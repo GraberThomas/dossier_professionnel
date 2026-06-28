@@ -1,71 +1,8 @@
 \documentclass[12pt,a4paper]{report}
 
-\usepackage{xcolor}
-\usepackage{tabularx}
-\usepackage{titling}
-
-% Encodage et langue
-\usepackage[T1]{fontenc}
-\usepackage[utf8]{inputenc}
-\usepackage{lmodern}
-\usepackage[french]{babel}
-
-\usepackage{microtype}
-
-% Mise en page
-\usepackage{geometry}
-\geometry{margin=2.5cm}
-
-% Interligne
-\usepackage{setspace}
-\onehalfspacing
-
-% Images, tableaux, liens
-\usepackage{graphicx}
-\usepackage{float}
-\usepackage{array}
-\usepackage{longtable}
-\usepackage{booktabs}
-\usepackage[hidelinks]{hyperref}
-
-% Citations / bibliographie
-\usepackage{csquotes}
-\usepackage[
-    backend=biber,
-    style=authoryear,
-    sorting=nyt
-]{biblatex}
-\addbibresource{bibliographie.bib}
-
-% Glossaire simple
-\usepackage[acronym]{glossaries}
-\makeglossaries
-\input{glossaire.tex}
-
-% Informations du document
-\title{
-    Validation des blocs de compétences\\
-    \large Titre RNCP niveau 7\\
-    Expert en Architecture et Développement Logiciel
-}
-\author{Thomas Graber}
-\date{2026}
-
 \begin{document}
 
-\pagenumbering{gobble}
-\input{cover.tex}
-\clearpage
-
-\pagenumbering{arabic}
-\setcounter{page}{1}
-
-\tableofcontents
-\listoffigures
-\listoftables
-
 \chapter*{Introduction générale}
-\addcontentsline{toc}{chapter}{Introduction générale}
 \input{sections/00-introduction.tex}
 
 \chapter{Contexte professionnel}
@@ -74,27 +11,6 @@
 \chapter{Cartographie des projets et des compétences}
 \input{sections/03-cartographie-projets.tex}
 
-\chapter{Bloc 1 -- Planifier et organiser un projet de développement logiciel}
-\input{sections/04-bloc-1.tex}
-
-\chapter{Bloc 2 -- Concevoir et développer des solutions logicielles}
-\input{sections/05-bloc-2.tex}
-
-\chapter{Bloc 3 -- Piloter la mise en production des solutions logicielles et leur évolution}
-\input{sections/06-bloc-3.tex}
-
-\chapter{Bloc 4 -- Piloter l'équipe du projet de développement logiciel}
-\input{sections/07-bloc-4.tex}
-
-\chapter*{Conclusion générale}
-\addcontentsline{toc}{chapter}{Conclusion générale}
-\input{sections/08-conclusion.tex}
-
-\printglossaries
-
-\printbibliography
-
-\appendix
-\chapter{Annexes}
+\chapter{Conclusion générale}
 
 \end{document}
