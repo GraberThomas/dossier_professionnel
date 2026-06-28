@@ -1,8 +1,48 @@
 \documentclass[12pt,a4paper]{report}
 
+\usepackage{xcolor}
+\usepackage{tabularx}
+\usepackage{titling}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage[french]{babel}
+\usepackage{microtype}
+\usepackage{geometry}
+\geometry{margin=2.5cm}
+\usepackage{setspace}
+\onehalfspacing
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{array}
+\usepackage{longtable}
+\usepackage{booktabs}
+\usepackage[hidelinks]{hyperref}
+\usepackage{csquotes}
+\usepackage[backend=biber,style=authoryear,sorting=nyt]{biblatex}
+\addbibresource{bibliographie.bib}
+\usepackage[acronym]{glossaries}
+\makeglossaries
+\input{glossaire.tex}
+
+\title{Validation des blocs de compétences\\\large Titre RNCP niveau 7\\Expert en Architecture et Développement Logiciel}
+\author{Thomas Graber}
+\date{2026}
+
 \begin{document}
 
+\pagenumbering{gobble}
+\input{cover.tex}
+\clearpage
+\pagenumbering{arabic}
+\setcounter{page}{1}
+
+\tableofcontents
+\listoffigures
+\listoftables
+
 \chapter*{Introduction générale}
+\addcontentsline{toc}{chapter}{Introduction générale}
 \input{sections/00-introduction.tex}
 
 \chapter{Contexte professionnel}
@@ -11,6 +51,38 @@
 \chapter{Cartographie des projets et des compétences}
 \input{sections/03-cartographie-projets.tex}
 
-\chapter{Conclusion générale}
+\chapter{FCU / Ediacara}
+\input{sections/04-projet-fcu-ediacara.tex}
+
+\chapter{S-123}
+\input{sections/05-projet-s123.tex}
+
+\chapter{FeastVerse}
+\input{sections/06-projet-feastverse.tex}
+
+\chapter{Brise-glace}
+\input{sections/07-projet-brise-glace.tex}
+
+\chapter{Projet Data / IA}
+\input{sections/08-projet-data-ia.tex}
+
+\chapter{Projet Observability server}
+\input{sections/09-projet-observability.tex}
+
+\chapter{IPF 2026 Lynx Immo}
+\input{sections/10-projet-lynx-immo.tex}
+
+\chapter{Synthèse par blocs de compétences}
+\input{sections/11-synthese-blocs.tex}
+
+\chapter*{Conclusion générale}
+\addcontentsline{toc}{chapter}{Conclusion générale}
+\input{sections/12-conclusion.tex}
+
+\printglossaries
+\printbibliography
+
+\appendix
+\chapter{Annexes}
 
 \end{document}
