@@ -1,11 +1,179 @@
-\section{Contexte et objectifs du projet}
+\section{Présentation du projet}
 
-Ce chapitre présentera le projet FeastVerse, retenu pour démontrer une maîtrise du développement back-end applicatif à travers une API REST Java Spring Boot.
+FeastVerse est un projet universitaire réalisé dans le cadre d'un enseignement consacré au développement Java Spring Boot. L'objectif du projet était de concevoir une API REST autour d'un univers de recettes de cuisine. L'application devait permettre de gérer plusieurs ressources liées entre elles : les utilisateurs, les ingrédients, les types d'ingrédients, les recettes, les commentaires, les likes et les signalements.
 
-\section{Compétences principalement mobilisées}
+Ce projet est mobilisé dans ce dossier comme preuve principale de développement back-end applicatif. Contrairement au projet professionnel FCU / Ediacara, qui porte surtout sur l'adaptation d'une chaîne existante, FeastVerse permet de présenter une application conçue autour d'une architecture plus classique d'API web : contrôleurs REST, services métier, repositories, entités de persistance, DTO, sécurité, documentation et tests fonctionnels.
 
-Les compétences principalement visées sont : C1.3, C2.1, C2.2, C2.4, C3.2 et C3.6.
+L'intérêt du projet ne réside pas uniquement dans la création de routes HTTP. Il repose également sur la mise en place d'une logique métier structurée : authentification par jeton, gestion des rôles, distinction entre ressources publiques et privées, règles de modération, validation des entrées, gestion des erreurs, pagination, tri et filtrage.
 
-\section{Plan de rédaction prévu}
+\section{Compétences mobilisées}
 
-Ce chapitre développera l'architecture Spring Boot, le modèle de données, l'ORM, l'authentification, les rôles et permissions, les endpoints REST, les tests Postman, la documentation et le bilan critique.
+\begin{table}[H]
+\centering
+\begin{tabular}{p{3cm} p{11cm}}
+\toprule
+\textbf{Compétence} & \textbf{Mobilisation dans le projet FeastVerse} \\
+\midrule
+C1.3 & Conception d'une solution back-end répondant à un besoin fonctionnel de gestion de recettes et d'interactions utilisateur. \\
+C2.1 & Organisation de l'architecture applicative autour de contrôleurs, services, repositories, DTO et documentation technique. \\
+C2.2 & Structuration du code, validation des entrées, gestion des erreurs, versioning et séparation des responsabilités. \\
+C2.4 & Développement back-end Java Spring Boot, API REST, ORM, PostgreSQL, sécurité JWT et logique métier. \\
+C3.2 & Validation fonctionnelle à l'aide d'une collection Postman couvrant des cas nominaux et des cas d'erreur. \\
+C3.6 & Documentation technique de l'API à l'aide de Swagger/OpenAPI et d'une documentation MkDocs dédiée. \\
+C3.4 & Déploiement de l'API sur un VPS, utilisé comme preuve complémentaire de mise à disposition d'une solution. \\
+\bottomrule
+\end{tabular}
+\caption{Compétences mobilisées dans le projet FeastVerse}
+\end{table}
+
+\section{Périmètre fonctionnel et limites du projet}
+
+Le périmètre fonctionnel de FeastVerse couvre plusieurs domaines. Les utilisateurs peuvent créer un compte, s'authentifier, consulter des recettes, interagir avec les contenus, commenter, liker et signaler des ressources. Les modérateurs disposent de fonctionnalités liées au traitement des signalements, tandis que les administrateurs disposent de droits plus étendus sur certaines ressources.
+
+Les ressources principales du projet sont les suivantes :
+
+\begin{itemize}
+    \item les utilisateurs et leurs rôles ;
+    \item les ingrédients et les types d'ingrédients ;
+    \item les recettes et les étapes de recettes ;
+    \item les commentaires ;
+    \item les likes ;
+    \item les signalements ;
+    \item les types de recettes et certaines ressources de référence.
+\end{itemize}
+
+Le projet doit toutefois être présenté avec ses limites. Toutes les fonctionnalités n'étaient pas finalisées au même niveau. Les ressources liées aux utilisateurs, ingrédients, commentaires, likes et signalements sont les plus avancées. En revanche, les recettes et les étapes de recettes étaient principalement disponibles en lecture au moment du rendu initial du projet. La création, la modification et la suppression complètes de ces ressources faisaient partie des perspectives d'évolution.
+
+Cette limite est importante dans l'analyse du projet. Elle montre que FeastVerse n'est pas présenté comme une application terminée en production commerciale, mais comme une API back-end avancée permettant de démontrer des compétences de conception, de développement, de sécurisation, de validation et de documentation.
+
+\section{Architecture technique de l'API}
+
+\subsection{Stack utilisée}
+
+L'application a été développée en Java avec Spring Boot. Le projet s'appuie sur Gradle pour la gestion du build et des dépendances. La stack technique mobilise notamment Spring Web pour l'exposition des endpoints REST, Spring Data JPA pour la persistance, Hibernate comme ORM, Spring Security pour la sécurisation des accès, JWT pour l'authentification, PostgreSQL pour la base de données et MapStruct pour les mappings entre entités et DTO.
+
+L'utilisation de Spring Boot permet de structurer rapidement une API robuste, tout en conservant une organisation claire entre les différentes couches de l'application. Le choix de PostgreSQL est cohérent avec le modèle relationnel du projet, qui repose sur des entités fortement liées : utilisateurs, recettes, ingrédients, commentaires, likes et signalements.
+
+\subsection{Organisation en couches}
+
+L'architecture de FeastVerse suit une organisation en couches classique pour une API REST :
+
+\begin{itemize}
+    \item les contrôleurs exposent les endpoints HTTP ;
+    \item les services portent la logique métier ;
+    \item les repositories assurent l'accès aux données ;
+    \item les entités représentent le modèle de persistance ;
+    \item les DTO contrôlent les données reçues et renvoyées par l'API ;
+    \item les mappers assurent la conversion entre entités et DTO.
+\end{itemize}
+
+Cette séparation permet de limiter le couplage entre la représentation interne des données et les réponses exposées aux clients de l'API. Par exemple, un utilisateur administrateur ne reçoit pas nécessairement la même vue d'une ressource qu'un utilisateur standard. Les DTO permettent donc d'adapter la réponse au contexte d'utilisation et au niveau d'autorisation.
+
+\subsection{Persistance et modèle de données}
+
+La persistance repose sur Spring Data JPA et Hibernate. Les repositories permettent d'interroger la base sans écrire systématiquement de requêtes SQL manuelles. Cette approche facilite la mise en place de recherches paginées, triées et filtrées, tout en conservant une structure de code homogène.
+
+Le modèle métier comporte plusieurs relations importantes : un utilisateur peut créer des ressources, aimer des recettes, commenter des recettes ou des étapes, et créer des signalements. Une recette peut être associée à des ingrédients, des étapes, des commentaires, des likes et des signalements. Cette structure impose de réfléchir à la cohérence des données, à la visibilité des ressources et aux droits d'action selon le rôle de l'utilisateur connecté.
+
+\section{Sécurité et gestion des rôles}
+
+\subsection{Authentification par JWT}
+
+La sécurité est l'un des points importants du projet. FeastVerse utilise une authentification par JWT. Après authentification, l'utilisateur reçoit un jeton qui doit être transmis avec les requêtes protégées. Un filtre dédié intercepte les requêtes, extrait le jeton, vérifie sa validité et initialise le contexte de sécurité Spring.
+
+Cette approche permet de rendre l'API sans état côté serveur. Le serveur n'a pas besoin de conserver une session utilisateur classique ; les informations nécessaires à l'identification sont portées par le jeton et validées à chaque requête.
+
+\subsection{Rôles et autorisations}
+
+Trois rôles principaux sont utilisés dans l'application : utilisateur standard, modérateur et administrateur. Ces rôles ne donnent pas accès aux mêmes fonctionnalités. Un utilisateur standard peut par exemple créer certaines ressources, commenter, liker ou signaler un contenu. Un modérateur peut accéder aux signalements et traiter leur statut. Un administrateur dispose de droits plus étendus, notamment pour certaines suppressions définitives.
+
+La protection des endpoints repose sur les annotations de sécurité de Spring. Cette logique rend les règles d'accès lisibles directement au niveau des contrôleurs. Elle permet également d'exprimer des règles plus fines, par exemple autoriser un utilisateur à modifier son propre profil tout en réservant certaines actions à l'administrateur.
+
+\section{Fonctionnalités métier développées}
+
+\subsection{Gestion des utilisateurs}
+
+La partie utilisateur permet de gérer l'inscription, l'authentification, la consultation de profils et la modification de certaines informations. L'API distingue plusieurs niveaux de détail dans les réponses : une vue publique, une vue personnelle et une vue administrateur. Cette distinction permet d'éviter d'exposer les mêmes informations à tous les clients.
+
+La liste des utilisateurs peut être paginée, triée et filtrée selon plusieurs critères, par exemple le rôle, le nom, le prénom, le pseudo ou l'adresse électronique. Cette fonctionnalité montre l'utilisation de filtres dynamiques et de réponses paginées adaptées à une API REST.
+
+\subsection{Gestion des ingrédients}
+
+La gestion des ingrédients constitue une partie importante du projet. L'API permet de consulter les types d'ingrédients, de rechercher des ingrédients, de filtrer les résultats, de créer de nouveaux ingrédients et d'associer une image à une ressource à l'aide d'une requête multipart.
+
+Cette partie illustre plusieurs problématiques back-end : validation des données d'entrée, upload de fichier, distinction entre ressource publique et privée, propriété d'une ressource, suppression logique et suppression définitive. La suppression définitive est réservée à l'administrateur, ce qui permet de montrer une règle d'autorisation métier plus fine qu'un simple accès authentifié.
+
+\subsection{Recettes, commentaires et likes}
+
+La partie recette permet de consulter des recettes et de les filtrer selon plusieurs critères : nom, temps maximum, difficulté, type, ingrédients inclus ou exclus, tags, propriétaire, visibilité ou statut de suppression. Cette recherche avancée montre que l'API ne se limite pas à exposer des listes simples, mais propose des mécanismes de sélection adaptés au domaine métier.
+
+Les utilisateurs authentifiés peuvent également interagir avec les recettes à travers les commentaires et les likes. Ces interactions enrichissent le modèle métier, car elles introduisent des relations entre utilisateurs et contenus. Elles permettent aussi de tester des règles de cohérence, comme la consultation des recettes aimées par un utilisateur.
+
+\subsection{Signalements et modération}
+
+Le système de signalement permet aux utilisateurs de signaler des contenus ou comportements problématiques. Les modérateurs et administrateurs peuvent ensuite consulter les signalements et mettre à jour leur état. L'administrateur dispose en plus de droits de suppression.
+
+Cette fonctionnalité est intéressante dans le cadre du référentiel, car elle montre la prise en compte de règles métier différenciées selon les rôles. Elle permet aussi de démontrer une logique d'autorisation plus réaliste qu'une application où tous les utilisateurs disposent des mêmes droits.
+
+\section{Qualité des réponses et gestion des erreurs}
+
+Une API doit être prévisible pour ses clients. FeastVerse intègre donc une gestion centralisée des erreurs afin de produire des réponses structurées en cas de problème. Les erreurs de validation, les formats invalides, les ressources inexistantes ou les conflits métier peuvent ainsi être transformés en réponses HTTP cohérentes.
+
+Cette gestion des erreurs est importante pour l'expérience développeur. Elle évite de renvoyer des traces techniques brutes et permet au client de comprendre plus facilement la cause d'une erreur. Elle participe également à la qualité générale de l'API, car les cas d'échec sont traités comme des comportements attendus et non comme des situations imprévues.
+
+\section{Tests fonctionnels avec Postman}
+
+La validation fonctionnelle du projet s'est principalement appuyée sur une collection Postman structurée par domaine fonctionnel. Cette collection ne remplace pas une suite complète de tests unitaires et d'intégration automatisés, mais elle constitue un plan de tests fonctionnels permettant de vérifier les principaux comportements de l'API.
+
+Les scénarios couvrent à la fois des cas nominaux et des cas d'erreur : création de compte, authentification, récupération des jetons, accès selon les rôles, création de ressources, filtrage, pagination, modification, suppression, erreurs de validation et autorisations insuffisantes.
+
+\begin{table}[H]
+\centering
+\begin{tabular}{p{4cm} p{10cm}}
+\toprule
+\textbf{Domaine testé} & \textbf{Exemples de scénarios} \\
+\midrule
+Authentification & Création de compte, connexion utilisateur, connexion modérateur, connexion administrateur, récupération des jetons. \\
+Utilisateurs & Consultation de profil, modification de profil, filtrage des utilisateurs, suppression par administrateur. \\
+Ingrédients & Recherche, pagination, filtrage, création multipart, modification, suppression logique et suppression définitive. \\
+Recettes & Consultation, recherche avancée, filtrage par critères métier, commentaires, likes et signalements. \\
+Signalements & Création par un utilisateur, consultation par un modérateur, mise à jour du statut, suppression par administrateur. \\
+Commentaires et likes & Ajout de commentaire, consultation des commentaires, like et unlike d'une recette. \\
+\bottomrule
+\end{tabular}
+\caption{Exemples de scénarios validés avec Postman}
+\end{table}
+
+L'intérêt de cette collection est aussi de documenter la manière d'utiliser l'API. Certaines requêtes dépendent de variables créées par des appels précédents, par exemple l'identifiant d'un utilisateur ou un jeton d'authentification. Cela impose d'exécuter les scénarios dans un ordre cohérent et montre la volonté de construire un parcours de validation réaliste.
+
+\section{Documentation technique}
+
+\subsection{Swagger et OpenAPI}
+
+La documentation de l'API est assurée en partie par Swagger/OpenAPI. Cette documentation permet de consulter les endpoints disponibles, les paramètres attendus et les formats de réponse. Elle est particulièrement utile pour un développeur souhaitant consommer l'API ou tester rapidement un endpoint.
+
+L'intégration de Swagger dans le projet permet également de rapprocher le code et la documentation. Les contrôleurs et annotations participent à la génération d'une documentation technique directement liée à l'état du code.
+
+\subsection{Documentation MkDocs}
+
+En complément de Swagger, une documentation MkDocs a été produite. Elle apporte une vue plus globale du projet, avec des pages dédiées aux fonctionnalités, aux cas d'utilisation, à la pile technique, à l'architecture et aux annexes. Cette documentation ne se limite pas à lister les endpoints ; elle explique également l'organisation générale de l'API et les choix de conception.
+
+Cette double documentation répond à deux besoins différents. Swagger est utile pour l'utilisation technique immédiate de l'API. MkDocs permet de présenter le projet de manière plus pédagogique, notamment pour expliquer l'architecture, le vocabulaire et les scénarios d'utilisation.
+
+Un point de vigilance concerne la synchronisation entre la documentation et l'état réel du projet. Certaines pages de documentation peuvent devenir obsolètes si le mode de déploiement ou le périmètre fonctionnel évolue. La documentation doit donc être maintenue comme un livrable vivant et non comme un document figé.
+
+\section{Déploiement sur VPS}
+
+Le projet a également été déployé sur un VPS afin de rendre l'API accessible dans un environnement distinct du poste de développement. Ce déploiement permet de prendre en compte des problématiques qui n'apparaissent pas lors d'une simple exécution locale : configuration par variables d'environnement, connexion à une base distante, gestion des secrets, exposition du service HTTP et vérification du bon fonctionnement de l'API après mise en ligne.
+
+Cette partie n'est pas le coeur du projet FeastVerse, mais elle renforce la dimension liée à la mise à disposition d'une solution logicielle. Elle montre que l'application a été pensée pour être configurée dans un environnement serveur et non uniquement exécutée localement depuis l'IDE.
+
+Dans le cadre du dossier professionnel, ce déploiement peut être mobilisé comme preuve complémentaire pour les compétences du bloc 3, en particulier la mise à disposition d'une solution et la prise en compte d'un environnement d'exécution.
+
+\section{Limites et bilan critique}
+
+Le projet présente plusieurs limites. La première concerne le périmètre fonctionnel : certaines ressources, notamment les recettes et les étapes de recettes, n'étaient pas encore entièrement disponibles en écriture au moment du rendu initial. La deuxième concerne les tests : la collection Postman permet de valider de nombreux scénarios fonctionnels, mais elle ne remplace pas une couverture complète par tests unitaires et tests d'intégration automatisés. Enfin, la documentation doit rester synchronisée avec l'état réel du projet, notamment lorsque le mode de déploiement évolue.
+
+Malgré ces limites, FeastVerse m'a permis de consolider des compétences importantes en développement back-end. Le projet m'a amené à concevoir une API REST structurée, à mettre en place une authentification JWT, à gérer des rôles et des autorisations, à organiser le code en couches, à manipuler une base PostgreSQL, à documenter les endpoints et à valider fonctionnellement les principaux scénarios avec Postman.
+
+Ce projet constitue donc une preuve pertinente pour démontrer ma capacité à développer une solution back-end complète, sécurisée, testable et documentée, tout en prenant du recul sur ses limites et ses perspectives d'amélioration.
