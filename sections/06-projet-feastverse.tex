@@ -54,6 +54,12 @@ L'application a été développée en Java avec Spring Boot. Le projet s'appuie 
 
 L'utilisation de Spring Boot permet de structurer rapidement une API robuste, tout en conservant une organisation claire entre les différentes couches de l'application. Le choix de PostgreSQL est cohérent avec le modèle relationnel du projet, qui repose sur des entités fortement liées : utilisateurs, recettes, ingrédients, commentaires, likes et signalements.
 
+\begin{figure}[H]
+\centering
+\fbox{\parbox{0.88\textwidth}{\centering Emplacement prévu : schéma simple de l'architecture technique FeastVerse.\\Client HTTP / Postman -- Contrôleurs REST -- Services -- Repositories -- PostgreSQL.}}
+\caption{Architecture générale de l'API FeastVerse}
+\end{figure}
+
 \subsection{Organisation en couches}
 
 L'architecture de FeastVerse suit une organisation en couches classique pour une API REST :
@@ -69,11 +75,58 @@ L'architecture de FeastVerse suit une organisation en couches classique pour une
 
 Cette séparation permet de limiter le couplage entre la représentation interne des données et les réponses exposées aux clients de l'API. Par exemple, un utilisateur administrateur ne reçoit pas nécessairement la même vue d'une ressource qu'un utilisateur standard. Les DTO permettent donc d'adapter la réponse au contexte d'utilisation et au niveau d'autorisation.
 
+Cette organisation m'a également permis d'éviter de placer la logique métier directement dans les contrôleurs. Le rôle du contrôleur est de recevoir la requête, valider les paramètres principaux, déléguer au service approprié, puis transformer le résultat en réponse HTTP. Le service porte la logique métier, tandis que le repository reste centré sur l'accès aux données.
+
 \subsection{Persistance et modèle de données}
 
 La persistance repose sur Spring Data JPA et Hibernate. Les repositories permettent d'interroger la base sans écrire systématiquement de requêtes SQL manuelles. Cette approche facilite la mise en place de recherches paginées, triées et filtrées, tout en conservant une structure de code homogène.
 
 Le modèle métier comporte plusieurs relations importantes : un utilisateur peut créer des ressources, aimer des recettes, commenter des recettes ou des étapes, et créer des signalements. Une recette peut être associée à des ingrédients, des étapes, des commentaires, des likes et des signalements. Cette structure impose de réfléchir à la cohérence des données, à la visibilité des ressources et aux droits d'action selon le rôle de l'utilisateur connecté.
+
+\section{Recherche, pagination et filtrage}
+
+Une partie importante du projet concerne la recherche et la consultation des ressources. L'API ne se limite pas à renvoyer l'ensemble des données : elle permet de filtrer, trier et paginer les résultats. Ce choix est essentiel pour une API qui manipule plusieurs centaines d'ingrédients et plusieurs ressources liées aux utilisateurs.
+
+L'exemple suivant illustre la logique appliquée aux recettes. Le contrôleur accepte plusieurs paramètres optionnels, puis les transmet au service métier. L'objet \texttt{Pageable} permet de gérer la pagination et le tri directement dans le flux de la requête.
+
+\paragraph{Extrait de code : filtrage et pagination des recettes}
+
+\begin{verbatim}
+@GetMapping
+public Page<RecipeViewDto> getAllRecipes(
+        @RequestParam(required = false) String name,
+        @RequestParam(required = false) Integer maxTotalTime,
+        @RequestParam(required = false) RecipeDifficulty difficulty,
+        @RequestParam(required = false) UUID typeId,
+        @RequestParam(required = false) List<Long> withIngredient,
+        @RequestParam(required = false) List<Long> withIngredientType,
+        @RequestParam(required = false) List<Long> withoutIngredientType,
+        @RequestParam(required = false) List<String> withTags,
+        @RequestParam(required = false) UUID ownerId,
+        @RequestParam(required = false, defaultValue = "PUBLIC")
+        VisibilityFilter visibility,
+        @ParameterObject
+        @PageableDefault(size = 10, sort = "likeCount",
+                         direction = Sort.Direction.DESC)
+        Pageable pageable
+) {
+    Page<Recipe> recipes = recipeService.findAllRecipes(
+            name, maxTotalTime, difficulty, typeId,
+            withIngredient, withIngredientType,
+            withoutIngredientType, withTags,
+            ownerId, visibility, pageable
+    );
+    return recipes.map(recipeMapper::toRecipeListViewDto);
+}
+\end{verbatim}
+
+Cet extrait est intéressant car il montre plusieurs choix de conception. D'abord, les critères de recherche restent optionnels, ce qui permet de combiner plusieurs usages dans un même endpoint. Ensuite, la pagination est intégrée à la signature de la méthode et ne nécessite pas de format de réponse spécifique. Enfin, la conversion vers un DTO de liste évite de renvoyer l'entité complète et permet de limiter la réponse aux informations utiles pour une page de résultats.
+
+\begin{figure}[H]
+\centering
+\fbox{\parbox{0.88\textwidth}{\centering Emplacement prévu : capture Postman ou Swagger d'un appel GET /recipes avec filtres, pagination et tri.}}
+\caption{Exemple de requête paginée et filtrée sur les recettes}
+\end{figure}
 
 \section{Sécurité et gestion des rôles}
 
@@ -83,11 +136,61 @@ La sécurité est l'un des points importants du projet. FeastVerse utilise une a
 
 Cette approche permet de rendre l'API sans état côté serveur. Le serveur n'a pas besoin de conserver une session utilisateur classique ; les informations nécessaires à l'identification sont portées par le jeton et validées à chaque requête.
 
+\paragraph{Extrait de code : extraction et validation du JWT}
+
+\begin{verbatim}
+final String authorizationHeader = request.getHeader("Authorization");
+
+String jwt = null;
+UUID userId = null;
+
+if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
+    jwt = authorizationHeader.substring(7);
+    userId = jwtUtil.extractUserId(jwt);
+}
+
+if (userId != null &&
+    SecurityContextHolder.getContext().getAuthentication() == null) {
+
+    UserDetails userDetails = userDetailsService.loadUserById(userId);
+
+    if (jwtUtil.validateToken(jwt, userId)) {
+        UsernamePasswordAuthenticationToken authToken =
+                new UsernamePasswordAuthenticationToken(
+                        userDetails,
+                        null,
+                        userDetails.getAuthorities()
+                );
+        SecurityContextHolder.getContext().setAuthentication(authToken);
+    }
+}
+\end{verbatim}
+
+Cet extrait met en évidence le fonctionnement du filtre de sécurité. La requête est analysée avant d'atteindre les contrôleurs. Si un jeton est présent et valide, l'utilisateur est chargé puis placé dans le contexte de sécurité. Les contrôleurs peuvent ensuite s'appuyer sur ce contexte pour appliquer les règles d'autorisation.
+
 \subsection{Rôles et autorisations}
 
 Trois rôles principaux sont utilisés dans l'application : utilisateur standard, modérateur et administrateur. Ces rôles ne donnent pas accès aux mêmes fonctionnalités. Un utilisateur standard peut par exemple créer certaines ressources, commenter, liker ou signaler un contenu. Un modérateur peut accéder aux signalements et traiter leur statut. Un administrateur dispose de droits plus étendus, notamment pour certaines suppressions définitives.
 
 La protection des endpoints repose sur les annotations de sécurité de Spring. Cette logique rend les règles d'accès lisibles directement au niveau des contrôleurs. Elle permet également d'exprimer des règles plus fines, par exemple autoriser un utilisateur à modifier son propre profil tout en réservant certaines actions à l'administrateur.
+
+\paragraph{Extrait de code : protection d'endpoints par rôle}
+
+\begin{verbatim}
+@PreAuthorize("hasRole('ROLE_STANDARD')")
+@PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+public IngredientViewDto createIngredient(...) { ... }
+
+@PreAuthorize("hasAnyRole('ROLE_MODERATOR', 'ROLE_ADMINISTRATOR')")
+@GetMapping("/reports")
+public Page<ReportViewDTO> getAll(...) { ... }
+
+@PreAuthorize("hasRole('ROLE_ADMINISTRATOR')")
+@DeleteMapping("/reports/{reportId}")
+public ResponseEntity<Void> deleteReport(...) { ... }
+\end{verbatim}
+
+Cet extrait montre que les droits ne sont pas seulement déclarés dans une documentation externe. Ils sont intégrés dans le code, au niveau des endpoints concernés. Cela facilite la lecture des règles de sécurité et limite le risque d'oublier un contrôle dans la logique métier.
 
 \section{Fonctionnalités métier développées}
 
@@ -102,6 +205,12 @@ La liste des utilisateurs peut être paginée, triée et filtrée selon plusieur
 La gestion des ingrédients constitue une partie importante du projet. L'API permet de consulter les types d'ingrédients, de rechercher des ingrédients, de filtrer les résultats, de créer de nouveaux ingrédients et d'associer une image à une ressource à l'aide d'une requête multipart.
 
 Cette partie illustre plusieurs problématiques back-end : validation des données d'entrée, upload de fichier, distinction entre ressource publique et privée, propriété d'une ressource, suppression logique et suppression définitive. La suppression définitive est réservée à l'administrateur, ce qui permet de montrer une règle d'autorisation métier plus fine qu'un simple accès authentifié.
+
+\begin{figure}[H]
+\centering
+\fbox{\parbox{0.88\textwidth}{\centering Emplacement prévu : capture d'une requête Postman de création d'ingrédient en multipart, avec partie JSON et fichier image.}}
+\caption{Création d'un ingrédient avec upload d'image}
+\end{figure}
 
 \subsection{Recettes, commentaires et likes}
 
@@ -120,6 +229,34 @@ Cette fonctionnalité est intéressante dans le cadre du référentiel, car elle
 Une API doit être prévisible pour ses clients. FeastVerse intègre donc une gestion centralisée des erreurs afin de produire des réponses structurées en cas de problème. Les erreurs de validation, les formats invalides, les ressources inexistantes ou les conflits métier peuvent ainsi être transformés en réponses HTTP cohérentes.
 
 Cette gestion des erreurs est importante pour l'expérience développeur. Elle évite de renvoyer des traces techniques brutes et permet au client de comprendre plus facilement la cause d'une erreur. Elle participe également à la qualité générale de l'API, car les cas d'échec sont traités comme des comportements attendus et non comme des situations imprévues.
+
+\paragraph{Extrait de code : réponse d'erreur de validation}
+
+\begin{verbatim}
+@ExceptionHandler(MethodArgumentNotValidException.class)
+public ResponseEntity<ErrorResponse> handleValidationExceptions(
+        MethodArgumentNotValidException ex,
+        WebRequest request
+) {
+    Map<String, String> errors = new HashMap<>();
+
+    for (FieldError error : ex.getBindingResult().getFieldErrors()) {
+        errors.put(error.getField(), error.getDefaultMessage());
+    }
+
+    ErrorResponse response = new ErrorResponse(
+            HttpStatus.BAD_REQUEST.value(),
+            HttpStatus.BAD_REQUEST.getReasonPhrase(),
+            "Validation failed",
+            getPath(request),
+            errors
+    );
+
+    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+}
+\end{verbatim}
+
+Cet extrait montre que les erreurs de validation ne sont pas laissées au comportement par défaut du framework. Elles sont transformées en réponse structurée, avec un statut HTTP, un message lisible, le chemin concerné et le détail des champs invalides.
 
 \section{Tests fonctionnels avec Postman}
 
@@ -146,6 +283,32 @@ Commentaires et likes & Ajout de commentaire, consultation des commentaires, lik
 
 L'intérêt de cette collection est aussi de documenter la manière d'utiliser l'API. Certaines requêtes dépendent de variables créées par des appels précédents, par exemple l'identifiant d'un utilisateur ou un jeton d'authentification. Cela impose d'exécuter les scénarios dans un ordre cohérent et montre la volonté de construire un parcours de validation réaliste.
 
+\paragraph{Extrait de script Postman : stockage d'un jeton JWT}
+
+\begin{verbatim}
+const jsonData = pm.response.json();
+
+pm.test("Status code is 200", function () {
+    pm.expect(pm.response.code).to.equal(200);
+});
+
+pm.test("Response contains a user-token", function () {
+    pm.expect(jsonData).to.have.property("accessToken").that.is.not.empty;
+});
+
+if (jsonData.accessToken) {
+    pm.collectionVariables.set("user-token", jsonData.accessToken);
+}
+\end{verbatim}
+
+Ce type de script permet de chaîner les scénarios de test. Après l'authentification, le jeton est automatiquement stocké dans une variable de collection et peut être réutilisé par les requêtes suivantes. Cela rend les tests plus proches d'un parcours utilisateur réel.
+
+\begin{figure}[H]
+\centering
+\fbox{\parbox{0.88\textwidth}{\centering Emplacement prévu : capture de la collection Postman avec les dossiers Authentification, User, Ingredients, Recipe, Report, Comment et Like.}}
+\caption{Organisation de la collection Postman FeastVerse}
+\end{figure}
+
 \section{Documentation technique}
 
 \subsection{Swagger et OpenAPI}
@@ -154,11 +317,23 @@ La documentation de l'API est assurée en partie par Swagger/OpenAPI. Cette docu
 
 L'intégration de Swagger dans le projet permet également de rapprocher le code et la documentation. Les contrôleurs et annotations participent à la génération d'une documentation technique directement liée à l'état du code.
 
+\begin{figure}[H]
+\centering
+\fbox{\parbox{0.88\textwidth}{\centering Emplacement prévu : capture de Swagger UI sur un endpoint représentatif, par exemple GET /recipes ou POST /ingredients.}}
+\caption{Documentation Swagger/OpenAPI de l'API FeastVerse}
+\end{figure}
+
 \subsection{Documentation MkDocs}
 
 En complément de Swagger, une documentation MkDocs a été produite. Elle apporte une vue plus globale du projet, avec des pages dédiées aux fonctionnalités, aux cas d'utilisation, à la pile technique, à l'architecture et aux annexes. Cette documentation ne se limite pas à lister les endpoints ; elle explique également l'organisation générale de l'API et les choix de conception.
 
 Cette double documentation répond à deux besoins différents. Swagger est utile pour l'utilisation technique immédiate de l'API. MkDocs permet de présenter le projet de manière plus pédagogique, notamment pour expliquer l'architecture, le vocabulaire et les scénarios d'utilisation.
+
+\begin{figure}[H]
+\centering
+\fbox{\parbox{0.88\textwidth}{\centering Emplacement prévu : capture de la page d'accueil MkDocs ou de la page Architecture / Tech stack.}}
+\caption{Documentation MkDocs du projet FeastVerse}
+\end{figure}
 
 Un point de vigilance concerne la synchronisation entre la documentation et l'état réel du projet. Certaines pages de documentation peuvent devenir obsolètes si le mode de déploiement ou le périmètre fonctionnel évolue. La documentation doit donc être maintenue comme un livrable vivant et non comme un document figé.
 
@@ -166,9 +341,34 @@ Un point de vigilance concerne la synchronisation entre la documentation et l'é
 
 Le projet a également été déployé sur un VPS afin de rendre l'API accessible dans un environnement distinct du poste de développement. Ce déploiement permet de prendre en compte des problématiques qui n'apparaissent pas lors d'une simple exécution locale : configuration par variables d'environnement, connexion à une base distante, gestion des secrets, exposition du service HTTP et vérification du bon fonctionnement de l'API après mise en ligne.
 
+La configuration de production s'appuie sur des variables d'environnement pour les paramètres sensibles. Cela évite d'inscrire directement dans le code les informations de connexion à la base de données ou aux services externes.
+
+\paragraph{Extrait de configuration de production}
+
+\begin{verbatim}
+spring:
+  datasource:
+    url: jdbc:postgresql://${PGHOST}:${PGPORT}/${POSTGRES_DB}
+    username: ${POSTGRES_USER}
+    password: ${POSTGRES_PASSWORD}
+
+upload:
+  storage-type: cloudinary
+  cloudinary:
+    cloud-name: ${CLOUDINARY_CLOUD_NAME}
+    api-key: ${CLOUDINARY_API_KEY}
+    api-secret: ${CLOUDINARY_API_SECRET}
+\end{verbatim}
+
 Cette partie n'est pas le coeur du projet FeastVerse, mais elle renforce la dimension liée à la mise à disposition d'une solution logicielle. Elle montre que l'application a été pensée pour être configurée dans un environnement serveur et non uniquement exécutée localement depuis l'IDE.
 
 Dans le cadre du dossier professionnel, ce déploiement peut être mobilisé comme preuve complémentaire pour les compétences du bloc 3, en particulier la mise à disposition d'une solution et la prise en compte d'un environnement d'exécution.
+
+\begin{figure}[H]
+\centering
+\fbox{\parbox{0.88\textwidth}{\centering Emplacement prévu : capture du service déployé sur VPS, d'un appel curl réussi ou d'une réponse Swagger accessible. Ne pas afficher de secret ni d'adresse sensible.}}
+\caption{Vérification du déploiement de FeastVerse sur VPS}
+\end{figure}
 
 \section{Limites et bilan critique}
 
