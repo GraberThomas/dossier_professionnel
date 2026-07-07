@@ -91,7 +91,7 @@ L'exemple suivant illustre la logique appliquée aux recettes. Le contrôleur ac
 
 \paragraph{Extrait de code : filtrage et pagination des recettes}
 
-\begin{verbatim}
+\begin{lstlisting}[language=Java,caption={Endpoint de recherche paginée et filtrée des recettes},label={lst:feastverse-filtrage-recettes}]
 @GetMapping
 public Page<RecipeViewDto> getAllRecipes(
         @RequestParam(required = false) String name,
@@ -118,7 +118,7 @@ public Page<RecipeViewDto> getAllRecipes(
     );
     return recipes.map(recipeMapper::toRecipeListViewDto);
 }
-\end{verbatim}
+\end{lstlisting}
 
 Cet extrait est intéressant car il montre plusieurs choix de conception. D'abord, les critères de recherche restent optionnels, ce qui permet de combiner plusieurs usages dans un même endpoint. Ensuite, la pagination est intégrée à la signature de la méthode et ne nécessite pas de format de réponse spécifique. Enfin, la conversion vers un DTO de liste évite de renvoyer l'entité complète et permet de limiter la réponse aux informations utiles pour une page de résultats.
 
@@ -138,7 +138,7 @@ Cette approche permet de rendre l'API sans état côté serveur. Le serveur n'a 
 
 \paragraph{Extrait de code : extraction et validation du JWT}
 
-\begin{verbatim}
+\begin{lstlisting}[language=Java,caption={Extraction et validation du JWT dans le filtre de sécurité},label={lst:feastverse-jwt-filter}]
 final String authorizationHeader = request.getHeader("Authorization");
 
 String jwt = null;
@@ -164,7 +164,7 @@ if (userId != null &&
         SecurityContextHolder.getContext().setAuthentication(authToken);
     }
 }
-\end{verbatim}
+\end{lstlisting}
 
 Cet extrait met en évidence le fonctionnement du filtre de sécurité. La requête est analysée avant d'atteindre les contrôleurs. Si un jeton est présent et valide, l'utilisateur est chargé puis placé dans le contexte de sécurité. Les contrôleurs peuvent ensuite s'appuyer sur ce contexte pour appliquer les règles d'autorisation.
 
@@ -176,7 +176,7 @@ La protection des endpoints repose sur les annotations de sécurité de Spring. 
 
 \paragraph{Extrait de code : protection d'endpoints par rôle}
 
-\begin{verbatim}
+\begin{lstlisting}[language=Java,caption={Exemples de restrictions d'accès par rôle},label={lst:feastverse-preauthorize}]
 @PreAuthorize("hasRole('ROLE_STANDARD')")
 @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 public IngredientViewDto createIngredient(...) { ... }
@@ -188,7 +188,7 @@ public Page<ReportViewDTO> getAll(...) { ... }
 @PreAuthorize("hasRole('ROLE_ADMINISTRATOR')")
 @DeleteMapping("/reports/{reportId}")
 public ResponseEntity<Void> deleteReport(...) { ... }
-\end{verbatim}
+\end{lstlisting}
 
 Cet extrait montre que les droits ne sont pas seulement déclarés dans une documentation externe. Ils sont intégrés dans le code, au niveau des endpoints concernés. Cela facilite la lecture des règles de sécurité et limite le risque d'oublier un contrôle dans la logique métier.
 
@@ -232,7 +232,7 @@ Cette gestion des erreurs est importante pour l'expérience développeur. Elle �
 
 \paragraph{Extrait de code : réponse d'erreur de validation}
 
-\begin{verbatim}
+\begin{lstlisting}[language=Java,caption={Gestion centralisée des erreurs de validation},label={lst:feastverse-validation-handler}]
 @ExceptionHandler(MethodArgumentNotValidException.class)
 public ResponseEntity<ErrorResponse> handleValidationExceptions(
         MethodArgumentNotValidException ex,
@@ -254,7 +254,7 @@ public ResponseEntity<ErrorResponse> handleValidationExceptions(
 
     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
 }
-\end{verbatim}
+\end{lstlisting}
 
 Cet extrait montre que les erreurs de validation ne sont pas laissées au comportement par défaut du framework. Elles sont transformées en réponse structurée, avec un statut HTTP, un message lisible, le chemin concerné et le détail des champs invalides.
 
@@ -285,7 +285,7 @@ L'intérêt de cette collection est aussi de documenter la manière d'utiliser l
 
 \paragraph{Extrait de script Postman : stockage d'un jeton JWT}
 
-\begin{verbatim}
+\begin{lstlisting}[language=JavaScript,caption={Script Postman de vérification et de stockage du token},label={lst:feastverse-postman-token}]
 const jsonData = pm.response.json();
 
 pm.test("Status code is 200", function () {
@@ -299,7 +299,7 @@ pm.test("Response contains a user-token", function () {
 if (jsonData.accessToken) {
     pm.collectionVariables.set("user-token", jsonData.accessToken);
 }
-\end{verbatim}
+\end{lstlisting}
 
 Ce type de script permet de chaîner les scénarios de test. Après l'authentification, le jeton est automatiquement stocké dans une variable de collection et peut être réutilisé par les requêtes suivantes. Cela rend les tests plus proches d'un parcours utilisateur réel.
 
@@ -345,7 +345,7 @@ La configuration de production s'appuie sur des variables d'environnement pour l
 
 \paragraph{Extrait de configuration de production}
 
-\begin{verbatim}
+\begin{lstlisting}[language=yaml,caption={Configuration de production par variables d'environnement},label={lst:feastverse-config-prod}]
 spring:
   datasource:
     url: jdbc:postgresql://${PGHOST}:${PGPORT}/${POSTGRES_DB}
@@ -358,7 +358,7 @@ upload:
     cloud-name: ${CLOUDINARY_CLOUD_NAME}
     api-key: ${CLOUDINARY_API_KEY}
     api-secret: ${CLOUDINARY_API_SECRET}
-\end{verbatim}
+\end{lstlisting}
 
 Cette partie n'est pas le coeur du projet FeastVerse, mais elle renforce la dimension liée à la mise à disposition d'une solution logicielle. Elle montre que l'application a été pensée pour être configurée dans un environnement serveur et non uniquement exécutée localement depuis l'IDE.
 
