@@ -12,6 +12,8 @@
 \usepackage{array}
 \usepackage{longtable}
 \usepackage{booktabs}
+\usepackage{xcolor}
+\usepackage{listings}
 \usepackage[hidelinks]{hyperref}
 \usepackage{csquotes}
 \usepackage[backend=biber,style=authoryear,sorting=nyt]{biblatex}
@@ -19,6 +21,43 @@
 \usepackage[acronym]{glossaries}
 \makeglossaries
 \input{glossaire.tex}
+
+\definecolor{codebackground}{RGB}{248,248,248}
+\definecolor{codekeyword}{RGB}{0,70,140}
+\definecolor{codestring}{RGB}{150,70,0}
+\definecolor{codecomment}{RGB}{90,110,90}
+\definecolor{codenumber}{RGB}{120,120,120}
+
+\lstdefinelanguage{yaml}{
+  keywords={true,false,null,y,n},
+  keywordstyle=\color{codekeyword}\bfseries,
+  basicstyle=\ttfamily\footnotesize,
+  sensitive=false,
+  comment=[l]{\#},
+  morecomment=[l]{\#},
+  stringstyle=\color{codestring},
+  morestring=[b]',
+  morestring=[b]"
+}
+
+\lstset{
+  backgroundcolor=\color{codebackground},
+  basicstyle=\ttfamily\footnotesize,
+  breaklines=true,
+  captionpos=b,
+  columns=fullflexible,
+  commentstyle=\color{codecomment}\itshape,
+  frame=single,
+  keepspaces=true,
+  keywordstyle=\color{codekeyword}\bfseries,
+  numbers=left,
+  numbersep=8pt,
+  numberstyle=\tiny\color{codenumber},
+  showstringspaces=false,
+  stringstyle=\color{codestring},
+  tabsize=2
+}
+
 \begin{document}
 \pagenumbering{gobble}
 \input{cover.tex}
