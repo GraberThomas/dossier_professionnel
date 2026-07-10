@@ -1,11 +1,362 @@
-\section{Contexte et objectifs du POC}
+\section{Présentation du projet}
 
-Ce chapitre présentera le projet S-123 comme un POC professionnel en cours. Au moment de la rédaction, la base de données est prête, le parseur XML/XSD est fonctionnel et l'API REST est en construction.
+Le projet S-123 constituait le sujet initial de mon alternance au Shom. Il m'a été présenté sous la forme d'un objectif volontairement large : concevoir une « base de données S-123 » capable d'accueillir les renseignements relatifs aux radiosignaux répartis dans plusieurs ouvrages et sources de données.
 
-\section{Compétences principalement mobilisées}
+Ce sujet s'inscrivait dans la transition du secteur hydrographique vers l'écosystème S-100 de l'Organisation hydrographique internationale (OHI). Les cartes électroniques de navigation, historiquement produites selon S-57, doivent évoluer vers S-101. S-100 fournit également un cadre commun à d'autres produits, dont S-123 pour les services radio maritimes. Mon travail ne portait donc pas sur les cartes elles-mêmes, mais sur la structuration des renseignements radio dans ce nouvel écosystème.
 
-Les compétences principalement visées sont : C1.1, C1.3, C2.1, C2.2, C2.4, C3.2 et C3.6.
+Au moment de la rédaction de ce dossier, le projet reste un POC avancé. L'analyse métier, le modèle de méta-base, le parseur XML/XSD, le mécanisme de peuplement de PostgreSQL et l'API REST de consultation du catalogue sont fonctionnels. Le stockage des instances métier, leur saisie et les exports S-1xx restent à développer. Le projet ne constitue donc pas encore une application déployée auprès des utilisateurs, mais il couvre déjà l'ensemble de la chaîne allant d'un Feature Catalogue XML jusqu'à son interrogation par API.
 
-\section{Plan de rédaction prévu}
+\section{Compétences mobilisées}
 
-Ce chapitre développera le contexte S-100 / S-123, l'analyse du besoin, la modélisation de la base de données, le développement du parseur, le choix du patron visiteur, les tests réalisés, les limites du POC et les perspectives.
+Le tableau~\ref{tab:competences-s123} présente les principales compétences mobilisées. Leur niveau de couverture n'est pas identique : le projet constitue une preuve forte pour la conception d'architecture et le développement back-end, mais seulement une preuve complémentaire pour l'étude de faisabilité, les tests et la documentation.
+
+\begin{table}[H]
+\centering
+\begin{tabular}{p{2.6cm} p{11.4cm}}
+\toprule
+\textbf{Compétence} & \textbf{Mobilisation dans le projet S-123} \\
+\midrule
+C1.1 & Analyse de la faisabilité technique et organisationnelle d'une base directement calquée sur S-123. La dimension financière n'a toutefois pas fait l'objet d'une étude complète. \\
+C1.3 & Reformulation du besoin, identification des risques liés à l'évolution de la norme et conception d'une solution plus générique que la demande initiale. \\
+C2.1 & Élaboration de l'architecture du parseur, du modèle de catalogue S-100, de la méta-base et de l'API de consultation. \\
+C2.2 & Séparation des responsabilités, utilisation du versionnement, contraintes d'intégrité PostgreSQL et organisation du code en composants spécialisés. \\
+C2.4 & Développement back-end en Python, parsing XML/XSD, peuplement de PostgreSQL/PostGIS et API REST avec FastAPI. \\
+C3.2 & Tests exploratoires du parseur et du chargement de différents Feature Catalogues. La couverture automatisée reste à compléter. \\
+C3.6 & Production de modèles de données, tableaux de correspondance, présentations d'avancement et supports expliquant les choix d'architecture. \\
+\bottomrule
+\end{tabular}
+\caption{Compétences mobilisées dans le projet S-123}
+\label{tab:competences-s123}
+\end{table}
+
+\section{Contexte métier : des ouvrages RSX vers S-123}
+
+\subsection{Des informations réparties entre plusieurs ouvrages}
+
+Au Shom, les renseignements relatifs aux radiosignaux sont répartis entre plusieurs ouvrages nautiques. Ils couvrent des domaines différents, tels que la radionavigation, les stations radio maritimes, le Système mondial de détresse et de sécurité en mer (SMDSM), les radiocommunications portuaires et la diffusion des renseignements de sécurité maritime. Ces ouvrages sont maintenus et mis à jour régulièrement par le groupe d'avis aux navigateurs (GAN).
+
+Les principales publications rencontrées pendant l'étude sont synthétisées dans le tableau~\ref{tab:ouvrages-rsx}. Le périmètre détaillé a évolué au cours du projet : les premières expérimentations de reprise ont notamment porté sur des données issues des ouvrages 91 et 92, comme les stations AIS, DGPS et certains centres de coordination.
+
+\begin{table}[H]
+\centering
+\begin{tabular}{p{2cm} p{5.2cm} p{6.8cm}}
+\toprule
+\textbf{Ouvrage} & \textbf{Domaine principal} & \textbf{Exemples d'informations étudiées} \\
+\midrule
+91 & Radionavigation maritime & Stations AIS, DGPS, Loran-C, balises Racon/Ramark et signaux horaires. \\
+92 & Stations radio maritimes & Stations, services de communication et informations de contact. \\
+924 & SMDSM & Organisation des services de détresse et de sécurité en mer. \\
+93 & Radiocommunications portuaires et systèmes de comptes rendus & Services portuaires, comptes rendus et modalités de communication. \\
+96 & Renseignements de sécurité maritime & Moyens de diffusion des avertissements météorologiques et de navigation. \\
+\bottomrule
+\end{tabular}
+\caption{Principaux domaines RSX étudiés dans le projet}
+\label{tab:ouvrages-rsx}
+\end{table}
+
+Les données étaient réparties dans différents documents et classeurs, structurés selon la logique éditoriale propre à chaque ouvrage. Une même notion pouvait être représentée différemment selon son origine et une partie importante des contenus demeurait textuelle. Cette organisation limitait la mutualisation, compliquait les contrôles de cohérence et rendait difficile une future production de jeux de données S-123.
+
+\subsection{Une nécessaire phase d'appropriation du domaine}
+
+La demande initiale comportait peu de spécifications détaillées. Avant de proposer une solution, j'ai dû comprendre simultanément le domaine maritime, les ouvrages RSX et la logique de S-100 et S-123. Cette appropriation a représenté une part importante du projet.
+
+J'ai étudié les ouvrages chapitre par chapitre et tableau par tableau. Les documents de correspondance produits distinguaient les données représentables directement, les correspondances partielles et les informations sans équivalent dans la version étudiée de S-123. Ils proposaient également des adaptations lorsque la norme ne permettait pas de conserver l'intégralité du contenu métier.
+
+\begin{figure}[H]
+\centering
+\fbox{\parbox{0.9\textwidth}{\centering
+Emplacement prévu : extrait anonymisé d'un tableau de correspondance entre un chapitre d'ouvrage RSX et les objets ou attributs S-123.\\
+Faire apparaître les colonnes « donnée source », « correspondance S-123 », « niveau de couverture » et « décision proposée ».
+}}
+\caption{Exemple de correspondance entre les données d'un ouvrage RSX et S-123}
+\label{fig:correspondance-rsx-s123}
+\end{figure}
+
+Plusieurs informations n'étaient pas modélisables directement. Il fallait soit accepter une perte lors de la transformation, soit augmenter le modèle avec des définitions propres au Shom, retirées ou transformées à l'export. Cette seconde piste préservait les données internes tout en maintenant la possibilité d'un échange conforme.
+
+\section{Analyse critique de la demande initiale}
+
+\subsection{Une première modélisation directement dérivée de S-123}
+
+La première approche envisagée consistait à reproduire le modèle S-123 dans une base de données relationnelle. J'ai commencé par modéliser la version 1.0 dans Modelio, puis par représenter une partie du schéma dans pgModeler. Chaque type d'objet, attribut, association ou relation devait être traduit en tables et en clés étrangères.
+
+Cette démarche semblait répondre fidèlement à la demande, mais l'implémentation encore partielle comptait déjà 73 tables. La structure obtenue était difficile à alimenter, à interroger et à faire évoluer.
+
+Le modèle était en outre couplé à une version précise. L'évolution importante entre S-123 1.0 et 1.1 a rendu une partie du travail obsolète avant même l'achèvement de la base, sans garantir la stabilité des versions suivantes.
+
+\begin{figure}[H]
+\centering
+\fbox{\parbox{0.9\textwidth}{\centering
+Emplacement prévu : schéma chronologique de la démarche.\\
+Demande de « base S-123 » $\rightarrow$ modèle relationnel direct $\rightarrow$ 73 tables pour une partie de la norme $\rightarrow$ évolution 1.0/1.1 $\rightarrow$ proposition d'un méta-modèle S-100.
+}}
+\caption{Évolution de la solution au cours de l'analyse}
+\label{fig:evolution-solution-s123}
+\end{figure}
+
+\subsection{Distinction entre format d'échange et modèle de stockage}
+
+Cette tentative m'a conduit à distinguer le produit d'échange du modèle de persistance interne. Une reproduction stricte aurait couplé les outils du Shom à une norme évolutive, sans résoudre la conservation des données propres à ses processus.
+
+Après échanges avec mes responsables, l'orientation retenue a été de rester proche de la norme afin de faciliter les exports, sans figer chaque objet S-123 dans une table dédiée.
+
+\begin{table}[H]
+\centering
+\begin{tabular}{p{3.2cm} p{5.4cm} p{5.4cm}}
+\toprule
+\textbf{Critère} & \textbf{Modèle relationnel direct} & \textbf{Méta-modèle retenu} \\
+\midrule
+Principe & Une structure dédiée à chaque élément de S-123. & Une structure générique décrivant les concepts d'un Feature Catalogue S-100. \\
+Complexité & 73 tables pour une implémentation partielle. & 18 tables principales organisées par responsabilité. \\
+Évolution & Migration du schéma à chaque modification importante de la norme. & Chargement de nouvelles définitions sans reconstruction globale du modèle physique. \\
+Réutilisation & Base fortement liée à S-123. & Modèle applicable à plusieurs spécifications S-1xx. \\
+Extensions du Shom & Ajout de colonnes ou de tables spécifiques. & Ajout de définitions identifiées comme internes au Shom. \\
+Maintenance & Coût élevé et risque d'obsolescence rapide. & Structure plus stable, avec évolution des catalogues chargés. \\
+\bottomrule
+\end{tabular}
+\caption{Comparaison des deux approches de modélisation}
+\label{tab:comparaison-modeles-s123}
+\end{table}
+
+Cette étape constitue un apport central du projet : j'ai objectivé les limites de la demande initiale et proposé une architecture différente tout en respectant l'objectif métier.
+
+\section{Conception d'un méta-modèle S-100}
+
+\subsection{Séparer la définition du modèle et les données métier}
+
+La solution sépare deux niveaux. Le premier décrit le catalogue : types d'entités et d'information, attributs, associations, rôles, cardinalités et contraintes. Le second doit stocker les objets métier et leurs valeurs.
+
+Au lieu de créer une table par classe S-123, la base enregistre la description des classes. Elle peut définir qu'un type d'entité possède un attribut obligatoire, multivalué ou limité à une énumération. Les futures instances peuvent ensuite être construites et validées à partir de cette description.
+
+La partie consacrée aux données s'inspire du principe Entity--Attribute--Value, sans se réduire à trois colonnes génériques. Le schéma conserve explicitement types, associations, héritage, cardinalités, unités et contraintes. Il reste dynamique sans abandonner l'intégrité décrite par S-100.
+
+\subsection{Organisation du schéma relationnel}
+
+Le schéma de catalogue développé dans PostgreSQL comprend 18 tables, sept types énumérés, huit vues et plusieurs dizaines de contraintes d'intégrité. Il a été construit avec pgModeler pour représenter les principaux concepts du Feature Catalogue S-100 tout en conservant une organisation relationnelle interrogeable.
+
+Le tableau~\ref{tab:familles-tables-s100} regroupe les tables par responsabilité. Ce regroupement est volontairement simplifié : le diagramme relationnel complet sera placé en annexe, car sa taille ne permet pas une lecture correcte dans le corps du rapport.
+
+\begin{table}[H]
+\centering
+\begin{tabular}{p{3cm} p{5.1cm} p{5.9cm}}
+\toprule
+\textbf{Famille} & \textbf{Tables représentatives} & \textbf{Responsabilité} \\
+\midrule
+Informations communes & \texttt{item\_info}, \texttt{definition\_reference}, \texttt{roles} & Conserver le nom, le code, la définition, la source et le rôle d'un élément. \\
+Attributs & \texttt{attributes}, \texttt{simple\_attributes\_types}, \texttt{listed\_value}, \texttt{unit\_of\_measure} & Décrire les attributs simples et complexes ainsi que leurs valeurs. \\
+Contraintes & \texttt{attribute\_constraints}, \texttt{sub\_attribute\_bindings}, \texttt{attribute\_bindings} & Représenter les types, cardinalités, compositions et valeurs autorisées. \\
+Objets & \texttt{feature\_type}, \texttt{information\_type} & Définir les entités géographiques et les objets d'information. \\
+Associations & \texttt{feature\_association}, \texttt{information\_association} & Définir les relations possibles entre les objets. \\
+Liaisons & \texttt{feature\_bindings}, \texttt{information\_bindings} et tables associatives & Relier les types autorisés, les associations, les rôles et leurs multiplicités. \\
+\bottomrule
+\end{tabular}
+\caption{Organisation fonctionnelle des tables du catalogue S-100}
+\label{tab:familles-tables-s100}
+\end{table}
+
+Les clés étrangères garantissent les relations entre définitions. D'autres contraintes vérifient notamment qu'une liaison d'attribut ne possède qu'un seul parent et limitent la duplication des éléments. Les vues SQL préparent quant à elles des représentations directement exploitables par l'API : attributs avec leurs liaisons, associations, types d'information, types d'entités et recherche globale. Certaines relations sont agrégées sous forme JSON afin d'éviter de reconstruire intégralement ces graphes dans chaque requête Python.
+
+PostgreSQL est exécuté à partir d'une image PostGIS. Le schéma actuel concerne surtout les métadonnées et n'exploite pas encore directement les types géométriques. PostGIS prépare néanmoins la future persistance d'objets S-1xx géolocalisés.
+
+\begin{figure}[H]
+\centering
+\fbox{\parbox{0.9\textwidth}{\centering
+Emplacement prévu : version simplifiée du diagramme pgModeler.\\
+Regrouper visuellement les 18 tables en six ensembles : informations communes, attributs, contraintes, objets, associations et liaisons.\\
+Le diagramme complet sera placé en annexe.
+}}
+\caption{Vue simplifiée du modèle relationnel du Feature Catalogue}
+\label{fig:modele-relationnel-s100}
+\end{figure}
+
+\section{Du Feature Catalogue XML à PostgreSQL}
+
+\subsection{Génération du modèle Python et parsing XML/XSD}
+
+Les Feature Catalogues sont des documents XML décrits par les XSD S-100. Plutôt que d'écrire manuellement toutes les classes Python, j'ai utilisé \texttt{xsdata} pour les générer à partir de ces schémas.
+
+Le modèle obtenu représente les attributs, types, associations, rôles, multiplicités et références. Un objet de type \texttt{S100FcFeatureCatalogue} constitue la racine du graphe.
+
+Le parseur lit le XML, applique un prétraitement limité aux espaces de noms, puis construit cet objet racine. Le reste de l'application manipule ensuite des objets Python typés plutôt que des balises XML.
+
+\begin{lstlisting}[language=Python,caption={Parsing d'un Feature Catalogue en objet Python},label={lst:s123-parser}]
+def get_feature_catalogue(file_path: str) -> S100FcFeatureCatalogue:
+    with open(file_path, "rb") as file:
+        xml_content = file.read()
+
+    parser = XmlParser(
+        context=XmlContext(),
+        config=ParserConfig(),
+        handler=LxmlEventHandler,
+    )
+    return parser.from_bytes(xml_content, S100FcFeatureCatalogue)
+\end{lstlisting}
+
+Cette séparation permet de faire évoluer la lecture XML et le stockage sans les réécrire simultanément.
+
+\subsection{Peuplement de la base avec les seeders}
+
+L'objet racine est transmis à un \texttt{FeatureCatalogueSeeder}, qui orchestre PostgreSQL et délègue chaque catégorie à un seeder spécialisé : attributs, rôles, associations, types et liaisons.
+
+La chaîne d'exécution principale peut être résumée par les deux instructions suivantes :
+
+\begin{lstlisting}[language=Python,caption={Enchaînement du parser et du seeder},label={lst:s123-parser-seeder}]
+feature_catalogue = get_feature_catalogue(S123_FILE_URL)
+FeatureCatalogueSeeder(feature_catalogue).seed(db_connection)
+\end{lstlisting}
+
+Les insertions sont réalisées dans une transaction afin d'éviter un catalogue partiel. Leur ordre est déterminant : un attribut doit exister avant sa liaison et un super-type avant ses descendants.
+
+Un tri topologique du graphe d'héritage insère d'abord les éléments sans dépendance, puis leurs descendants. Un cycle provoque une erreur plutôt qu'une insertion incohérente.
+
+\begin{figure}[H]
+\centering
+\fbox{\parbox{0.9\textwidth}{\centering
+Emplacement prévu : chaîne technique complète.\\[0.2cm]
+Feature Catalogue XML $\rightarrow$ parseur \texttt{xsdata} $\rightarrow$ objets Python\\
+$\rightarrow$ \texttt{FeatureCatalogueSeeder} $\rightarrow$ seeders spécialisés $\rightarrow$ PostgreSQL/PostGIS\\
+$\rightarrow$ vues SQL $\rightarrow$ API REST de consultation.\\
+La génération de formulaires et le stockage des instances constituent l'étape suivante.
+}}
+\caption{Chaîne de traitement d'un Feature Catalogue S-100}
+\label{fig:chaine-parser-seeder}
+\end{figure}
+
+Le parser porte ainsi la connaissance du XML et des XSD, tandis que les seeders portent la correspondance avec le modèle relationnel. Les deux étapes peuvent évoluer et être testées séparément.
+
+\subsection{Mise en œuvre du patron Visiteur}
+
+La conception du patron Visiteur constitue l'une des parties techniques du projet dont je suis le plus fier. Les classes représentant le catalogue sont générées automatiquement par \texttt{xsdata} à partir des XSD. Modifier manuellement chacune de ces classes aurait créé un risque important : toute nouvelle génération aurait pu écraser les comportements ajoutés et rendre la maintenance difficile.
+
+J'ai donc conçu une interface abstraite \texttt{Visitor} déclarant une opération de visite pour les principales catégories du modèle S-100 : attributs, associations, rôles, multiplicités, types d'entités, types d'information et catalogue racine. J'ai également développé un décorateur capable d'ajouter dynamiquement une méthode \texttt{accept} aux classes concernées. Le nom de la classe est transformé en nom de méthode de visite ; par exemple, une classe \texttt{S100FcFeatureType} est associée à une méthode \texttt{visit\_s100\_fc\_feature\_type}. Un traitement particulier est prévu pour les énumérations et un mécanisme de visite générique peut servir de solution de repli.
+
+Cette approche sépare la structure générée des traitements qui lui sont appliqués. Elle permet d'ajouter un nouveau parcours sans modifier les classes issues des XSD, par exemple pour contrôler un catalogue, préparer un export, produire des traces de diagnostic ou transformer certains éléments. Au-delà de son intérêt immédiat, ce travail m'a permis de mettre en pratique un patron de conception sur un problème réel de code généré, et non dans un simple exercice théorique.
+
+Dans l'architecture globale, cette réflexion complète la spécialisation des seeders. Le Visiteur apporte une réponse au parcours extensible du graphe d'objets, tandis que les seeders portent les règles de persistance propres à chaque catégorie. Cette séparation entre représentation, parcours et stockage a guidé la structuration du POC.
+
+\section{Généricité et coexistence des spécifications S-1xx}
+
+Le modèle ne dépend pas des objets propres aux services radio : il représente les concepts communs d'un Feature Catalogue S-100. Le même parser et les mêmes seeders peuvent donc traiter d'autres catalogues compatibles avec les XSD pris en charge.
+
+Le script d'exécution permet de sélectionner différents catalogues, notamment S-101, S-104, S-111, S-123, S-124 et S-129. Dans la version finale transmise, il est configuré pour charger un catalogue S-101 avec le même parser, le même modèle Python et les mêmes seeders que ceux employés pour S-123. La réutilisabilité ne concerne donc pas seulement plusieurs versions de S-123, mais une famille de produits S-1xx partageant le Feature Catalogue S-100 pris en charge.
+
+Cette architecture rend possible la coexistence de catalogues : un client pourrait sélectionner une spécification et une version, récupérer les définitions autorisées puis générer une interface. Validation et export pourraient être mutualisés tout en conservant les règles de chaque produit.
+
+\begin{figure}[H]
+\centering
+\fbox{\parbox{0.9\textwidth}{\centering
+Emplacement prévu : schéma de coexistence multi-normes.\\[0.2cm]
+S-101 \quad S-104 \quad S-111 \quad S-123 \quad S-124 \quad autres S-1xx\\
+$\searrow$ \quad $\downarrow$ \quad $\downarrow$ \quad $\downarrow$ \quad $\downarrow$ \quad $\swarrow$\\
+\textbf{Méta-modèle commun S-100}\\
+$\downarrow$\\
+API commune -- formulaires dynamiques -- validation -- export
+}}
+\caption{Coexistence de plusieurs spécifications autour du méta-modèle S-100}
+\label{fig:coexistence-s1xx}
+\end{figure}
+
+Cette généricité concerne la définition du Feature Catalogue. Elle ne prend pas automatiquement en charge tous les encodages et jeux de données associés aux produits S-1xx, qui peuvent nécessiter des composants spécifiques.
+
+La coexistence doit encore être consolidée en rattachant chaque définition à un produit et une version, puis en portant certaines contraintes d'unicité au niveau du couple \texttt{catalogue/code}. Cela évitera les collisions entre catalogues.
+
+Le gain reste majeur : l'ajout d'un produit devient principalement un chargement de catalogue plutôt qu'un nouveau projet de modélisation.
+
+\section{Développement de l'API REST de consultation}
+
+\subsection{Architecture de l'API}
+
+Le POC comprend une API REST fonctionnelle développée avec FastAPI. Son objectif est d'exposer la structure du catalogue sans imposer aux applications clientes un accès direct à PostgreSQL. La connexion repose sur un pool asynchrone \texttt{asyncpg}, créé au démarrage de l'application puis mis à disposition des endpoints à l'aide du mécanisme de dépendances de FastAPI.
+
+Le code est organisé en plusieurs responsabilités :
+
+\begin{itemize}
+    \item les \textit{routers} déclarent les endpoints, paramètres, codes d'erreur et modèles de réponse ;
+    \item les \textit{repositories} exécutent les requêtes SQL asynchrones ;
+    \item les \textit{mappers} transforment les résultats PostgreSQL en objets applicatifs ;
+    \item les schémas Pydantic décrivent et valident les réponses exposées par l'API ;
+    \item les vues PostgreSQL agrègent les relations complexes et alimentent la recherche globale.
+\end{itemize}
+
+Cette séparation évite de mélanger l'accès aux données, la transformation des résultats et le protocole HTTP. Elle rend également les contrats de réponse visibles dans la documentation OpenAPI générée automatiquement par FastAPI.
+
+\begin{figure}[H]
+\centering
+\fbox{\parbox{0.9\textwidth}{\centering
+Emplacement prévu : schéma de l'architecture de l'API.\\[0.2cm]
+Client / Swagger $\rightarrow$ routeurs FastAPI $\rightarrow$ repositories asynchrones\\
+$\rightarrow$ vues et tables PostgreSQL\\
+Résultats SQL $\rightarrow$ mappers $\rightarrow$ schémas Pydantic $\rightarrow$ réponse JSON.
+}}
+\caption{Architecture de l'API de consultation du catalogue}
+\label{fig:architecture-api-s100}
+\end{figure}
+
+\subsection{Fonctionnalités exposées}
+
+L'API ne se limite pas à retourner une liste d'éléments. Elle permet de consulter les attributs simples ou complexes, d'obtenir le détail d'un attribut avec son type, son unité, ses contraintes et ses valeurs énumérées, ainsi que de rechercher les objets qui utilisent directement cet attribut. Des endpoints équivalents exposent les types d'entités, les types d'information, les associations, les rôles et les valeurs listées.
+
+Une recherche globale permet également de retrouver un élément du catalogue à partir d'un texte, avec la possibilité de demander une correspondance exacte ou de filtrer selon la catégorie recherchée. Enfin, plusieurs endpoints renvoient le schéma JSON des modèles Pydantic. Cette fonctionnalité prépare directement la génération d'interfaces dynamiques : un client peut connaître la structure attendue sans la coder manuellement.
+
+L'API est actuellement orientée vers la lecture du catalogue. La création et la modification des instances métier, la distinction entre définitions normalisées et extensions du Shom ainsi que la production d'exports conformes constituent les étapes suivantes. Elle doit donc être présentée comme une API de consultation fonctionnelle dans le cadre du POC, et non comme une API métier complète prête pour la production.
+
+\section{Validation du POC}
+
+La validation a porté sur la lecture d'un catalogue réel, la création des objets Python et leur insertion dans PostgreSQL. Le fichier S-123 utilisé comprend plus d'une centaine d'attributs simples, plusieurs dizaines d'attributs complexes, des rôles, des associations et différents types d'objets.
+
+Les tests restent exploratoires. Les journaux suivent les phases du chargement, la transaction protège contre une insertion partielle et le tri topologique détecte les cycles d'héritage.
+
+\begin{table}[H]
+\centering
+\begin{tabular}{p{4cm} p{6.4cm} p{3.6cm}}
+\toprule
+\textbf{Scénario} & \textbf{Vérification recherchée} & \textbf{État} \\
+\midrule
+Parsing du catalogue S-123 & Création d'un objet \texttt{S100FcFeatureCatalogue} complet à partir du XML. & Fonctionnel \\
+Insertion du catalogue & Création des attributs, rôles, associations et types dans PostgreSQL. & Fonctionnel \\
+Gestion des dépendances & Insertion des super-types avant leurs descendants et détection des cycles. & Fonctionnel \\
+Chargement d'autres S-1xx & Vérification de la généricité du parseur sur plusieurs Feature Catalogues. & Tests exploratoires \\
+Coexistence multi-catalogues & Chargement simultané avec isolation des produits et versions. & À consolider \\
+API REST & Consultation des attributs, types, associations, rôles, valeurs et recherche globale. & Fonctionnel dans le POC \\
+Validation d'instances & Contrôle d'objets métier par rapport aux règles du catalogue. & Perspective \\
+Export S-123 & Génération et validation d'un jeu de données conforme. & Perspective \\
+\bottomrule
+\end{tabular}
+\caption{État de validation des principaux composants du POC}
+\label{tab:validation-s123}
+\end{table}
+
+Une suite automatisée devra encore couvrir catalogues invalides, références absentes, cardinalités, cycles, doublons, annulations de transaction et versions des XSD.
+
+\section{Limites et perspectives}
+
+Le méta-modèle réduit l'impact des évolutions d'un catalogue, mais une modification des XSD communs peut nécessiter de régénérer les classes et d'adapter le schéma ou les seeders.
+
+Une autre limite concerne les sources textuelles, conçues pour la lecture humaine. Leur transformation ne peut être entièrement automatisée sans qualification et validation par les spécialistes du GAN.
+
+Enfin, la description et l'API de consultation du catalogue sont plus avancées que le stockage des instances, les endpoints d'écriture, les formulaires, les extensions du Shom et l'export, qui restent à finaliser avec les utilisateurs.
+
+Les prochaines étapes identifiées sont les suivantes :
+
+\begin{itemize}
+    \item ajouter la gestion explicite des catalogues, produits et versions ;
+    \item finaliser le modèle des instances métier et de leurs valeurs ;
+    \item compléter l'API de consultation par des endpoints de création et de modification des instances ;
+    \item générer des formulaires à partir des définitions stockées ;
+    \item tester la saisie d'objets S-123 avec les spécialistes métier ;
+    \item définir les extensions propres au Shom sans perdre la traçabilité de leur origine ;
+    \item produire puis valider des exports S-123 ;
+    \item automatiser les tests du parseur, des seeders et des contraintes de catalogue.
+\end{itemize}
+
+\section{Bilan critique et apports professionnels}
+
+Ce projet m'a placé face à une demande ambitieuse, formulée avant la stabilisation du besoin. La difficulté principale a été de comprendre un domaine nouveau et de définir une architecture capable d'absorber l'évolution de la norme.
+
+La tentative de 73 tables, bien qu'abandonnée, a objectivé la complexité de l'approche directe. Le passage à 18 tables traduit surtout un changement d'abstraction : la base ne stocke plus une photographie rigide de S-123, mais les concepts nécessaires à la description des catalogues S-100.
+
+Je suis particulièrement satisfait de cette orientation, car parser, modèle Python, Visiteur, seeders et API sont pensés autour du Feature Catalogue S-100 et non d'une liste figée d'objets S-123. Ils ouvrent la mutualisation de la consultation, de la validation, des formulaires et de certains exports entre plusieurs S-1xx, ainsi que leur coexistence après isolation par catalogue et version.
+
+Le projet m'a appris à remettre en question une formulation sans perdre l'objectif opérationnel. J'ai expliqué pourquoi un produit d'échange ne constituait pas nécessairement un bon stockage interne, exposé les risques et présenté une alternative aux responsables.
+
+Enfin, j'ai progressé en modélisation, parsing XML/XSD, génération de classes, patrons de conception, architecture Python, FastAPI et PostgreSQL. J'ai surtout constaté que l'architecture consiste autant à choisir le bon niveau d'abstraction qu'une technologie. La valeur de la solution réside dans la séparation entre norme, catalogue, traitements, persistance et formats d'exposition.
