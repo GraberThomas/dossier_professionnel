@@ -1,11 +1,223 @@
-\section{Contexte et objectifs du projet}
+\section{Présentation du projet}
 
-Ce chapitre présentera le projet Brise-glace, retenu comme preuve principale du développement front-end et de l'interactivité applicative.
+Collective Escape, également désigné comme le projet Brise-glace, est un projet universitaire réalisé en équipe entre octobre et décembre 2024. Son objectif était de transformer un jeu de survie collectif, habituellement animé avec des supports physiques, en une application web interactive. Dans le scénario initial, les joueurs doivent classer quinze objets selon leur utilité pour survivre dans le désert. Ils réalisent d'abord un classement individuel, confrontent ensuite leurs choix en petits groupes, puis établissent une réponse collective avant de la comparer à une solution experte.
 
-\section{Compétences principalement mobilisées}
+Le porteur du projet avait formulé deux objectifs principaux. Le premier consistait à permettre la création et le déroulement complet d'une partie sur le scénario du désert, jusqu'à l'affichage des résultats. Le second visait à rendre la solution extensible afin que de nouveaux scénarios, par exemple en milieu océanique, polaire ou tropical, puissent être ajoutés sans reconstruire toute l'application.
 
-Les compétences principalement visées sont : C2.3, C2.1 et C2.2. Les compétences C2.4, C3.2, C4.3 et C4.4 pourront être mobilisées en complément selon les éléments disponibles.
+Ce projet est mobilisé dans ce dossier comme preuve principale de la compétence C2.3, relative au pilotage du développement front-end. Il présente en effet une interface dynamique, un mécanisme de glisser-déposer, plusieurs vues adaptées au rôle de l'utilisateur et une synchronisation en temps réel entre les joueurs et le maître du jeu. Il apporte également des preuves complémentaires en architecture, en développement back-end et en déploiement automatisé.
 
-\section{Plan de rédaction prévu}
+\section{Positionnement et contribution personnelle}
 
-Ce chapitre développera les règles du jeu, l'architecture React et Supabase, l'interface utilisateur, la communication temps réel, la messagerie, la logique de jeu, la gestion de l'état applicatif, la validation fonctionnelle et le bilan critique.
+Le projet a été mené par une équipe de quatre étudiants. Anne-Charlotte Arnold assurait le rôle de Scrum Master et le suivi organisationnel. Johan Nedelec a principalement travaillé sur les maquettes et la production des illustrations. Rui Lu, arrivée en cours de projet, a participé à des tâches ponctuelles, notamment à la réalisation de schémas et à la relecture des documents. Une application de test isolée a également été utilisée par l'équipe pour expérimenter le glisser-déposer avant son intégration.
+
+Pour ma part, j'occupais le rôle de développeur full stack et de référent technique. J'ai assuré l'intégralité de la réalisation technique de l'application principale livrée : conception et implémentation de la base PostgreSQL, migrations et données initiales, politiques de sécurité, fonctions SQL, services d'accès aux données, client React et TypeScript, logique de jeu, mécanismes temps réel et configuration du déploiement. Cette responsabilité complète m'a conduit à assurer la cohérence entre les choix d'architecture et leur traduction concrète dans le code.
+
+Je n'ai cependant pas travaillé isolément sur la définition du produit. J'ai participé avec l'équipe à l'analyse du besoin, à la rédaction et à la priorisation des exigences, au découpage des fonctionnalités et aux points d'avancement. Les décisions fonctionnelles restaient collectives et le pilotage des sprints relevait principalement de la Scrum Master. Cette distinction est importante : ma contribution principale porte sur la conception technique et la réalisation, tandis que les exigences, les maquettes et l'organisation générale résultent d'un travail d'équipe.
+
+\begin{table}[H]
+\centering
+\small
+\begin{tabular}{p{2.5cm} p{3cm} p{8.2cm}}
+\toprule
+\textbf{Compétence} & \textbf{Niveau} & \textbf{Mobilisation dans Collective Escape} \\
+\midrule
+C1.3 & Complémentaire & Participation à la traduction des besoins du jeu en exigences, scénarios d'utilisation et solution technique. \\
+C2.1 & Complémentaire & Architecture React--Supabase, modélisation des données et séparation entre pages, composants, contextes, services et persistance. \\
+C2.2 & Complémentaire & TypeScript, validation des données, ESLint, Git, migrations SQL et séparation des responsabilités. \\
+C2.3 & Principale & Réalisation complète du client React interactif, responsive et synchronisé en temps réel. \\
+C2.4 & Complémentaire & Base PostgreSQL, authentification Supabase, politiques RLS, fonctions SQL et liaison avec le client. \\
+C3.4 & Complémentaire & Déploiement automatisé du client avec GitHub et Vercel, avec environnements de prévisualisation. \\
+\bottomrule
+\end{tabular}
+\caption{Compétences mobilisées dans le projet Collective Escape}
+\end{table}
+
+\section{Du besoin aux choix d'architecture}
+
+\subsection{Définition et priorisation des exigences}
+
+La première étape a consisté à transformer les règles du jeu en comportements logiciels. L'équipe a recensé 91 exigences, réparties entre cinq secteurs : interface utilisateur, mécaniques de jeu, gestion des données, gestion des scénarios et fonctionnement général de l'application. Les exigences ont ensuite été classées comme obligatoires, souhaitables ou optionnelles. Cette priorisation devait permettre de concentrer l'effort sur un parcours jouable de bout en bout avant d'ajouter des fonctions secondaires.
+
+Parmi les exigences obligatoires figuraient notamment la création et la participation à une partie, le classement des quinze objets, la progression entre les phases du jeu, la présence d'un maître du jeu, la comparaison avec une solution experte et la conservation des résultats. D'autres besoins, comme une interface complète de création de scénario ou la consultation détaillée des archives, pouvaient être reportés sans empêcher la démonstration du cœur du produit.
+
+J'ai participé à cette phase en évaluant la faisabilité technique des comportements demandés. Le passage d'un jeu physique à une application multi-utilisateur soulevait plusieurs questions : comment représenter les différentes phases d'une partie, comment identifier les joueurs présents, comment propager immédiatement une décision du maître du jeu et comment empêcher un utilisateur d'accéder à des données qui ne le concernent pas ? Ces questions ont directement orienté la structure des tables, les états de l'application et le choix d'un service temps réel.
+
+\subsection{Choix de la stack}
+
+Le client a été réalisé avec React, TypeScript et Vite. React répondait au besoin de construire une interface composée de nombreux états et composants réutilisables. TypeScript apportait un typage statique utile pour sécuriser les échanges avec les données générées à partir du schéma PostgreSQL. Vite offrait un environnement de développement rapide et une production optimisée du client.
+
+Le back-end repose sur Supabase, qui réunit une base PostgreSQL, un système d'authentification, un stockage de fichiers, des API générées à partir du schéma et des canaux temps réel. Ce choix permettait d'éviter le développement d'un serveur applicatif séparé dans un projet limité à trois mois. Il restait néanmoins nécessaire de concevoir le modèle, d'écrire les migrations, de définir les règles de sécurité et de développer les fonctions SQL portant les opérations métier complexes.
+
+Le déploiement du client a été confié à Vercel. Son intégration avec GitHub permettait de construire et publier automatiquement l'application, tout en générant des URL de prévisualisation pour les branches et les demandes de fusion.
+
+\begin{figure}[H]
+\centering
+\fbox{\parbox{0.88\textwidth}{\centering
+Emplacement prévu : schéma d'architecture générale de Collective Escape.\\
+Navigateur React/TypeScript -- Contextes et services -- Supabase Auth, Realtime et PostgreSQL -- Vercel.
+}}
+\caption{Architecture générale de l'application Collective Escape}
+\end{figure}
+
+\subsection{Une architecture sans serveur applicatif dédié}
+
+Le choix de Supabase déplace une partie des responsabilités habituellement portées par une API spécifique vers PostgreSQL et les services de la plateforme. Le client utilise la bibliothèque JavaScript Supabase pour s'authentifier, effectuer les opérations autorisées et s'abonner aux changements. La sécurité ne peut donc pas reposer uniquement sur l'interface : elle doit être garantie au niveau de la base grâce aux politiques de Row-Level Security.
+
+Cette architecture a accéléré la réalisation du produit, mais elle a aussi créé une dépendance forte à la plateforme. Plus les règles métier se complexifiaient, plus les politiques RLS et les fonctions PostgreSQL devenaient difficiles à contrôler. Certaines opérations privilégiées, comme la suppression complète d'un compte ou l'archivage transactionnel d'une partie, ne pouvaient pas être réalisées proprement depuis le client avec la clé publique. Elles ont nécessité des fonctions SQL dédiées.
+
+Avec le recul, Supabase était adapté à la durée du projet et à son besoin de temps réel. Pour une évolution à plus grande échelle, j'étudierais néanmoins l'introduction d'une couche back-end dédiée afin de centraliser les opérations métier sensibles, de faciliter les tests et de réduire le couplage entre le client et le modèle de persistance.
+
+\section{Conception des données et sécurisation}
+
+\subsection{Modélisation et gestion des migrations}
+
+Le modèle de données a d'abord été représenté dans Modelio, puis repris dans pgModeler afin de disposer d'un schéma adapté à PostgreSQL. J'ai ensuite traduit ce modèle dans Supabase. Les principales entités sont les utilisateurs, les scénarios, les éléments à classer, les parties, les groupes, les participants et les archives.
+
+Une partie contient notamment son maître du jeu, le scénario sélectionné, les groupes, son état général et l'étape en cours. Les éléments d'un scénario conservent leur position dans la solution experte, leur illustration et leur justification. Les relations entre la partie, les groupes et les joueurs permettent de suivre les réponses et les scores sans les mélanger aux données de référence du scénario.
+
+Après une première utilisation directe de l'instance distante, j'ai mis en place Supabase CLI afin de reconstruire localement la base à partir du dépôt Git. Les migrations SQL décrivent les évolutions successives du schéma, tandis que le fichier de \textit{seed} fournit le scénario initial et ses quinze objets. Cette organisation rend le modèle reproductible et rattache son évolution aux versions du code.
+
+\begin{figure}[H]
+\centering
+\fbox{\parbox{0.88\textwidth}{\centering
+Emplacement prévu : modèle de données simplifié issu du rapport de projet.\\
+Conserver uniquement User, Scenario, ScenarioElement, Game, Group et GameArchive.
+}}
+\caption{Principales entités du modèle de données}
+\end{figure}
+
+\subsection{Authentification et politiques RLS}
+
+L'authentification est gérée par Supabase Auth. Lorsqu'un utilisateur se connecte, la session obtenue est prise en charge par le client Supabase et rendue accessible au reste de l'application à travers un contexte React. La table applicative des utilisateurs complète les informations du schéma d'authentification avec les données utiles au jeu, notamment le pseudonyme.
+
+J'ai défini des politiques RLS pour encadrer les opérations de lecture et d'écriture. Un utilisateur ne doit pas, par exemple, pouvoir modifier le scénario privé d'un autre créateur, agir à la place du maître du jeu ou consulter une archive à laquelle il n'a pas participé. Le contrôle est exécuté par PostgreSQL, indépendamment de ce que l'interface affiche. Cette défense au niveau des données limite le risque qu'un appel fabriqué manuellement contourne les restrictions du client.
+
+L'archivage illustre la nécessité de déplacer certaines règles au plus près de la base. Une fonction PostgreSQL vérifie que l'appelant est le maître du jeu et que la partie est terminée. Elle crée ensuite l'archive, associe les joueurs autorisés à la consulter, puis supprime les données devenues inutiles dans les tables actives. Le traitement regroupe ainsi une opération métier cohérente au lieu de laisser le client enchaîner plusieurs écritures susceptibles d'être interrompues.
+
+\section{Réalisation du client React}
+
+\subsection{Organisation générale}
+
+J'ai organisé le client afin de distinguer les responsabilités d'affichage, de navigation, d'état et d'accès aux données. Les pages correspondent aux routes principales, les composants portent les éléments réutilisables, les services encapsulent les interactions avec Supabase et les hooks donnent accès aux contextes partagés.
+
+L'application utilise notamment :
+
+\begin{itemize}
+    \item un contexte d'authentification, qui expose l'utilisateur connecté et les actions de connexion ou de déconnexion ;
+    \item un contexte de thème, qui gère les modes clair et sombre ;
+    \item un contexte de partie, qui centralise les données du jeu, le scénario, les joueurs présents et les abonnements temps réel ;
+    \item des services sans état pour les utilisateurs, les scénarios, les parties et les images ;
+    \item React Router pour associer les URL aux pages et gérer les redirections.
+\end{itemize}
+
+Cette séparation évite que chaque écran réimplémente la connexion à Supabase ou conserve une copie indépendante de l'état global. Elle facilite également l'évolution du client : un composant d'interface consomme une donnée ou déclenche une action sans avoir à connaître tous les détails de persistance.
+
+\subsection{Parcours utilisateur et cohérence visuelle}
+
+La page d'accueil regroupe les trois entrées principales du produit : rejoindre une partie avec un code, créer une partie et consulter les scénarios disponibles. Lors du chargement, l'application recherche également une éventuelle partie en cours afin de permettre à un joueur déconnecté de reprendre plus facilement sa session.
+
+Les pages de connexion, d'inscription et de compte utilisent une structure visuelle commune. Un composant de mise en page réutilisable limite la largeur du contenu sur les écrans larges et maintient une présentation homogène. L'en-tête adapte ses actions à la session de l'utilisateur, tandis que le thème peut être basculé entre une version claire et une version sombre.
+
+Les écrans de jeu ont nécessité une organisation différente car ils affichent simultanément le scénario, les cartes, la progression et des informations propres au rôle de l'utilisateur. Le maître du jeu suit les participants et déclenche les changements de phase. Les joueurs classent les objets, soumettent leur réponse et attendent la phase suivante. L'interface est donc déterminée par la combinaison de l'état de la partie, de l'étape en cours et du rôle de la personne connectée.
+
+\begin{figure}[H]
+\centering
+\fbox{\parbox{0.88\textwidth}{\centering
+Emplacement prévu : planche de trois captures issues du rapport.\\
+Accueil responsive -- lobby avec joueurs connectés -- écran de classement des quinze objets.
+}}
+\caption{Principaux écrans du client Collective Escape}
+\end{figure}
+
+\subsection{Interaction par glisser-déposer}
+
+Le classement des quinze objets constitue l'interaction centrale du jeu. Une première expérimentation isolée a permis à l'équipe d'étudier le comportement attendu : déplacer une carte, la déposer à une position, modifier l'ordre, retirer une carte et réinitialiser le classement. J'ai ensuite repris ces apprentissages pour intégrer la fonctionnalité dans l'application principale React et TypeScript.
+
+L'implémentation devait conserver l'identité de chaque objet et la position choisie, tout en fournissant un retour visuel pendant le déplacement. Le passage de quelques cartes de test aux quinze objets du scénario a également imposé de travailler la lisibilité de l'écran et la séparation des styles. Les cartes associent une illustration et un intitulé afin de réduire l'effort d'identification pendant la discussion.
+
+Cette fonctionnalité reste cependant imparfaite du point de vue de l'accessibilité. L'interface a été pensée pour être compréhensible et responsive, mais elle n'a pas fait l'objet d'un audit WCAG formalisé. Une version plus aboutie devrait proposer une alternative complète au glisser-déposer, utilisable au clavier et avec un lecteur d'écran, vérifier systématiquement les contrastes et tester le parcours avec différents profils d'utilisateurs. Ce constat limite la portée de la preuve en matière d'inclusion, mais il constitue également un enseignement concret pour mes futurs développements front-end.
+
+\section{Synchronisation et déroulement d'une partie}
+
+\subsection{Modélisation des états}
+
+Le cœur de l'application repose sur une machine d'états simple. Une partie peut être en attente, active ou terminée. Lorsqu'elle est active, une étape supplémentaire distingue la réflexion individuelle, le travail en petit groupe et la mise en commun. Cette représentation rend explicites les transitions autorisées et permet à l'interface de choisir le composant adapté.
+
+À l'entrée dans une partie, le composant englobant récupère le code depuis l'URL puis initialise le contexte de jeu. Celui-ci charge la partie et son scénario, suit l'état de chargement et prépare les abonnements nécessaires. Si le code n'existe pas, l'utilisateur est redirigé vers une page d'erreur ; si les données sont valides, le contexte les fournit à tous les composants descendants.
+
+\subsection{Présence et mises à jour en temps réel}
+
+Le contexte de jeu ouvre un canal Supabase pour suivre la présence des utilisateurs. La liste des joueurs connectés est mise à jour lorsqu'une personne rejoint ou quitte la partie. Un autre abonnement écoute les modifications de la table représentant la partie. Lorsque le maître du jeu démarre la session ou change d'étape, l'écriture en base déclenche une notification vers les clients connectés.
+
+Le résultat visible est immédiat : une modification du maître du jeu entraîne le remplacement du lobby par le plateau, puis l'affichage de la phase suivante, sans rechargement manuel. Le temps réel n'est donc pas un ajout décoratif ; il assure la cohérence d'une expérience où plusieurs navigateurs doivent partager le même rythme.
+
+Pendant les phases individuelle et en petits groupes, les joueurs transmettent leur classement. Le maître du jeu dispose d'une vue récapitulative indiquant les réponses reçues. À la fin, l'application affiche les solutions détaillées et calcule les résultats en comparant les positions proposées avec le classement expert. Les données utiles sont ensuite archivées afin de conserver les participants, les groupes et les scores.
+
+\begin{figure}[H]
+\centering
+\fbox{\parbox{0.88\textwidth}{\centering
+Emplacement prévu : diagramme de séquence d'une partie issu du rapport.\\
+Joueur / client React / GameProvider / Supabase / maître du jeu.
+}}
+\caption{Synchronisation des acteurs au cours d'une partie}
+\end{figure}
+
+\section{Déploiement et mise à disposition}
+
+Le code source était versionné sur GitHub. Chaque membre disposait d'une branche de travail, une branche de développement était utilisée pour la préproduction et la branche principale représentait la version stable. Même si la production du code a été fortement concentrée, cette organisation conservait une séparation entre les modifications en cours et la version présentée.
+
+J'ai configuré le déploiement du client sur Vercel. Lorsqu'une modification est intégrée à la branche principale, Vercel récupère le dépôt, installe les dépendances, génère le \textit{build} de production et met à jour le domaine de l'application. Les paramètres d'accès à Supabase sont fournis au moment de la construction par des variables d'environnement.
+
+Des URL de prévisualisation sont également créées pour les branches et les demandes de fusion. Elles permettent de vérifier une évolution dans un environnement distant sans remplacer la version principale. Les journaux de construction facilitent enfin le diagnostic lorsqu'une installation ou une compilation échoue.
+
+Cette automatisation constitue une preuve complémentaire de C3.4 : la publication du client ne nécessitait pas de copie manuelle de fichiers vers un serveur. Elle ne représente cependant pas une chaîne DevOps complète conçue par l'équipe, car une grande partie du processus est fournie et orchestrée par Vercel.
+
+\section{Validation, résultats et limites}
+
+\subsection{Résultats mesurés}
+
+Le suivi des exigences permet de disposer d'indicateurs plus précis qu'une appréciation générale du produit. Au 30 décembre 2024, 36 des 48 exigences fonctionnelles étaient réalisées. Les fonctions principales permettaient de créer une partie, de rejoindre un lobby, d'enchaîner les phases du jeu, de classer les objets, de synchroniser les participants et d'afficher les solutions.
+
+\begin{table}[H]
+\centering
+\begin{tabular}{p{5.2cm} r r r r}
+\toprule
+\textbf{Catégorie} & \textbf{Réalisées} & \textbf{En cours} & \textbf{Non faites} & \textbf{Total} \\
+\midrule
+Exigences fonctionnelles & 36 & 6 & 6 & 48 \\
+Exigences non fonctionnelles & 23 & 15 & 5 & 43 \\
+Ensemble des exigences & 59 & 21 & 11 & 91 \\
+\bottomrule
+\end{tabular}
+\caption{État des exigences au 30 décembre 2024}
+\end{table}
+
+Le taux de réalisation atteint ainsi 75\,\% pour les exigences fonctionnelles et 64,84\,\% pour l'ensemble des exigences. Ces résultats doivent être interprétés avec prudence. Ils montrent que le parcours principal était fonctionnel, mais aussi qu'une part importante des exigences non fonctionnelles restait incomplète. Les fonctionnalités de création complète de scénarios et de consultation des archives n'avaient notamment pas été terminées.
+
+\subsection{Stratégie de validation}
+
+Le rapport collectif évoque des tests unitaires, d'intégration et de charge automatisés. En l'absence d'éléments suffisamment précis permettant de démontrer leur couverture et leurs résultats, je ne les retiens pas comme preuve principale dans ce dossier. La validation s'est surtout appuyée sur le \textit{build} TypeScript, l'analyse statique, les essais fonctionnels au fil des développements et les scénarios exécutés avec plusieurs clients connectés.
+
+Les points sensibles vérifiés concernaient la connexion, la création ou la reprise d'une partie, les transitions déclenchées par le maître du jeu, la présence des joueurs, la soumission des classements, les restrictions d'accès et l'archivage. La mise à disposition sur Vercel permettait également de tester l'application dans un environnement distant plus représentatif que le seul poste de développement.
+
+Cette stratégie a permis de livrer une version démontrable, mais elle demeure insuffisamment industrialisée. Un nouveau cycle devrait introduire des tests unitaires sur les calculs et les transitions d'état, des tests d'intégration sur les politiques RLS et les fonctions SQL, puis des tests de bout en bout simulant plusieurs navigateurs.
+
+\subsection{Difficultés rencontrées}
+
+La première difficulté a été l'écart entre l'ambition du périmètre et le temps réellement disponible. Le projet devait être mené en trois mois en parallèle des cours, de l'alternance et des autres travaux. La disponibilité variable des membres a créé une répartition déséquilibrée et a concentré la réalisation technique sur moi. Cette situation a accéléré certaines décisions, mais elle a aussi réduit les possibilités de revue de code et de partage de la connaissance.
+
+La seconde difficulté concernait l'environnement local Supabase. La version locale n'a fonctionné de manière fiable que sur mon poste, probablement en raison de contraintes d'espace ou de compatibilité sur les autres machines. L'équipe a donc souvent utilisé l'instance distante, ce qui a limité la participation directe au code principal et augmenté le risque de travailler sur un environnement partagé.
+
+Enfin, la transition de Trello vers Jira en cours de projet a demandé un effort de reprise. Jira a ensuite apporté un backlog et une organisation par sprints plus structurés, mais ses indicateurs, notamment la vélocité et le \textit{burndown}, n'ont pas été réellement exploités. Le projet disposait donc d'outils de suivi, sans atteindre une mesure suffisamment rigoureuse de la performance.
+
+\section{Analyse critique et enseignements}
+
+Collective Escape m'a permis de conduire une réalisation front-end bien au-delà de l'assemblage de pages statiques. J'ai dû maintenir la cohérence entre une règle de jeu, un modèle relationnel, des permissions, des événements temps réel et plusieurs interfaces dépendantes du rôle de l'utilisateur. Le développement du client ne pouvait pas être séparé du comportement de la base : une transition ou une restriction mal modélisée aurait immédiatement produit des incohérences entre les participants.
+
+Le projet m'a également appris qu'une forte capacité de production individuelle ne suffit pas à garantir la réussite collective. Le rapport initial me décrit comme le \enquote{pilier technique} de l'équipe. Cette position a permis d'aboutir à un produit fonctionnel, mais elle constituait aussi un risque : une grande partie de la connaissance reposait sur une seule personne. Sur un futur projet, je prévoirais des revues de code, du travail en binôme et une procédure de mise en route vérifiée sur plusieurs postes.
+
+Je réduirais également plus tôt le périmètre du produit. Le parcours complet du scénario du désert devait constituer le MVP, tandis que la création avancée de scénarios, les statistiques de compte et les archives consultables auraient pu être planifiées dans un second incrément. Cette séparation aurait libéré du temps pour les tests, l'accessibilité et la stabilisation de l'environnement local.
+
+Enfin, le choix d'une architecture React--Supabase a été efficace pour produire rapidement une application temps réel. Il ne doit cependant pas être considéré comme universel. J'en retiens surtout une méthode de décision : relier un choix technique au besoin prioritaire, identifier les responsabilités qu'il déplace et réévaluer sa pertinence lorsque la complexité augmente.
+
+Ce projet constitue ainsi ma preuve principale de C2.3. Il montre ma capacité à réaliser une interface React dynamique, à intégrer des interactions complexes et à la relier à un système temps réel sécurisé. Il précise aussi mes prochains axes de progression : accessibilité, tests automatisés et partage de la réalisation.
