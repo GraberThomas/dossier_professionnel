@@ -4,6 +4,9 @@ on:
   push:
     branches:
       - tmp/compile-feastverse-pdf
+  pull_request:
+    branches:
+      - rewrite/feastverse
 
 jobs:
   build:
