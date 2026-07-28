@@ -1,7 +1,268 @@
-\section{Contexte et objectifs du projet}
+\section{Présentation du projet}
 
-Ce chapitre présentera le projet mobile retenu pour le pilotage d'équipe.
+Le projet IPF 2026, intitulé \textit{5 Secondes Chrono} puis décliné sous le nom Lynx Immo dans l'application, est un projet de fin d'année réalisé pour Le Carré Pro, organisme de formation spécialisé dans l'immobilier commercial. L'objectif était de concevoir une solution de micro-apprentissage juridique composée d'une application mobile destinée aux apprenants, d'un espace d'administration pour le client et d'un socle de données commun permettant de gérer contenus, progression, abonnements et statistiques.
 
-\section{Compétences principalement mobilisées}
+Le projet s'est déroulé de novembre 2025 à juillet 2026 avec un client réel et une équipe de cinq étudiants de M1 et M2. J'y ai occupé une double fonction de chef de projet et de référent technique. J'étais donc chargé de la coordination générale, de la relation avec le client, du suivi des jalons et de l'arbitrage des priorités, tout en participant directement aux décisions d'architecture et à la réalisation technique.
 
-Les compétences principalement visées sont : C1.4, C1.5, C1.6, C1.7, C4.1, C4.2, C4.3, C4.4, C4.5 et C4.6.
+Cette double responsabilité a constitué la principale spécificité du projet dans mon parcours. Contrairement aux projets présentés précédemment, Lynx Immo n'est pas mobilisé ici principalement pour démontrer une technologie ou un type de développement. Il constitue surtout une situation de pilotage : il m'a fallu transformer un besoin client ambitieux en une trajectoire réalisable, organiser une équipe aux disponibilités variables, suivre plusieurs centaines de tâches, arbitrer les évolutions du périmètre et préparer la transmission du produit à une future équipe de reprise.
+
+Le produit réalisé repose finalement sur trois briques principales. L'application apprenant est développée en Flutter pour Android et iOS. L'espace d'administration repose sur React, Vite et TypeScript. Le socle serveur utilise Supabase, avec PostgreSQL, Auth, des politiques de sécurité au niveau des lignes, des fonctions SQL et des fonctions Edge pour certaines opérations. RevenueCat complète cet ensemble pour la gestion des abonnements mobiles. La solution a également été accompagnée d'une documentation développeur MkDocs très détaillée, conçue explicitement pour permettre une reprise du projet par une entreprise ou un autre prestataire.
+
+\section{Compétences mobilisées}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{p{2.4cm} p{11.6cm}}
+\toprule
+\textbf{Compétence} & \textbf{Mobilisation dans le projet Lynx Immo} \\
+\midrule
+C1.4 & Construction et suivi d'une feuille de route de novembre 2025 à juillet 2026 : phases, sprints, jalons, dépendances, livrables, charge, risques et outils de pilotage. \\
+C1.5 & Mise en place du projet à partir du cadrage, du périmètre MVP, d'une méthode hybride, d'un registre des risques, d'une organisation documentaire et d'environnements de développement reproductibles. \\
+C1.6 & Mesure de la performance du projet par les exigences, les états Jira, les jalons et plusieurs familles de KPI de pilotage, de valeur, d'usage et de performance technique. \\
+C1.7 & Supervision de l'avancement et adaptation du projet face aux écarts de disponibilité, aux retards, aux demandes client et à l'augmentation du périmètre. \\
+C4.1 & Identification des compétences nécessaires au projet et organisation de l'équipe autour des domaines UX/UI, mobile, web, données, sécurité, gestion de projet, documentation et déploiement. \\
+C4.2 & Constitution opérationnelle de l'équipe par attribution des rôles, des responsabilités et des domaines de contribution. Le cadre académique n'incluait pas de recrutement RH ; cette limite est explicitée dans l'analyse. \\
+C4.3 & Coordination de l'activité par la répartition des tâches, les sprints, Jira, la matrice RACI, les priorités et les réaffectations liées à la charge réelle. \\
+C4.4 & Accompagnement de l'équipe par les réunions, la communication continue, les revues, l'aide à la résolution des blocages et la mise à disposition de supports techniques et documentaires. \\
+C4.5 & Planification de la montée en compétences sur les outils nécessaires au projet, principalement par auto-formation encadrée, expérimentation et apprentissage en situation de travail. \\
+C4.6 & Évaluation collective par les indicateurs et la rétrospective, complétée par des entretiens individuels de fin de projet permettant un retour réciproque sur l'organisation, la contribution et le management. \\
+C3.6 & Production d'une documentation de reprise couvrant installation, architecture, API, base de données, mobile, administration, sécurité, tests, déploiement, maintenance et évolutions. \\
+\bottomrule
+\end{tabular}
+\caption{Compétences principalement mobilisées dans le projet Lynx Immo}
+\label{tab:competences-lynx}
+\end{table}
+
+Les compétences C1.4 à C1.7 et C4.1 à C4.6 constituent le cœur de ce chapitre. Certaines sont démontrées dans un cadre différent de celui d'une entreprise classique. L'équipe était imposée par le contexte pédagogique et il n'existait ni processus de recrutement ni service de ressources humaines associé au projet. Je ne présente donc pas Lynx Immo comme une expérience de recrutement. En revanche, la définition des rôles, l'identification des compétences requises, la répartition de la charge, l'accompagnement et l'évaluation ont constitué de véritables responsabilités de pilotage.
+
+\section{Transformer un besoin ambitieux en trajectoire projet}
+
+\subsection{Cadrer un produit plus large qu'un simple quiz}
+
+Le besoin initial pouvait sembler relativement simple : proposer aux professionnels de l'immobilier commercial des quiz juridiques courts et réguliers. Les premiers échanges ont rapidement montré que l'application devait couvrir un périmètre beaucoup plus large. Le client souhaitait disposer d'une expérience apprenant gamifiée, d'un espace d'administration, de statistiques, de vidéos pédagogiques, de mécanismes de progression, d'abonnements et, à terme, d'un accompagnement personnalisé.
+
+La première difficulté a donc été d'éviter que le projet soit défini comme une accumulation de fonctionnalités. Avec l'équipe, nous avons distingué trois ensembles : l'application apprenant, l'interface d'administration et le socle technique. Le MVP devait avant tout démontrer un parcours complet et cohérent : accéder à l'application, réaliser un quiz, obtenir un résultat, progresser et permettre au client d'administrer le contenu nécessaire à ce parcours.
+
+Le cadrage a reposé sur plusieurs livrables complémentaires : cahier des charges, Project Scope Statement, Plan de Développement Logiciel, exigences fonctionnelles et non fonctionnelles, registre des risques, maquettes, modèle de données, roadmap et planning. Ce travail préparatoire a parfois donné l'impression de retarder le développement, notamment pour les profils qui souhaitaient produire rapidement du code. Avec le recul, il a au contraire constitué un garde-fou lorsque la charge et le périmètre ont commencé à diverger de la trajectoire initiale.
+
+\subsection{Construire une feuille de route à plusieurs niveaux}
+
+La feuille de route s'étendait de novembre 2025 à juillet 2026. Je l'ai organisée autour de grandes phases correspondant à des niveaux de maturité du produit : lancement et cadrage, préparation des contenus, validation du design, développement du MVP, tests et stabilisation, préparation de la préproduction, sécurité et finalisation, puis livraison et soutenance.
+
+Cette vision macro était complétée par un diagramme de Gantt et par des sprints. Les sprints n'avaient volontairement pas tous une durée identique. Le projet devait composer avec les rendez-vous client, les périodes d'alternance, les autres rendus académiques et deux promotions disposant de calendriers différents. Utiliser un rythme fixe uniquement pour se conformer à Scrum aurait donné une impression de régularité sans correspondre à la disponibilité réelle de l'équipe. J'ai donc préféré conserver la logique itérative tout en adaptant la durée des périodes de travail aux contraintes du projet.
+
+\begin{figure}[H]
+\centering
+\fbox{\parbox{0.9\textwidth}{\centering
+Emplacement prévu : synthèse de la roadmap IPF.\\[0.15cm]
+Novembre 2025 : cadrage et kick-off $\rightarrow$ janvier 2026 : design validé $\rightarrow$ mars/avril : MVP $\rightarrow$ mai : stabilisation et sécurité $\rightarrow$ juin/juillet : livraison et soutenance.\\
+La version détaillée du calendrier et du Gantt sera placée en annexe.
+}}
+\caption{Trajectoire générale du projet Lynx Immo}
+\label{fig:lynx-roadmap}
+\end{figure}
+
+La roadmap avait également une fonction de décision. Un jalon n'était pas seulement une date à atteindre : il permettait de comparer le niveau de maturité obtenu au niveau attendu et de décider de la suite. Lorsque le MVP est arrivé avec un niveau de complétude inférieur aux ambitions initiales, le rôle du pilotage n'était pas de conserver artificiellement toutes les fonctionnalités prévues. Il fallait protéger le parcours principal, hiérarchiser les écarts et reporter ce qui ne pouvait plus être terminé correctement.
+
+Cette démarche constitue la preuve principale de C1.4. La feuille de route ne se limitait pas à un calendrier : elle reliait livrables, dépendances, ressources disponibles, risques, sprints et critères de validation.
+
+\section{Mettre en place une organisation adaptée au contexte}
+
+\subsection{Une méthode hybride plutôt qu'un cadre agile théorique}
+
+Le projet a suivi une méthode hybride. La phase de cadrage était structurée de manière assez proche d'une démarche séquentielle : comprendre le besoin, définir le périmètre, identifier les risques, concevoir les grands éléments et fixer les livrables avant d'engager fortement le développement. La réalisation était ensuite plus itérative, avec sprints, retours client, ajustements du backlog et validations progressives.
+
+Ce choix répondait à une contrainte concrète. Une démarche entièrement séquentielle aurait été trop rigide face aux évolutions du besoin et aux retours réguliers du client. À l'inverse, commencer immédiatement par des sprints sans cadrage suffisamment précis aurait rendu difficile le contrôle du périmètre, notamment pour un produit comportant à la fois mobile, administration, données, paiements et exigences de conformité.
+
+L'objectif n'était donc pas de revendiquer l'application parfaite d'une méthode, mais de disposer d'un cadre compréhensible et adaptable. Cette approche a été particulièrement utile lorsque les hypothèses de disponibilité de l'équipe se sont révélées trop optimistes.
+
+\subsection{Identifier les risques avant qu'ils ne deviennent des incidents}
+
+Le registre des risques distinguait plusieurs familles : risques stratégiques, planning, techniques, organisationnels et qualité/UX. Les risques étaient évalués selon leur probabilité et leur impact. Un mécanisme d'escalade prévoyait qu'un score suffisamment élevé entraîne une attention renforcée du chef de projet, puis un arbitrage avec le Product Owner ou le client lorsque le périmètre ou les délais étaient concernés.
+
+Plusieurs risques identifiés se sont effectivement matérialisés : disponibilité variable de l'équipe, retard de certains contenus, ambition trop élevée pour le module de coaching et difficulté à maintenir tous les outils de suivi au même niveau pendant les périodes de forte charge. Le registre n'a donc pas supprimé les difficultés. Sa valeur a été de fournir un langage commun pour expliquer pourquoi certaines décisions étaient nécessaires.
+
+Le projet m'a notamment appris qu'identifier un risque ne signifie pas l'avoir traité. Un risque de surcharge peut être connu plusieurs mois à l'avance et se produire malgré tout. La compétence de pilotage réside alors dans la réaction : mesurer l'impact, réévaluer les priorités et réduire l'exposition du projet.
+
+\subsection{Rendre l'environnement reproductible}
+
+La mise en place du projet ne concernait pas seulement la gestion de projet. Sur le plan technique, j'ai cherché à réduire les écarts entre postes et environnements. Le dépôt est organisé comme un monorepo comprenant le backend Supabase, l'interface React, l'application Flutter et les scripts de peuplement de données. L'environnement de développement a ensuite été consolidé autour d'un DevContainer VS Code regroupant notamment Node.js, Flutter, Supabase CLI, Java, Android SDK et Docker-in-Docker.
+
+Le schéma de base de données est versionné par migrations ; il n'est pas prévu de modifier directement la structure depuis l'interface d'administration Supabase. Les scripts distinguent également les environnements local, préproduction et production et ajoutent des confirmations avant certaines opérations destructrices. Ces choix ont été introduits progressivement pour faciliter la reprise du projet et éviter que son fonctionnement dépende de la configuration de mon poste.
+
+Cette combinaison entre cadrage, organisation, gestion des risques et reproductibilité technique constitue ma principale démonstration de C1.5.
+
+\section{Définir l'équipe, les responsabilités et les compétences nécessaires}
+
+\subsection{Une équipe de cinq personnes aux profils et disponibilités différents}
+
+L'équipe était composée de cinq étudiants. J'assurais le rôle de chef de projet et de référent technique ; Johan Nedelec était Product Owner ; Anne-Charlotte Arnold occupait notamment les fonctions de Scrum Master, documentation et suivi opérationnel ; Clémence Yonkeu Wandji et William Plantec participaient au développement. Les responsabilités ont été formalisées afin d'éviter que la répartition ne repose uniquement sur des habitudes ou sur la personne disponible au moment d'une urgence.
+
+Le fait que l'équipe soit issue de deux promotions était un élément structurant. Les M1 et M2 n'avaient pas les mêmes échéances académiques ni la même disponibilité au cours de l'année. Le projet devait donc intégrer non seulement les compétences techniques, mais également la capacité réelle de chaque membre à contribuer selon les périodes.
+
+\subsection{Identifier les compétences à couvrir}
+
+Avant de répartir les travaux, nous avons identifié les domaines nécessaires à la réalisation : UX/UI et Figma, Supabase et PostgreSQL pour les données, React/Vite pour l'administration, Flutter/Dart pour le mobile, Jira/Confluence/Teams pour le pilotage, GitHub et les environnements de déploiement, ainsi que les sujets liés à la sécurité, au \terme{rgpd} et aux paiements.
+
+Cette cartographie avait deux usages. Elle permettait d'abord de vérifier que le projet disposait d'un responsable ou d'un contributeur pour chaque domaine. Elle mettait ensuite en évidence les sujets nécessitant une montée en compétences. Dans une équipe étudiante, la compétence n'est pas figée : une technologie peut être nouvelle pour un membre au début du projet et devenir son domaine principal quelques semaines plus tard.
+
+\begin{figure}[H]
+\centering
+\fbox{\parbox{0.9\textwidth}{\centering
+Emplacement prévu : organigramme de l'équipe et principaux domaines de compétence.\\[0.15cm]
+Client / référente pédagogique $\rightarrow$ chef de projet\\
+$\rightarrow$ Product Owner / Scrum Master / référent technique $\rightarrow$ équipe de développement.}}
+\caption{Organisation de l'équipe Lynx Immo}
+\label{fig:lynx-equipe}
+\end{figure}
+
+Cette démarche valide directement C4.1 : les compétences ont été analysées à partir des besoins du projet avant d'être associées aux rôles et aux tâches.
+
+\subsection{La limite du contexte académique pour C4.2}
+
+Le référentiel associe également la constitution d'une équipe à des problématiques de recrutement et de ressources humaines. Ce contexte n'existait pas ici : l'équipe était constituée dans le cadre de la formation et je n'ai ni recruté ses membres ni conduit de processus RH. Il serait donc artificiel de présenter le projet comme une expérience de recrutement.
+
+En revanche, j'ai bien participé à sa constitution opérationnelle. Les personnes disponibles devaient être transformées en une équipe capable de produire : clarification des rôles, attribution des responsabilités, identification des compétences à développer, définition des circuits de validation et réorganisation lorsque la disponibilité réelle évoluait. C'est sur cette dimension que je mobilise Lynx Immo pour C4.2, avec la limite explicite qu'il ne couvre pas la sélection de candidats ni les relations avec un service RH.
+
+\section{Coordonner le travail et piloter la charge}
+
+\subsection{Du découpage fonctionnel aux 563 tickets Jira}
+
+Le projet a été découpé en grands domaines : application apprenant, contenus pédagogiques, coaching et IA, utilisateurs et abonnements, espace administrateur, backend et base de données, sécurité/infrastructure/\terme{rgpd}, auxquels se sont ajoutées gestion de projet, documentation, veille et recherche.
+
+Ce découpage a ensuite été transformé en tâches opérationnelles. Au total, 563 tickets ont été créés dans Jira au cours du projet. Ce volume reflète moins une recherche de granularité artificielle que l'étendue du produit : le quiz n'était qu'une partie d'un ensemble comprenant authentification, administration, paiements, statistiques, sécurité, contenus, environnements, documentation et préparation de la livraison.
+
+Jira permettait de passer d'une vue globale à une vue opérationnelle à travers backlog, Kanban, chronologie et sprints. Les tickets étaient répartis selon la priorité, les dépendances, la complexité et la disponibilité des personnes concernées. La matrice RACI complétait ce suivi en distinguant la personne responsable de l'activité, celle qui en portait la responsabilité finale, les personnes consultées et celles à informer.
+
+\subsection{Répartir la charge sans disposer d'une équipe à temps plein}
+
+Trois périodes de charge avaient été identifiées dès le cadrage : décembre/début janvier, mars-avril et la fin de l'année scolaire. La première correspondait notamment au projet DEV des M1 ; la deuxième concentrait plusieurs rendus pour les deux promotions ; la dernière réunissait finalisation, rapports et soutenances.
+
+La stratégie initiale prévoyait que les M2 portent davantage le cadrage, la gestion et les responsabilités transverses, avant une montée en puissance des M1 sur les développements. Cette organisation était cohérente sur le papier, mais le projet DEV des M1 a été décalé. Au moment où Lynx Immo devait accélérer sa phase de réalisation, une partie de l'équipe est donc restée moins disponible que prévu.
+
+Cette situation a entraîné un déséquilibre. Certains membres déjà fortement impliqués ont compensé une partie des retards, ce qui a permis de maintenir l'avancement mais a augmenté leur charge. J'ai dû revoir les priorités, redistribuer certains travaux et accepter que certaines ambitions ne puissent plus être traitées au même niveau.
+
+Ce point est important pour C4.3 : coordonner une équipe n'a pas consisté à appliquer une répartition initiale jusqu'à la fin du projet. La répartition devait évoluer avec les personnes, leur disponibilité, leur progression et les contraintes réellement rencontrées.
+
+\section{Mesurer l'avancement plutôt que se fier au ressenti}
+
+\subsection{Plusieurs niveaux d'indicateurs}
+
+Pour C1.6, j'ai cherché à disposer de plusieurs lectures de la performance. Le projet prévoyait des KPI de pilotage, des KPI de valeur et d'usage, ainsi que des KPI techniques. Ils répondaient à des questions différentes : le projet tient-il sa trajectoire ? Le produit apporte-t-il la valeur attendue ? Le système présente-t-il des performances et une stabilité suffisantes ?
+
+Les indicateurs de pilotage étaient les plus directement exploitables pendant le projet : respect des jalons, progression des sprints, état des tickets Jira, couverture du MVP, état des exigences, documentation produite et risques actifs. Les indicateurs d'usage --- engagement, nombre de quiz, progression ou rétention --- nécessitaient davantage d'utilisateurs réels et une période d'observation. Les indicateurs techniques préparaient quant à eux la mesure de temps de réponse, disponibilité, erreurs ou comportement sous charge.
+
+L'intérêt principal a été de ne pas confondre ces familles. Un produit peut être livré dans les délais tout en apportant peu de valeur ; inversement, une fonctionnalité appréciée ne signifie pas que le projet est correctement maîtrisé. Cette séparation m'a aidé à utiliser les indicateurs comme des outils de décision plutôt que comme une simple page de tableau de bord.
+
+\subsection{Suivre les exigences et la couverture du produit}
+
+Le suivi des exigences complétait Jira. Les exigences fonctionnelles et non fonctionnelles étaient classées par priorité et par état, ce qui permettait de distinguer le nombre brut de fonctionnalités du niveau réel de couverture du besoin. Cette lecture était particulièrement utile lors des arbitrages : une exigence optionnelle non réalisée n'avait pas le même poids qu'une exigence indispensable au parcours principal.
+
+\begin{figure}[H]
+\centering
+\fbox{\parbox{0.9\textwidth}{\centering
+Emplacement prévu : planche de deux éléments issus du rapport IPF.\\
+À gauche : état des exigences par priorité et statut.\\
+À droite : vue synthétique du Kanban Jira et des états À faire / En cours / Revue / Test / Terminé.}}
+\caption{Suivi de l'avancement par exigences et tickets Jira}
+\label{fig:lynx-suivi}
+\end{figure}
+
+Au moment du bilan, la vue Jira active contenait encore 121 tickets : 53 à faire, 27 en cours, 8 en revue, 17 en test et 16 terminés. Cette vue ne représentait pas l'historique complet des 563 tickets créés, mais elle rendait visible une réalité importante : le projet n'était pas intégralement achevé au même niveau sur tous les domaines. Le coaching et l'IA concentraient notamment de nombreux éléments restants, ce qui correspondait aux arbitrages effectués en fin de projet.
+
+\subsection{Accepter les limites des KPI}
+
+Le système d'indicateurs n'a pas été utilisé avec la même régularité pendant toute l'année. La première partie du projet était relativement structurée ; autour de mars et avril, la charge, les retards et la disponibilité variable ont réduit la mise à jour de certains documents. Le suivi s'est alors davantage appuyé sur les jalons essentiels, le MVP, les exigences prioritaires et les échanges directs.
+
+Je considère cette limite comme un enseignement plutôt que comme un élément à masquer. Définir un KPI ne crée pas automatiquement un pilotage par la donnée. L'indicateur doit être alimenté, partagé, compris et relié à une décision. Sur un prochain projet, je réduirais le nombre d'indicateurs suivis en continu et j'automatiserais davantage ceux qui peuvent être calculés depuis les outils de développement ou de gestion.
+
+\section{Superviser les écarts et arbitrer le périmètre}
+
+\subsection{Un planning utile précisément parce qu'il n'a pas été respecté à la lettre}
+
+La supervision du projet a été particulièrement visible lorsque la disponibilité réelle de l'équipe s'est éloignée des hypothèses du planning. Les M1 devaient initialement rejoindre plus fortement le développement après leur projet DEV. Le décalage de ce dernier a repoussé leur disponibilité au moment même où Lynx Immo avait besoin d'accélérer sa production. Les M2 ont donc continué à porter à la fois le cadrage, le pilotage et une part importante de la réalisation.
+
+Cette situation s'est aggravée autour de mars-avril avec plusieurs rendus académiques, de la fatigue, des tâches reportées et une baisse de régularité dans les outils de suivi. Les retards ont eu un effet cumulatif : une tâche non terminée dans un sprint réduisait la marge du suivant.
+
+Le rôle du planning a alors changé. Il n'était plus un calendrier à reproduire, mais une référence permettant de mesurer l'écart. Les jalons ont servi de points de décision : quel niveau minimal doit être atteint ? Qu'est-ce qui protège le parcours principal ? Quelles fonctionnalités peuvent être reportées sans rendre le produit incohérent ?
+
+\subsection{Arbitrer avec le client}
+
+La relation client a ajouté une autre source d'évolution. Les échanges réguliers étaient une force du projet : les maquettes, parcours et fonctionnalités pouvaient être confrontés aux attentes réelles. Ils introduisaient cependant des demandes nouvelles ou des ajustements parfois tardifs.
+
+J'ai utilisé le périmètre, les priorités et les dépendances pour éviter de transformer chaque retour en obligation immédiate. Certaines demandes ont été intégrées lorsqu'elles amélioraient directement le MVP ou corrigeaient un besoin mal compris. D'autres ont été simplifiées ou reportées. L'exemple du coaching est représentatif : l'ambition d'un accompagnement avancé et fondé sur les données était pertinente, mais le projet ne disposait ni du volume d'usage ni du temps permettant de construire dès la première version un système prédictif mature. Le choix a donc été de préparer le socle et de limiter l'ambition initiale.
+
+Cette capacité à comparer le prévu, le réalisable et la valeur attendue constitue la preuve principale de C1.7.
+
+\section{Accompagner l'équipe et organiser la montée en compétences}
+
+\subsection{Faire de la formation une charge du projet}
+
+Le projet mobilisait plusieurs technologies nouvelles pour certains membres. Nous avons donc défini un plan de montée en compétences par domaine. L'objectif n'était pas de créer des formations théoriques indépendantes, mais de relier l'apprentissage à une tâche réelle : découvrir une technologie, expérimenter sur un POC ou à partir de la documentation officielle, puis l'appliquer dans le projet.
+
+Les ressources utilisées comprenaient documentations officielles, tutoriels ciblés, prototypes, échanges entre membres et apports de la formation. Le temps d'apprentissage devait être intégré à la planification, notamment pour Supabase, Flutter, React, les paiements, l'authentification, la sécurité ou le déploiement.
+
+Cette démarche répond directement à C4.5. Elle a néanmoins été imparfaite : la montée en compétences n'a pas été homogène et certaines connaissances sont restées concentrées sur quelques membres. Dans les périodes de forte pression, la tentation était de confier une tâche à la personne la plus rapide plutôt que d'investir du temps dans la transmission. Ce choix pouvait résoudre un problème immédiat, mais renforçait la dépendance à certains profils.
+
+Avec le recul, je formaliserais davantage des sessions courtes de partage technique et du travail en binôme sur les sujets structurants. Le temps de formation doit être considéré comme une charge de production réelle, et non comme une activité périphérique supposée se produire spontanément.
+
+\subsection{Accompagner par les échanges et les supports}
+
+L'accompagnement ne reposait pas uniquement sur la formation. Les points internes permettaient d'identifier les blocages, de revoir les priorités et d'aider à clarifier une tâche. Teams servait aux échanges quotidiens ; Jira conservait les travaux ; Confluence et les documents de cadrage centralisaient les décisions ; GitHub portait la collaboration technique.
+
+Mon rôle de référent technique m'amenait également à relier les choix d'architecture aux tâches de développement. Le fait d'occuper simultanément la fonction de chef de projet constituait à la fois un avantage et un risque. Je pouvais arbitrer rapidement en connaissant les conséquences techniques d'une décision. En revanche, cela renforçait ma charge et augmentait le risque que certaines connaissances ou décisions se concentrent sur une seule personne.
+
+C4.4 est donc démontrée à la fois par la coordination régulière, l'aide à la résolution des difficultés et la mise à disposition de supports. La principale limite a été la régularité de cet accompagnement lorsque la pression du calendrier augmentait.
+
+\section{Évaluer le fonctionnement collectif et individuel}
+
+\subsection{Une évaluation collective fondée sur plusieurs traces}
+
+La performance de l'équipe a d'abord été observée collectivement à travers l'état des tâches, les exigences, les jalons, les risques et le niveau de maturité des livrables. Ces éléments permettaient d'éviter de réduire l'évaluation à une impression générale de travail fourni.
+
+Une rétrospective de fin de projet a ensuite permis d'analyser le fonctionnement de l'équipe : ce qui avait bien fonctionné, les difficultés, la répartition du travail, l'utilité des outils et les améliorations possibles. Elle a notamment confirmé que le cadrage et les points d'avancement avaient apporté une structure utile, tout en mettant en évidence une implication inégale, une charge importante sur certains membres et une utilisation insuffisamment collective des outils de suivi.
+
+\subsection{Des entretiens individuels de fin de projet}
+
+En complément de la rétrospective, des entretiens individuels ont été organisés en fin de projet. Leur objectif était de recueillir le ressenti de chaque membre sur sa place dans l'équipe, la répartition du travail, les éléments facilitateurs, les blocages et le management. Ils prévoyaient également un retour mutuel, et pas seulement une évaluation descendante.
+
+Cette démarche apporte une preuve intéressante pour C4.6 : l'évaluation ne concernait pas uniquement le produit ou les indicateurs globaux, mais également l'expérience individuelle des membres et les enseignements à tirer pour une future organisation.
+
+Elle reste toutefois plus limitée qu'un dispositif RH en entreprise. Nous ne disposions pas d'un référentiel individuel formel associé à des objectifs de carrière, et les entretiens intervenaient surtout en fin de projet. Je ne présente donc pas cette expérience comme un processus complet de gestion de la performance individuelle. Elle démontre en revanche ma capacité à organiser un feedback structuré, à analyser les écarts entre perception collective et individuelle et à transformer ces retours en axes d'amélioration.
+
+\section{Préparer la reprise du produit plutôt que seulement le rendre}
+
+\subsection{Une documentation de transmission comme livrable à part entière}
+
+Un des objectifs importants était d'éviter que le produit devienne inexploitable après la soutenance. En parallèle du rapport de projet, une documentation développeur MkDocs de plus d'une centaine de pages a donc été construite pour une future équipe de reprise.
+
+Elle ne se limite pas à une procédure d'installation. Son arborescence couvre le démarrage, le contexte et le périmètre, l'architecture, l'\terme{api}, la base de données, le frontend, le mobile, le backend Supabase, les règles métier, la sécurité, les tests, le déploiement, la maintenance, les évolutions et les annexes. Une personne reprenant le projet peut ainsi partir du contexte, installer l'environnement, comprendre les principaux flux, identifier les règles d'accès, déployer les composants et trouver les procédures de maintenance ou de dépannage.
+
+\begin{figure}[H]
+\centering
+\fbox{\parbox{0.9\textwidth}{\centering
+Emplacement prévu : capture de l'accueil et de la navigation MkDocs.\\[0.15cm]
+Sections visibles : Démarrage, Projet, Architecture, API, Base de données, Frontend, Mobile, Backend, Règles métier, Sécurité, Tests, Déploiement, Maintenance et Évolutions.}}
+\caption{Documentation développeur préparée pour la reprise de Lynx Immo}
+\label{fig:lynx-mkdocs}
+\end{figure}
+
+Cette documentation complète les mécanismes de reproductibilité du dépôt. Le README technique décrit les quatre briques du monorepo, l'utilisation du DevContainer, les scripts de démarrage et de réinitialisation, les différences entre local, préproduction et production ainsi que les précautions appliquées aux opérations destructrices. L'objectif est qu'une équipe de reprise ne dépende ni de ma mémoire ni d'une installation déjà configurée.
+
+La documentation constitue une preuve supplémentaire de C4.4 et C4.5, mais elle renforce surtout C3.6. Dans FCU, j'ai documenté un système historique afin de le rendre compréhensible. Ici, j'ai essayé d'intégrer la transmissibilité dès la construction d'un produit moderne. Ces deux situations montrent des objectifs différents mais complémentaires de la documentation technique.
+
+\section{Bilan critique et apports professionnels}
+
+Lynx Immo est le projet qui m'a le plus confronté à la différence entre planifier et piloter. Construire un Gantt, définir des sprints ou créer des KPI était relativement simple. La difficulté a commencé lorsque les hypothèses du plan ont cessé d'être vraies : disponibilité plus faible que prévu, intégration tardive de certains membres, périmètre ambitieux, retours client et accumulation de tâches sur quelques personnes.
+
+Je retiens d'abord qu'une feuille de route doit rester un outil de décision. Le planning n'a pas perdu sa valeur parce que certaines dates ont glissé ; il a permis de rendre l'écart visible et d'identifier les conséquences. Les jalons les plus utiles sont finalement ceux qui obligent à décider ce qui peut réellement être terminé.
+
+Le deuxième enseignement concerne la charge d'équipe. J'avais identifié le risque lié aux disponibilités, mais j'ai constaté qu'un risque correctement documenté peut malgré tout se produire. Il aurait fallu réévaluer plus fréquemment la capacité de chacun et réduire plus tôt certaines ambitions. Lorsque quelques personnes compensent systématiquement les retards, le projet peut continuer à avancer tout en fragilisant l'équipe.
+
+Le troisième enseignement concerne la délégation et la montée en compétences. Confier un sujet complexe au membre le plus expérimenté est souvent la solution la plus rapide à court terme. À l'échelle de plusieurs mois, cette stratégie concentre la connaissance et rend la reprise plus difficile. Je privilégierais davantage de binômage, des revues techniques régulières et des tâches conçues explicitement pour transmettre un domaine.
+
+Enfin, la double fonction de chef de projet et référent technique m'a beaucoup appris sur l'arbitrage. Elle m'a permis de relier directement valeur fonctionnelle, impact technique, charge et délai. Elle m'a également montré la nécessité de séparer parfois ces responsabilités : être la personne vers laquelle remontent à la fois les décisions de pilotage et les questions techniques crée une dépendance et peut limiter la délégation.
+
+Au-delà du produit livré, le résultat qui me paraît le plus important est d'avoir construit un ensemble reprenable : code versionné, migrations, environnements, procédures, documentation détaillée, historique de décisions et backlog d'évolutions. Le projet n'est pas présenté comme un produit commercial totalement industrialisé ; certaines fonctionnalités, tests utilisateurs, aspects de conformité et travaux de finalisation restent nécessaires avant une exploitation à grande échelle. Il constitue en revanche une base fonctionnelle et documentée, ainsi qu'une expérience complète de conduite de projet et de coordination d'équipe.
+
+Lynx Immo me permet ainsi de démontrer principalement C1.4 à C1.7 et C4.1 à C4.6. Pour C4.2 et C4.6, le contexte académique impose des limites explicites : je n'ai pas réalisé de recrutement RH ni de gestion de carrière. En revanche, j'ai organisé une équipe existante autour de compétences identifiées, coordonné sa contribution, accompagné sa montée en compétences et mis en place une évaluation collective et individuelle adaptée au cadre du projet. Cette distinction me paraît plus fidèle à l'expérience réellement acquise que de chercher à reproduire artificiellement un contexte d'entreprise qui n'existait pas.
