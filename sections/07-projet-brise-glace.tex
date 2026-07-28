@@ -22,7 +22,7 @@ C1.3 & Participation à la traduction des règles du jeu en exigences fonctionne
 C2.1 & Conception d'une architecture React--Supabase séparant interface, contextes applicatifs, services d'accès aux données et persistance PostgreSQL. \\
 C2.2 & Structuration du client TypeScript, versionnement Git, migrations SQL, validation des données et séparation des responsabilités entre les composants. \\
 C2.3 & Développement du client React, des interactions de classement, des écrans adaptés aux différents rôles et de la compatibilité avec plusieurs formats d'affichage. \\
-C2.4 & Conception de la base PostgreSQL, utilisation de Supabase Auth, Storage et Realtime, politiques RLS et fonctions SQL pour certaines opérations métier. \\
+C2.4 & Conception de la base PostgreSQL, utilisation de Supabase Auth, Storage et Realtime, politiques \terme{rls} et fonctions SQL pour certaines opérations métier. \\
 C3.4 & Mise à disposition automatisée du client avec Vercel à partir du dépôt GitHub et utilisation d'environnements de prévisualisation. \\
 \bottomrule
 \end{tabular}
@@ -152,7 +152,7 @@ Le code était partagé sur GitHub. Chaque membre pouvait travailler sur une bra
 
 Le client a été déployé sur Vercel. L'intégration avec GitHub permettait de reconstruire automatiquement l'application lors des mises à jour de la branche principale. Les variables nécessaires à la connexion avec Supabase étaient configurées dans l'environnement de déploiement. Vercel générait également des environnements de prévisualisation pour tester une évolution avant son intégration à la version principale.
 
-Cette solution a permis de disposer rapidement d'une application accessible à distance pour les démonstrations et les essais multi-utilisateurs. La chaîne restait cependant largement prise en charge par Vercel : il ne s'agissait pas d'une infrastructure CI/CD développée intégralement par l'équipe, mais d'une automatisation de déploiement adaptée au périmètre du projet.
+Cette solution a permis de disposer rapidement d'une application accessible à distance pour les démonstrations et les essais multi-utilisateurs. La chaîne restait cependant largement prise en charge par Vercel : il ne s'agissait pas d'une infrastructure \terme{ci}/\terme{cd} développée intégralement par l'équipe, mais d'une automatisation de déploiement adaptée au périmètre du projet.
 
 \subsection{Validation fonctionnelle}
 
