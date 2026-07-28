@@ -1,10 +1,12 @@
 \section{Présentation du projet}
 
-Collective Escape, également désigné comme le projet Brise-glace, est un projet universitaire réalisé en équipe entre octobre et décembre 2024. Son objectif était de transformer un jeu de survie collectif, habituellement animé avec des supports physiques, en une application web interactive. Dans le scénario initial, les joueurs doivent classer quinze objets selon leur utilité pour survivre dans le désert. Ils réalisent d'abord un classement individuel, confrontent ensuite leurs choix en petits groupes, puis établissent une réponse collective avant de la comparer à une solution experte.
+Collective Escape, également désigné comme le projet Brise-glace, est un projet universitaire réalisé en équipe entre octobre et décembre 2024, puis stabilisé par quelques correctifs jusqu'au 5 janvier 2025. Son objectif était de transformer un jeu de survie collectif, habituellement animé avec des supports physiques, en une application web interactive. Dans le scénario initial, les joueurs doivent classer quinze objets selon leur utilité pour survivre dans le désert. Ils réalisent d'abord un classement individuel, confrontent ensuite leurs choix en petits groupes, puis établissent une réponse collective avant de la comparer à une solution experte.
 
 Le porteur du projet avait formulé deux objectifs principaux. Le premier consistait à permettre la création et le déroulement complet d'une partie sur le scénario du désert, jusqu'à l'affichage des résultats. Le second visait à rendre la solution extensible afin que de nouveaux scénarios, par exemple en milieu océanique, polaire ou tropical, puissent être ajoutés sans reconstruire toute l'application.
 
 Ce projet est mobilisé dans ce dossier comme preuve principale de la compétence C2.3, relative au pilotage du développement front-end. Il présente en effet une interface dynamique, un mécanisme de glisser-déposer, plusieurs vues adaptées au rôle de l'utilisateur et une synchronisation en temps réel entre les joueurs et le maître du jeu. Il apporte également des preuves complémentaires en architecture, en développement back-end et en déploiement automatisé.
+
+La présentation qui suit croise le rapport collectif remis à la fin du projet avec le code effectivement conservé sur la branche \texttt{main} du dépôt GitHub \textit{CollectiveEscape}. La version technique relue correspond au commit \texttt{57a33a2}. Cette double source permet de distinguer les intentions décrites dans le rapport des fonctions réellement présentes dans l'application.
 
 \section{Positionnement et contribution personnelle}
 
@@ -44,9 +46,9 @@ J'ai participé à cette phase en évaluant la faisabilité technique des compor
 
 \subsection{Choix de la stack}
 
-Le client a été réalisé avec React, TypeScript et Vite. React répondait au besoin de construire une interface composée de nombreux états et composants réutilisables. TypeScript apportait un typage statique utile pour sécuriser les échanges avec les données générées à partir du schéma PostgreSQL. Vite offrait un environnement de développement rapide et une production optimisée du client.
+Le client a été réalisé avec React 18, TypeScript 5.6 et Vite 5. React répondait au besoin de construire une interface composée de nombreux états et composants réutilisables. TypeScript apportait un typage statique utile pour sécuriser les échanges avec les données générées à partir du schéma PostgreSQL. Vite offrait un environnement de développement rapide et une production optimisée du client.
 
-Le back-end repose sur Supabase, qui réunit une base PostgreSQL, un système d'authentification, un stockage de fichiers, des API générées à partir du schéma et des canaux temps réel. Ce choix permettait d'éviter le développement d'un serveur applicatif séparé dans un projet limité à trois mois. Il restait néanmoins nécessaire de concevoir le modèle, d'écrire les migrations, de définir les règles de sécurité et de développer les fonctions SQL portant les opérations métier complexes.
+Le back-end repose sur Supabase, qui réunit une base PostgreSQL, un système d'authentification, un stockage de fichiers, des API générées à partir du schéma et des canaux temps réel. Les illustrations des scénarios sont notamment récupérées depuis un compartiment de stockage Supabase. Ce choix permettait d'éviter le développement d'un serveur applicatif séparé dans un projet limité à trois mois. Il restait néanmoins nécessaire de concevoir le modèle, d'écrire les migrations, de définir les règles de sécurité et de développer les fonctions SQL portant les opérations métier complexes.
 
 Le déploiement du client a été confié à Vercel. Son intégration avec GitHub permettait de construire et publier automatiquement l'application, tout en générant des URL de prévisualisation pour les branches et les demandes de fusion.
 
@@ -54,7 +56,8 @@ Le déploiement du client a été confié à Vercel. Son intégration avec GitHu
 \centering
 \fbox{\parbox{0.88\textwidth}{\centering
 Emplacement prévu : schéma d'architecture générale de Collective Escape.\\
-Navigateur React/TypeScript -- Contextes et services -- Supabase Auth, Realtime et PostgreSQL -- Vercel.
+Navigateur React/TypeScript -- Contextes et services -- Supabase Auth, Storage, Realtime et PostgreSQL.\\
+Vercel construit et publie séparément le client web.
 }}
 \caption{Architecture générale de l'application Collective Escape}
 \end{figure}
@@ -90,9 +93,11 @@ Conserver uniquement User, Scenario, ScenarioElement, Game, Group et GameArchive
 
 L'authentification est gérée par Supabase Auth. Lorsqu'un utilisateur se connecte, la session obtenue est prise en charge par le client Supabase et rendue accessible au reste de l'application à travers un contexte React. La table applicative des utilisateurs complète les informations du schéma d'authentification avec les données utiles au jeu, notamment le pseudonyme.
 
-J'ai défini des politiques RLS pour encadrer les opérations de lecture et d'écriture. Un utilisateur ne doit pas, par exemple, pouvoir modifier le scénario privé d'un autre créateur, agir à la place du maître du jeu ou consulter une archive à laquelle il n'a pas participé. Le contrôle est exécuté par PostgreSQL, indépendamment de ce que l'interface affiche. Cette défense au niveau des données limite le risque qu'un appel fabriqué manuellement contourne les restrictions du client.
+J'ai défini progressivement des politiques RLS pour encadrer les opérations de lecture et d'écriture. Leur objectif était qu'un utilisateur ne puisse pas modifier le scénario privé d'un autre créateur, agir à la place du maître du jeu ou consulter une archive à laquelle il n'avait pas participé. Le contrôle est exécuté par PostgreSQL, indépendamment de ce que l'interface affiche. Cette défense au niveau des données limite le risque qu'un appel fabriqué manuellement contourne les restrictions du client.
 
-L'archivage illustre la nécessité de déplacer certaines règles au plus près de la base. Une fonction PostgreSQL vérifie que l'appelant est le maître du jeu et que la partie est terminée. Elle crée ensuite l'archive, associe les joueurs autorisés à la consulter, puis supprime les données devenues inutiles dans les tables actives. Le traitement regroupe ainsi une opération métier cohérente au lieu de laisser le client enchaîner plusieurs écritures susceptibles d'être interrompues.
+La relecture du dépôt montre toutefois que cette sécurisation n'était pas complètement aboutie. Dans la migration initiale, les politiques de modification et de suppression des éléments d'un scénario vérifient que l'utilisateur possède un scénario, mais ne relient pas toujours ce contrôle au scénario de l'élément concerné. Une politique correctement corrélée aurait dû comparer l'identifiant de ce scénario à \texttt{ScenarioElement.scenarioID}. Ce défaut n'a pas été détecté pendant le projet, faute de tests d'intégration dédiés aux politiques RLS. Il constitue une limite importante et montre qu'une intention de sécurité ne suffit pas sans scénarios de contrôle positifs et négatifs.
+
+L'archivage illustre également la nécessité de déplacer certaines règles au plus près de la base. La fonction PostgreSQL \texttt{archive\_game} vérifie que l'appelant est le maître du jeu et que la partie est terminée. Elle crée ensuite l'archive, enregistre les associations avec les joueurs, puis supprime la partie des tables actives. Le traitement regroupe ainsi une opération métier cohérente au lieu de laisser le client enchaîner plusieurs écritures susceptibles d'être interrompues. En revanche, l'interface de consultation n'a pas été terminée et les dernières politiques du dépôt n'exploitent pas encore complètement l'association \texttt{UserCanReadArchive} pour ouvrir l'archive aux participants. Le mécanisme de production de l'archive est donc présent, mais le parcours de consultation reste incomplet.
 
 \section{Réalisation du client React}
 
@@ -104,17 +109,17 @@ L'application utilise notamment :
 
 \begin{itemize}
     \item un contexte d'authentification, qui expose l'utilisateur connecté et les actions de connexion ou de déconnexion ;
-    \item un contexte de thème, qui gère les modes clair et sombre ;
     \item un contexte de partie, qui centralise les données du jeu, le scénario, les joueurs présents et les abonnements temps réel ;
+    \item un hook \texttt{useTheme} et le \texttt{ThemeProvider} fourni par React Bootstrap pour basculer l'attribut \texttt{data-bs-theme} entre les modes clair et sombre ;
     \item des services sans état pour les utilisateurs, les scénarios, les parties et les images ;
     \item React Router pour associer les URL aux pages et gérer les redirections.
 \end{itemize}
 
-Cette séparation évite que chaque écran réimplémente la connexion à Supabase ou conserve une copie indépendante de l'état global. Elle facilite également l'évolution du client : un composant d'interface consomme une donnée ou déclenche une action sans avoir à connaître tous les détails de persistance.
+Les deux contextes applicatifs réellement développés, \texttt{AuthContext} et \texttt{GameContext}, évitent que chaque écran réimplémente la connexion à Supabase ou conserve une copie indépendante de l'état global. Le thème ne constitue pas un troisième contexte métier : il s'appuie sur le mécanisme de thème de Bootstrap et sur un hook spécialisé. Cette séparation facilite l'évolution du client : un composant d'interface consomme une donnée ou déclenche une action sans avoir à connaître tous les détails de persistance.
 
 \subsection{Parcours utilisateur et cohérence visuelle}
 
-La page d'accueil regroupe les trois entrées principales du produit : rejoindre une partie avec un code, créer une partie et consulter les scénarios disponibles. Lors du chargement, l'application recherche également une éventuelle partie en cours afin de permettre à un joueur déconnecté de reprendre plus facilement sa session.
+La page d'accueil regroupe les trois entrées principales du produit : rejoindre une partie avec un code, créer une partie et consulter les scénarios disponibles. Lors du chargement, l'application recherche également une éventuelle partie en cours afin de permettre à un joueur déconnecté de reprendre plus facilement sa session. La consultation des scénarios publics et privés est fonctionnelle, mais le bouton de création d'un scénario ne déclenche encore aucune action. Les méthodes de création, de modification et de suppression existent dans le service TypeScript, sans être reliées à un parcours d'interface complet.
 
 Les pages de connexion, d'inscription et de compte utilisent une structure visuelle commune. Un composant de mise en page réutilisable limite la largeur du contenu sur les écrans larges et maintient une présentation homogène. L'en-tête adapte ses actions à la session de l'utilisateur, tandis que le thème peut être basculé entre une version claire et une version sombre.
 
@@ -131,17 +136,17 @@ Accueil responsive -- lobby avec joueurs connectés -- écran de classement des 
 
 \subsection{Interaction par glisser-déposer}
 
-Le classement des quinze objets constitue l'interaction centrale du jeu. Une première expérimentation isolée a permis à l'équipe d'étudier le comportement attendu : déplacer une carte, la déposer à une position, modifier l'ordre, retirer une carte et réinitialiser le classement. J'ai ensuite repris ces apprentissages pour intégrer la fonctionnalité dans l'application principale React et TypeScript.
+Le classement des quinze objets constitue l'interaction centrale du jeu. Une première expérimentation isolée a permis à l'équipe d'étudier le comportement attendu : déplacer une carte, la déposer à une position, modifier l'ordre, retirer une carte et réinitialiser le classement. J'ai ensuite repris ces apprentissages pour intégrer la fonctionnalité dans l'application principale React et TypeScript avec la bibliothèque \texttt{react-dnd}.
 
-L'implémentation devait conserver l'identité de chaque objet et la position choisie, tout en fournissant un retour visuel pendant le déplacement. Le passage de quelques cartes de test aux quinze objets du scénario a également imposé de travailler la lisibilité de l'écran et la séparation des styles. Les cartes associent une illustration et un intitulé afin de réduire l'effort d'identification pendant la discussion.
+L'implémentation conserve séparément les identifiants placés dans les quinze emplacements et les détails immuables des cartes. Sur ordinateur, \texttt{HTML5Backend} gère le glisser-déposer. Sur un écran tactile, le client détecte le périphérique et utilise \texttt{TouchBackend}, tout en proposant surtout une interaction plus fiable consistant à sélectionner une carte puis à toucher son emplacement de destination. Le passage de quelques cartes de test aux quinze objets du scénario a également imposé de travailler la lisibilité de l'écran et la séparation des styles. Les cartes associent une illustration et un intitulé afin de réduire l'effort d'identification pendant la discussion.
 
-Cette fonctionnalité reste cependant imparfaite du point de vue de l'accessibilité. L'interface a été pensée pour être compréhensible et responsive, mais elle n'a pas fait l'objet d'un audit WCAG formalisé. Une version plus aboutie devrait proposer une alternative complète au glisser-déposer, utilisable au clavier et avec un lecteur d'écran, vérifier systématiquement les contrastes et tester le parcours avec différents profils d'utilisateurs. Ce constat limite la portée de la preuve en matière d'inclusion, mais il constitue également un enseignement concret pour mes futurs développements front-end.
+Cette adaptation tactile est un résultat concret, confirmé par les derniers commits de compatibilité mobile. Elle ne résout cependant pas l'accessibilité au sens large. L'interface a été pensée pour être compréhensible et responsive, mais elle n'a pas fait l'objet d'un audit WCAG formalisé. Une version plus aboutie devrait proposer une alternative utilisable entièrement au clavier et avec un lecteur d'écran, vérifier systématiquement les contrastes et tester le parcours avec différents profils d'utilisateurs. Ce constat limite la portée de la preuve en matière d'inclusion, mais il constitue également un enseignement concret pour mes futurs développements front-end.
 
 \section{Synchronisation et déroulement d'une partie}
 
 \subsection{Modélisation des états}
 
-Le cœur de l'application repose sur une machine d'états simple. Une partie peut être en attente, active ou terminée. Lorsqu'elle est active, une étape supplémentaire distingue la réflexion individuelle, le travail en petit groupe et la mise en commun. Cette représentation rend explicites les transitions autorisées et permet à l'interface de choisir le composant adapté.
+Le cœur de l'application repose sur une machine d'états simple. Le parcours effectivement géré par l'interface utilise les états \texttt{WAITING}, \texttt{ACTIVE} et \texttt{FINISHED}. Lorsqu'une partie est active, une étape supplémentaire distingue la réflexion individuelle, le travail en petit groupe et la mise en commun. Cette représentation rend explicites les transitions autorisées et permet à l'interface de choisir le composant adapté. L'énumération TypeScript contient également un état \texttt{CLOSED}, mais celui-ci n'est pas traité dans le composant principal : il correspond à une évolution envisagée plutôt qu'à un parcours finalisé.
 
 À l'entrée dans une partie, le composant englobant récupère le code depuis l'URL puis initialise le contexte de jeu. Celui-ci charge la partie et son scénario, suit l'état de chargement et prépare les abonnements nécessaires. Si le code n'existe pas, l'utilisateur est redirigé vers une page d'erreur ; si les données sont valides, le contexte les fournit à tous les composants descendants.
 
@@ -168,7 +173,7 @@ Le code source était versionné sur GitHub. Chaque membre disposait d'une branc
 
 J'ai configuré le déploiement du client sur Vercel. Lorsqu'une modification est intégrée à la branche principale, Vercel récupère le dépôt, installe les dépendances, génère le \textit{build} de production et met à jour le domaine de l'application. Les paramètres d'accès à Supabase sont fournis au moment de la construction par des variables d'environnement.
 
-Des URL de prévisualisation sont également créées pour les branches et les demandes de fusion. Elles permettent de vérifier une évolution dans un environnement distant sans remplacer la version principale. Les journaux de construction facilitent enfin le diagnostic lorsqu'une installation ou une compilation échoue.
+Des URL de prévisualisation sont également créées pour les branches et les demandes de fusion. Elles permettent de vérifier une évolution dans un environnement distant sans remplacer la version principale. Les journaux de construction facilitent enfin le diagnostic lorsqu'une installation ou une compilation échoue. Le dépôt contient un fichier \texttt{vercel.json} chargé de rediriger les routes de l'application monopage vers \texttt{index.html}. Le lien entre GitHub et Vercel reste toutefois une configuration externe : aucun workflow GitHub Actions n'est présent dans le dépôt.
 
 Cette automatisation constitue une preuve complémentaire de C3.4 : la publication du client ne nécessitait pas de copie manuelle de fichiers vers un serveur. Elle ne représente cependant pas une chaîne DevOps complète conçue par l'équipe, car une grande partie du processus est fournie et orchestrée par Vercel.
 
@@ -196,11 +201,13 @@ Le taux de réalisation atteint ainsi 75\,\% pour les exigences fonctionnelles e
 
 \subsection{Stratégie de validation}
 
-Le rapport collectif évoque des tests unitaires, d'intégration et de charge automatisés. En l'absence d'éléments suffisamment précis permettant de démontrer leur couverture et leurs résultats, je ne les retiens pas comme preuve principale dans ce dossier. La validation s'est surtout appuyée sur le \textit{build} TypeScript, l'analyse statique, les essais fonctionnels au fil des développements et les scénarios exécutés avec plusieurs clients connectés.
+Le dépôt configure Vitest et expose une commande \texttt{npm run test}. Il contient cependant un seul fichier de test, nommé \texttt{ScenarioService.test.ts}, dont l'unique assertion vérifie simplement que la valeur \texttt{true} est vraie. Le commentaire du fichier le présente lui-même comme un test factice destiné à laisser passer la chaîne. Il ne valide donc pas le service annoncé par son nom et ne constitue pas une couverture automatisée significative.
+
+Le rapport collectif évoque plus largement des tests unitaires, d'intégration et de charge automatisés, mais le code conservé ne permet pas d'étayer cette affirmation. La validation s'est surtout appuyée sur le \textit{build} TypeScript, l'analyse statique ESLint, les essais fonctionnels au fil des développements et les scénarios exécutés avec plusieurs clients connectés. Le script de production exécute \texttt{tsc -b} puis le \textit{build} Vite, ce qui détecte les erreurs de typage et de compilation sans vérifier le comportement métier.
 
 Les points sensibles vérifiés concernaient la connexion, la création ou la reprise d'une partie, les transitions déclenchées par le maître du jeu, la présence des joueurs, la soumission des classements, les restrictions d'accès et l'archivage. La mise à disposition sur Vercel permettait également de tester l'application dans un environnement distant plus représentatif que le seul poste de développement.
 
-Cette stratégie a permis de livrer une version démontrable, mais elle demeure insuffisamment industrialisée. Un nouveau cycle devrait introduire des tests unitaires sur les calculs et les transitions d'état, des tests d'intégration sur les politiques RLS et les fonctions SQL, puis des tests de bout en bout simulant plusieurs navigateurs.
+Cette stratégie a permis de livrer une version démontrable, mais elle demeure insuffisamment industrialisée. Un nouveau cycle devrait remplacer le test factice par des tests unitaires sur les calculs et les transitions d'état, ajouter des tests d'intégration sur les politiques RLS et les fonctions SQL, puis des tests de bout en bout simulant plusieurs navigateurs.
 
 \subsection{Difficultés rencontrées}
 
@@ -220,4 +227,4 @@ Je réduirais également plus tôt le périmètre du produit. Le parcours comple
 
 Enfin, le choix d'une architecture React--Supabase a été efficace pour produire rapidement une application temps réel. Il ne doit cependant pas être considéré comme universel. J'en retiens surtout une méthode de décision : relier un choix technique au besoin prioritaire, identifier les responsabilités qu'il déplace et réévaluer sa pertinence lorsque la complexité augmente.
 
-Ce projet constitue ainsi ma preuve principale de C2.3. Il montre ma capacité à réaliser une interface React dynamique, à intégrer des interactions complexes et à la relier à un système temps réel sécurisé. Il précise aussi mes prochains axes de progression : accessibilité, tests automatisés et partage de la réalisation.
+Ce projet constitue ainsi ma preuve principale de C2.3. Il montre ma capacité à réaliser une interface React dynamique, à intégrer des interactions complexes et à la relier à un système temps réel dont la sécurisation a été engagée par des politiques RLS. La relecture du dépôt conduit toutefois à ne pas qualifier cette sécurisation de complète. Elle précise mes prochains axes de progression : accessibilité, tests automatisés substantiels, vérification systématique des autorisations et partage de la réalisation.
