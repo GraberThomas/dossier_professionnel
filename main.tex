@@ -23,6 +23,12 @@
 \input{glossaire.tex}
 \renewcommand*{\glossaryname}{Glossaire}
 
+% Les termes faisant l'objet d'une entrée dans le glossaire sont signalés
+% par un astérisque à chaque utilisation dans le corps du dossier.
+% \gls rend également le terme cliquable vers sa définition et enregistre
+% la page courante dans l'index du glossaire.
+\newcommand{\terme}[1]{\gls{#1}\textsuperscript{*}}
+
 \definecolor{codebackground}{RGB}{248,248,248}
 \definecolor{codekeyword}{RGB}{0,70,140}
 \definecolor{codestring}{RGB}{150,70,0}
@@ -115,7 +121,6 @@
 \input{sections/08-conclusion.tex}
 
 \clearpage
-\glsaddall
 \printglossaries
 
 \printbibliography
