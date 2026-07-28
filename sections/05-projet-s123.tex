@@ -78,7 +78,7 @@ Plusieurs informations n'étaient pas modélisables directement. Il fallait soit
 
 \subsection{Une première modélisation directement dérivée de S-123}
 
-La première approche envisagée consistait à reproduire le modèle S-123 dans une base de données relationnelle. J'ai commencé par modéliser la version 1.0 dans Modelio, puis par représenter une partie du schéma dans pgModeler. Chaque type d'objet, attribut, association ou relation devait être traduit en tables et en clés étrangères.
+J'ai d'abord envisagé de reproduire directement le modèle S-123 dans une base de données relationnelle. J'ai ainsi modélisé la version 1.0 dans Modelio, puis représenté une partie du schéma dans pgModeler. Chaque type d'objet, attribut, association ou relation devait être traduit en tables et en clés étrangères.
 
 Cette démarche semblait répondre fidèlement à la demande, mais l'implémentation encore partielle comptait déjà 73 tables. La structure obtenue était difficile à alimenter, à interroger et à faire évoluer.
 
@@ -98,7 +98,7 @@ Demande de « base S-123 » $\rightarrow$ modèle relationnel direct $\rightarro
 
 Cette tentative m'a conduit à distinguer le produit d'échange du modèle de persistance interne. Une reproduction stricte aurait couplé les outils du Shom à une norme évolutive, sans résoudre la conservation des données propres à ses processus.
 
-Après échanges avec mes responsables, l'orientation retenue a été de rester proche de la norme afin de faciliter les exports, sans figer chaque objet S-123 dans une table dédiée.
+J'ai présenté cette limite à mes responsables et proposé de dissocier le modèle de stockage interne du format d'échange S-123. À la suite de ces échanges, nous avons retenu une architecture restant proche de la norme afin de faciliter les exports, sans figer chaque objet S-123 dans une table dédiée.
 
 \begin{table}[H]
 \centering
@@ -124,7 +124,7 @@ Cette étape constitue un apport central du projet : j'ai objectivé les limites
 
 \subsection{Séparer la définition du modèle et les données métier}
 
-La solution sépare deux niveaux. Le premier décrit le catalogue : types d'entités et d'information, attributs, associations, rôles, cardinalités et contraintes. Le second doit stocker les objets métier et leurs valeurs.
+À partir de ce constat, j'ai conçu un méta-modèle destiné à représenter les concepts communs des Feature Catalogues S-100 plutôt qu'une version figée de S-123. La solution sépare deux niveaux. Le premier décrit le catalogue : types d'entités et d'information, attributs, associations, rôles, cardinalités et contraintes. Le second doit stocker les objets métier et leurs valeurs.
 
 Au lieu de créer une table par classe S-123, la base enregistre la description des classes. Elle peut définir qu'un type d'entité possède un attribut obligatoire, multivalué ou limité à une énumération. Les futures instances peuvent ensuite être construites et validées à partir de cette description.
 
@@ -132,7 +132,7 @@ La partie consacrée aux données s'inspire du principe Entity--Attribute--Value
 
 \subsection{Organisation du schéma relationnel}
 
-Le schéma de catalogue développé dans PostgreSQL comprend 18 tables, sept types énumérés, huit vues et plusieurs dizaines de contraintes d'intégrité. Il a été construit avec pgModeler pour représenter les principaux concepts du Feature Catalogue S-100 tout en conservant une organisation relationnelle interrogeable.
+J'ai traduit ce méta-modèle dans PostgreSQL avec pgModeler. Le schéma de catalogue comprend 18 tables, sept types énumérés, huit vues et plusieurs dizaines de contraintes d'intégrité. Il représente les principaux concepts du Feature Catalogue S-100 tout en conservant une organisation relationnelle interrogeable.
 
 Le tableau~\ref{tab:familles-tables-s100} regroupe les tables par responsabilité. Ce regroupement est volontairement simplifié : le diagramme relationnel complet sera placé en annexe, car sa taille ne permet pas une lecture correcte dans le corps du rapport.
 
@@ -196,7 +196,7 @@ Cette séparation permet de faire évoluer la lecture XML et le stockage sans le
 
 \subsection{Peuplement de la base avec les seeders}
 
-L'objet racine est transmis à un \texttt{FeatureCatalogueSeeder}, qui orchestre PostgreSQL et délègue chaque catégorie à un seeder spécialisé : attributs, rôles, associations, types et liaisons.
+Pour persister le catalogue, j'ai organisé le chargement autour d'un \texttt{FeatureCatalogueSeeder}. L'objet racine lui est transmis, puis il orchestre PostgreSQL et délègue chaque catégorie à un seeder spécialisé : attributs, rôles, associations, types et liaisons.
 
 La chaîne d'exécution principale peut être résumée par les deux instructions suivantes :
 
@@ -266,7 +266,7 @@ Le gain reste majeur : l'ajout d'un produit devient principalement un chargement
 
 \subsection{Architecture de l'API}
 
-Le POC comprend une API REST fonctionnelle développée avec FastAPI. Son objectif est d'exposer la structure du catalogue sans imposer aux applications clientes un accès direct à PostgreSQL. La connexion repose sur un pool asynchrone \texttt{asyncpg}, créé au démarrage de l'application puis mis à disposition des endpoints à l'aide du mécanisme de dépendances de FastAPI.
+J'ai également développé une API REST fonctionnelle avec FastAPI afin d'exposer la structure du catalogue sans imposer aux applications clientes un accès direct à PostgreSQL. La connexion repose sur un pool asynchrone \texttt{asyncpg}, créé au démarrage de l'application puis mis à disposition des endpoints à l'aide du mécanisme de dépendances de FastAPI.
 
 Le code est organisé en plusieurs responsabilités :
 
@@ -302,7 +302,7 @@ L'API est actuellement orientée vers la lecture du catalogue. La création et l
 
 \section{Validation du POC}
 
-La validation a porté sur la lecture d'un catalogue réel, la création des objets Python et leur insertion dans PostgreSQL. Le fichier S-123 utilisé comprend plus d'une centaine d'attributs simples, plusieurs dizaines d'attributs complexes, des rôles, des associations et différents types d'objets.
+J'ai validé le POC à partir d'un catalogue réel, en vérifiant successivement sa lecture, la création des objets Python et leur insertion dans PostgreSQL. Le fichier S-123 utilisé comprend plus d'une centaine d'attributs simples, plusieurs dizaines d'attributs complexes, des rôles, des associations et différents types d'objets.
 
 Les tests restent exploratoires. Les journaux suivent les phases du chargement, la transaction protège contre une insertion partielle et le tri topologique détecte les cycles d'héritage.
 
