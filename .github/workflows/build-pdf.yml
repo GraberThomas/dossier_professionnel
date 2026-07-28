@@ -17,6 +17,9 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Apply glossary links in document text
+        run: python scripts/apply_glossary_links.py
+
       - name: Install LaTeX toolchain
         run: |
           sudo apt-get update
