@@ -17,14 +17,35 @@ jobs:
           sudo apt-get install -y latexmk biber texlive-latex-extra texlive-lang-french texlive-fonts-recommended
 
       - name: Compile PDF
+        id: compile
+        continue-on-error: true
         run: |
-          pdflatex -interaction=nonstopmode -halt-on-error main.tex
-          biber main || true
-          makeglossaries main || true
-          pdflatex -interaction=nonstopmode -halt-on-error main.tex
-          pdflatex -interaction=nonstopmode -halt-on-error main.tex
+          set +e
+          pdflatex -interaction=nonstopmode -halt-on-error main.tex > build.log 2>&1
+          STATUS=$?
+          if [ $STATUS -eq 0 ]; then
+            biber main >> build.log 2>&1 || true
+            makeglossaries main >> build.log 2>&1 || true
+            pdflatex -interaction=nonstopmode -halt-on-error main.tex >> build.log 2>&1
+            STATUS=$?
+          fi
+          if [ $STATUS -eq 0 ]; then
+            pdflatex -interaction=nonstopmode -halt-on-error main.tex >> build.log 2>&1
+            STATUS=$?
+          fi
+          echo "status=$STATUS" >> "$GITHUB_OUTPUT"
+          exit $STATUS
+
+      - name: Upload build log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: dossier-professionnel-build-log
+          path: build.log
+          if-no-files-found: error
 
       - name: Upload PDF
+        if: steps.compile.outcome == 'success'
         uses: actions/upload-artifact@v4
         with:
           name: dossier-professionnel-pdf
