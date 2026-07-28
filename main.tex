@@ -23,14 +23,11 @@
 \input{glossaire.tex}
 \renewcommand*{\glossaryname}{Glossaire}
 
-% Les termes du glossaire sont signalés par un astérisque et sont
-% directement cliquables vers leur définition.
+% Les termes faisant l'objet d'une entrée dans le glossaire sont signalés
+% par un astérisque à chaque utilisation dans le corps du dossier.
+% \gls rend également le terme cliquable vers sa définition et enregistre
+% la page courante dans l'index du glossaire.
 \newcommand{\terme}[1]{\gls{#1}\textsuperscript{*}}
-\newcommand{\reperesterminologiques}[1]{%
-  \par\smallskip
-  \noindent\textit{Repères terminologiques : #1.}%
-  \par\medskip
-}
 
 \definecolor{codebackground}{RGB}{248,248,248}
 \definecolor{codekeyword}{RGB}{0,70,140}
@@ -100,29 +97,22 @@
 \addcontentsline{toc}{chapter}{Introduction générale}
 \input{sections/00-introduction.tex}
 \chapter{Contexte professionnel}
-\reperesterminologiques{\terme{shom}, \terme{enc}}
 \input{sections/01-contexte-professionnel.tex}
 \chapter{Cartographie des projets et des compétences}
 \input{sections/03-cartographie-projets.tex}
 \chapter{FCU / Ediacara}
-\reperesterminologiques{\terme{fcu}, \terme{bdmr}, \terme{gdal}, \terme{geotiff}, \terme{svn}, \terme{poc}}
 \input{sections/04-projet-fcu-ediacara.tex}
 \chapter{S-123}
-\reperesterminologiques{\terme{s100}, \terme{s123}, \terme{rsx}, \terme{smdsm}, \terme{xsd}, \terme{uml}, \terme{api}, \terme{rest}, \terme{poc}}
 \input{sections/05-projet-s123.tex}
 \chapter{FeastVerse}
-\reperesterminologiques{\terme{api}, \terme{jwt}, \terme{crud}, \terme{dto}, \terme{orm}, \terme{rest}}
 \input{sections/06-projet-feastverse.tex}
 \chapter{Brise-glace}
-\reperesterminologiques{\terme{rls}, \terme{api}}
 \input{sections/07-projet-brise-glace.tex}
 \chapter{Projet Data / IA}
 \input{sections/08-projet-data-ia.tex}
 \chapter{Projet Observability server}
-\reperesterminologiques{\terme{devops}, \terme{ci}, \terme{cd}, \terme{gitops}}
 \input{sections/09-projet-observability.tex}
 \chapter{IPF 2026 Lynx Immo}
-\reperesterminologiques{\terme{rgpd}, \terme{api}}
 \input{sections/10-projet-lynx-immo.tex}
 \chapter{Synthese finale}
 \input{sections/11-synthese.tex}
