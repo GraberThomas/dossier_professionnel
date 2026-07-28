@@ -1,10 +1,10 @@
 \section{Présentation du projet}
 
-FeastVerse est un projet universitaire réalisé dans le cadre d'un enseignement consacré au développement d'API avec Java Spring Boot. Le sujet imposait essentiellement le framework Spring Boot et la mise en place d'une authentification JWT ; le domaine fonctionnel restait libre.
+FeastVerse est un projet universitaire réalisé dans le cadre d'un enseignement consacré au développement d'API avec Java Spring Boot. Le sujet imposait essentiellement l'utilisation de Spring Boot et la mise en place d'une authentification JWT ; le domaine fonctionnel restait libre.
 
 J'ai choisi d'utiliser cette liberté pour aller nettement au-delà d'un exercice limité à quelques opérations CRUD protégées par un jeton. J'ai imaginé FeastVerse comme le back-end d'une plateforme de recettes intégrant des problématiques proches d'une application réelle : gestion d'utilisateurs et de rôles, propriété et visibilité des ressources, commentaires, likes, signalements et modération, recherche multicritère, pagination, upload d'images, documentation détaillée et déploiement dans un environnement distant.
 
-Cette ambition a progressivement transformé le sujet pédagogique initial en un projet plus large de conception d'API. FeastVerse est mobilisé dans ce dossier comme preuve principale de développement back-end applicatif : il me permet de présenter une solution conçue de bout en bout, de son architecture logicielle jusqu'à sa documentation et sa mise à disposition sur Railway.
+Cette ambition a progressivement transformé le sujet pédagogique initial en un projet plus large de conception d'API. FeastVerse est mobilisé dans ce dossier comme preuve principale de développement back-end applicatif : il me permet de présenter une solution conçue de bout en bout, de son architecture logicielle jusqu'à sa documentation et sa mise à disposition automatique sur Railway.
 
 \section{Compétences mobilisées}
 
@@ -27,7 +27,7 @@ C3.6 & Documentation technique avec Swagger/OpenAPI et production d'un site MkDo
 \label{tab:competences-feastverse}
 \end{table}
 
-\section{Du sujet pédagogique à un back-end applicatif complet}
+\section{Du sujet pédagogique à un back-end applicatif avancé}
 
 Le besoin minimal laissait une grande liberté : développer une API Spring Boot sur un sujet libre et intégrer une authentification JWT. J'aurais donc pu me limiter à quelques entités, des opérations CRUD et un système d'authentification simple.
 
@@ -35,36 +35,55 @@ J'ai volontairement élargi ce périmètre. Le domaine des recettes me permettai
 
 Le périmètre développé comprend également plus de 700 ingrédients de démonstration, trois rôles distincts --- utilisateur, modérateur et administrateur --- ainsi que des mécanismes de pagination, tri et filtrage sur les principales ressources. Les utilisateurs peuvent interagir avec les contenus, tandis que les modérateurs et administrateurs disposent de droits spécifiques sur les signalements et certaines suppressions.
 
-Cette ambition a toutefois eu un coût. Toutes les ressources n'ont pas atteint le même niveau de complétude dans le temps disponible : les utilisateurs, ingrédients, commentaires, likes et signalements sont les plus avancés, tandis que les recettes et leurs étapes étaient principalement disponibles en lecture au moment du rendu initial. Je préfère présenter cette limite explicitement plutôt que qualifier FeastVerse d'application totalement finalisée.
+Ce choix d'élargir le sujet a été formateur, mais il a également augmenté fortement le nombre de fonctionnalités à réaliser dans le temps disponible. Toutes les ressources n'ont donc pas atteint le même niveau de complétude. Les utilisateurs, ingrédients, commentaires, likes et signalements sont les plus avancés ; les recettes et leurs étapes étaient principalement disponibles en lecture au moment du rendu initial.
 
-\section{Conception de l'architecture back-end}
+Cette limite fait partie de l'analyse du projet. FeastVerse n'est pas présenté comme une application commerciale totalement finalisée, mais comme une API back-end avancée sur laquelle j'ai volontairement exploré des problématiques de conception, de sécurisation, de validation, de documentation et de déploiement.
 
-\subsection{Stack et organisation générale}
+\section{Architecture technique de l'API}
 
-Le cadre pédagogique imposait Spring Boot ; mon travail a donc surtout porté sur la manière de structurer l'application autour de ce framework. J'ai utilisé Gradle pour le build, Spring Web pour les endpoints REST, Spring Data JPA et Hibernate pour la persistance, Spring Security pour les autorisations, JWT pour l'authentification, PostgreSQL pour la base de données et MapStruct pour les conversions entre entités et DTO.
+\subsection{Stack utilisée}
 
-J'ai organisé l'application en couches afin d'éviter que les contrôleurs concentrent à la fois la gestion HTTP, la logique métier et l'accès aux données. Les contrôleurs reçoivent les requêtes et délèguent aux services ; les services portent les règles métier ; les repositories restent centrés sur la persistance. Les DTO et mappers séparent quant à eux le modèle de stockage des contrats exposés par l'API.
+Le cadre pédagogique imposait Spring Boot ; mon travail a donc surtout porté sur la manière de structurer l'application autour de ce framework. J'ai utilisé Gradle pour le build, Spring Web pour l'exposition des endpoints REST, Spring Data JPA et Hibernate pour la persistance, Spring Security pour les autorisations, JWT pour l'authentification, PostgreSQL pour la base de données et MapStruct pour les conversions entre entités et DTO.
+
+Le choix de PostgreSQL correspondait bien au modèle relationnel de FeastVerse, composé de nombreuses entités liées : utilisateurs, recettes, ingrédients, commentaires, likes et signalements. L'objectif n'était pas seulement de faire fonctionner l'API, mais de conserver une structure suffisamment claire pour pouvoir faire évoluer ces fonctionnalités sans concentrer toutes les responsabilités dans quelques classes.
 
 \begin{figure}[H]
 \centering
-\fbox{\parbox{0.88\textwidth}{\centering Emplacement prévu : schéma de l'architecture FeastVerse.\\Client HTTP / Postman $\rightarrow$ contrôleurs REST $\rightarrow$ services $\rightarrow$ repositories $\rightarrow$ PostgreSQL.\\DTO et mappers entre les couches d'exposition et le modèle de persistance.}}
+\fbox{\parbox{0.88\textwidth}{\centering Emplacement prévu : schéma simple de l'architecture technique FeastVerse.\\Client HTTP / Postman $\rightarrow$ contrôleurs REST $\rightarrow$ services $\rightarrow$ repositories $\rightarrow$ PostgreSQL.\\DTO et mappers entre les couches d'exposition et le modèle de persistance.}}
 \caption{Architecture générale de l'API FeastVerse}
 \label{fig:architecture-feastverse}
 \end{figure}
 
-Cette séparation s'est révélée particulièrement utile pour les utilisateurs. Selon le contexte, une même ressource ne doit pas exposer les mêmes informations : une vue publique, une vue personnelle et une vue administrateur peuvent donc utiliser des DTO différents sans modifier l'entité de persistance.
+\subsection{Organisation en couches}
 
-\subsection{Persistance et modèle métier}
+J'ai organisé FeastVerse autour de plusieurs responsabilités distinctes :
 
-Le modèle relationnel traduit les interactions entre utilisateurs et contenus : un utilisateur peut créer certaines ressources, aimer une recette, commenter un contenu ou créer un signalement. Une recette est liée à des ingrédients, des étapes, des commentaires, des likes et des signalements.
+\begin{itemize}
+    \item les contrôleurs exposent les endpoints HTTP et gèrent l'entrée dans l'application ;
+    \item les services portent la logique métier ;
+    \item les repositories assurent l'accès aux données ;
+    \item les entités représentent le modèle de persistance ;
+    \item les DTO contrôlent les données reçues et renvoyées par l'API ;
+    \item les mappers assurent la conversion entre entités et DTO.
+\end{itemize}
 
-Ces relations m'ont obligé à traiter des règles qui dépassent un CRUD simple : vérifier le propriétaire d'une ressource, distinguer visibilité publique et privée, gérer la suppression logique ou définitive et appliquer des autorisations différentes selon le rôle connecté.
+Cette organisation m'a permis d'éviter de placer la logique métier directement dans les contrôleurs. Le contrôleur reçoit la requête, valide les paramètres principaux et délègue au service approprié. Le service prend les décisions métier, tandis que le repository reste centré sur la persistance.
 
-\section{Concevoir une API interrogeable à grande échelle}
+La séparation entre entités et DTO a également été importante pour la sécurité et la maîtrise des contrats HTTP. Une même ressource ne doit pas nécessairement exposer les mêmes informations selon le contexte. Pour les utilisateurs, j'ai par exemple distingué une vue publique, une vue personnelle et une vue administrateur. Ces variantes peuvent évoluer sans modifier directement l'entité persistée.
 
-Une partie importante du projet concerne la consultation des ressources. Avec plusieurs centaines d'ingrédients et de nombreux critères métier, renvoyer des listes complètes n'était pas une solution satisfaisante. J'ai donc généralisé pagination, tri et filtrage sur les principales routes de consultation.
+\subsection{Persistance et modèle de données}
 
-L'exemple des recettes est le plus représentatif. Le contrôleur accepte plusieurs critères optionnels : nom, temps maximal, difficulté, type, ingrédients inclus ou exclus, tags, propriétaire et visibilité. L'objet \texttt{Pageable} permet de faire varier pagination et tri sans créer un endpoint par combinaison de critères.
+La persistance repose sur Spring Data JPA et Hibernate. Les repositories m'ont permis d'organiser les accès aux données tout en profitant des mécanismes de pagination et de construction de requêtes de Spring Data.
+
+Le modèle métier comporte plusieurs relations importantes : un utilisateur peut créer certaines ressources, aimer des recettes, commenter des recettes ou des étapes et créer des signalements. Une recette peut être associée à des ingrédients, des étapes, des commentaires, des likes et des signalements.
+
+Cette structure m'a obligé à traiter des règles qui dépassent un CRUD simple : cohérence des relations, visibilité des ressources, propriété, suppression logique ou définitive et droits d'action selon le rôle connecté. Ces règles se retrouvent ensuite dans les services et dans les restrictions appliquées aux endpoints.
+
+\section{Recherche, pagination et filtrage}
+
+Une partie importante du projet concerne la recherche et la consultation des ressources. Avec plus de 700 ingrédients de démonstration et plusieurs ressources liées aux utilisateurs, renvoyer systématiquement l'ensemble des données n'était pas une solution satisfaisante. J'ai donc généralisé pagination, tri et filtrage sur les principales routes de consultation.
+
+L'exemple suivant illustre la logique appliquée aux recettes. Le contrôleur accepte plusieurs paramètres optionnels : nom, temps maximal, difficulté, type, ingrédients inclus ou exclus, tags, propriétaire et visibilité. L'objet \texttt{Pageable} permet de faire varier la pagination et le tri directement dans le flux de la requête.
 
 \paragraph{Extrait de code : filtrage et pagination des recettes}
 
@@ -97,13 +116,24 @@ public Page<RecipeViewDto> getAllRecipes(
 }
 \end{lstlisting}
 
-Ce choix permet de combiner plusieurs usages dans un même contrat HTTP tout en limitant le volume transféré. La conversion vers un DTO de liste évite également de renvoyer l'entité complète lorsque seules quelques informations sont nécessaires à l'affichage d'un résultat.
+Ce choix permet de combiner plusieurs usages dans un même endpoint. La pagination reste intégrée au contrat HTTP, tandis que la conversion vers un DTO de liste évite de renvoyer l'entité complète lorsque seules quelques informations sont nécessaires à l'affichage d'un résultat.
 
-\section{Sécurité et autorisations métier}
+Cette logique n'est pas limitée aux recettes. La liste des utilisateurs peut également être paginée, triée et filtrée selon plusieurs critères, par exemple le rôle, le nom, le prénom, le pseudo ou l'adresse électronique. Les ingrédients disposent eux aussi de mécanismes de recherche et de filtrage adaptés à un catalogue de plusieurs centaines d'éléments.
 
-\subsection{Authentification JWT}
+\begin{figure}[H]
+\centering
+\fbox{\parbox{0.88\textwidth}{\centering Emplacement prévu : capture Postman ou Swagger d'un appel GET /recipes avec filtres, pagination et tri.}}
+\caption{Exemple de requête paginée et filtrée sur les recettes}
+\label{fig:recherche-feastverse}
+\end{figure}
 
-L'authentification JWT faisait partie des contraintes du sujet. J'ai cependant poussé son utilisation au-delà de la seule génération d'un jeton. Un filtre dédié extrait le token transmis dans l'en-tête \texttt{Authorization}, vérifie sa validité, recharge l'utilisateur puis initialise le contexte de sécurité Spring avant l'exécution du contrôleur.
+\section{Sécurité et gestion des rôles}
+
+\subsection{Authentification par JWT}
+
+L'authentification JWT faisait partie des contraintes du sujet. J'ai cependant poussé son intégration au-delà de la seule génération d'un jeton. Après authentification, le client transmet le JWT avec les requêtes protégées. Un filtre dédié intercepte la requête, extrait le token, vérifie sa validité, recharge l'utilisateur puis initialise le contexte de sécurité Spring avant l'exécution du contrôleur.
+
+\paragraph{Extrait de code : extraction et validation du JWT}
 
 \begin{lstlisting}[language=Java,caption={Extraction et validation du JWT dans le filtre de sécurité},label={lst:feastverse-jwt-filter}]
 final String authorizationHeader = request.getHeader("Authorization");
@@ -133,11 +163,15 @@ if (userId != null &&
 }
 \end{lstlisting}
 
-\subsection{Rôles, propriété et modération}
+Cette étape rend l'identité et les autorités de l'utilisateur disponibles aux contrôleurs et aux services. La sécurité n'est donc pas traitée comme une fonctionnalité isolée : elle devient un élément utilisé par les règles métier de l'application.
 
-J'ai défini trois niveaux principaux d'autorisation : utilisateur standard, modérateur et administrateur. Ils ne donnent pas accès aux mêmes opérations. Les utilisateurs peuvent créer certaines ressources et interagir avec les contenus ; les modérateurs disposent d'actions liées au traitement des signalements ; les administrateurs peuvent effectuer des opérations plus sensibles, notamment certaines suppressions définitives.
+\subsection{Rôles, propriété et autorisations}
 
-Les annotations \texttt{@PreAuthorize} rendent une partie de ces règles visible au niveau des endpoints, tandis que d'autres contrôles tiennent compte du propriétaire de la ressource. L'objectif était d'obtenir un modèle où être authentifié ne signifie pas automatiquement avoir le droit d'agir sur n'importe quelle donnée.
+J'ai défini trois rôles principaux : utilisateur standard, modérateur et administrateur. Ils ne donnent pas accès aux mêmes fonctionnalités. Un utilisateur standard peut créer certaines ressources, commenter, liker ou signaler un contenu. Un modérateur peut consulter les signalements et traiter leur statut. Un administrateur dispose de droits plus étendus, notamment pour certaines suppressions définitives.
+
+La protection des endpoints repose notamment sur les annotations de sécurité de Spring. Elles rendent les restrictions lisibles directement au niveau des opérations concernées. D'autres règles tiennent compte du propriétaire de la ressource : être authentifié ne signifie donc pas automatiquement pouvoir modifier ou supprimer n'importe quelle donnée.
+
+\paragraph{Extrait de code : protection d'endpoints par rôle}
 
 \begin{lstlisting}[language=Java,caption={Exemples de restrictions d'accès par rôle},label={lst:feastverse-preauthorize}]
 @PreAuthorize("hasRole('ROLE_STANDARD')")
@@ -153,13 +187,50 @@ public Page<ReportViewDTO> getAll(...) { ... }
 public ResponseEntity<Void> deleteReport(...) { ... }
 \end{lstlisting}
 
-La gestion des ingrédients illustre aussi cette logique : création avec upload d'image, visibilité et propriété de la ressource, suppression logique pour préserver les données, et suppression définitive réservée à l'administrateur.
+Ces règles ont donné au projet une dimension plus réaliste que le simple couple « utilisateur authentifié / utilisateur non authentifié ». Elles m'ont également obligé à réfléchir à la frontière entre autorisation technique, portée par Spring Security, et autorisation métier, par exemple lorsqu'une action dépend de la propriété d'une ressource.
 
-\section{Qualité des réponses et validation fonctionnelle}
+\section{Fonctionnalités métier développées}
 
-\subsection{Gestion centralisée des erreurs}
+\subsection{Gestion des utilisateurs}
 
-J'ai centralisé le traitement de plusieurs erreurs afin que les clients reçoivent des réponses cohérentes plutôt que des exceptions techniques brutes. Les erreurs de validation, ressources inexistantes, formats invalides ou conflits métier sont transformés en réponses HTTP structurées.
+La partie utilisateur permet de gérer l'inscription, l'authentification, la consultation de profils et la modification de certaines informations. J'ai distingué plusieurs niveaux de détail dans les réponses : une vue publique, une vue personnelle et une vue administrateur. Cette séparation évite d'exposer les mêmes informations à tous les clients et constitue aussi un exemple concret d'utilisation des DTO.
+
+La liste des utilisateurs peut être paginée, triée et filtrée selon plusieurs critères, par exemple le rôle, le nom, le prénom, le pseudo ou l'adresse électronique. Cette fonctionnalité prolonge la logique de consultation générique mise en place sur les autres ressources.
+
+\subsection{Gestion des ingrédients}
+
+La gestion des ingrédients constitue une partie importante du projet. L'API permet de consulter les types d'ingrédients, de rechercher et filtrer les ingrédients, de créer de nouvelles ressources et d'associer une image à un ingrédient à l'aide d'une requête multipart.
+
+Cette partie m'a fait travailler plusieurs problématiques back-end dans une même fonctionnalité : validation des données d'entrée, upload de fichier, stockage distant via Cloudinary, distinction entre ressource publique et privée, propriété, suppression logique et suppression définitive. La suppression définitive est réservée à l'administrateur, ce qui ajoute une règle métier au-delà du simple contrôle d'authentification.
+
+\begin{figure}[H]
+\centering
+\fbox{\parbox{0.88\textwidth}{\centering Emplacement prévu : capture d'une requête Postman de création d'ingrédient en multipart, avec partie JSON et fichier image.}}
+\caption{Création d'un ingrédient avec upload d'image}
+\label{fig:ingredient-multipart-feastverse}
+\end{figure}
+
+\subsection{Recettes, commentaires et likes}
+
+La partie recette permet de consulter des recettes et de les filtrer selon plusieurs critères : nom, temps maximum, difficulté, type, ingrédients inclus ou exclus, tags, propriétaire, visibilité ou statut de suppression. C'est sur cette ressource que la recherche multicritère est la plus visible.
+
+Les utilisateurs authentifiés peuvent également interagir avec les recettes à travers les commentaires et les likes. Ces interactions enrichissent le modèle métier, car elles introduisent des relations entre utilisateurs et contenus et obligent à conserver une cohérence entre les opérations exposées et l'identité de l'utilisateur connecté.
+
+Le CRUD complet des recettes et des étapes n'a toutefois pas été terminé au même niveau que ces fonctionnalités de consultation et d'interaction. Cette asymétrie provient directement du choix d'avoir élargi fortement le périmètre du projet.
+
+\subsection{Signalements et modération}
+
+Le système de signalement permet aux utilisateurs de signaler des contenus ou comportements problématiques. Les modérateurs et administrateurs peuvent ensuite consulter les signalements et mettre à jour leur état. L'administrateur dispose en plus de droits de suppression.
+
+J'ai ajouté cette fonctionnalité parce qu'elle permettait d'aller au-delà d'une gestion uniforme des utilisateurs. Elle introduit une véritable séparation des responsabilités : l'utilisateur crée un signalement, le modérateur traite l'information et l'administrateur conserve les opérations les plus sensibles.
+
+\section{Qualité des réponses et gestion des erreurs}
+
+J'ai centralisé le traitement de plusieurs erreurs afin que les clients reçoivent des réponses HTTP cohérentes plutôt que des exceptions techniques brutes. Les erreurs de validation, les formats invalides, les ressources inexistantes ou certains conflits métier peuvent ainsi être transformés en objets d'erreur structurés.
+
+Cette décision facilite l'utilisation de l'API : le client peut exploiter un statut HTTP, un message, le chemin concerné et, dans le cas d'une validation, le détail des champs invalides. Elle évite également de laisser chaque contrôleur définir sa propre manière de traiter les mêmes situations d'échec.
+
+\paragraph{Extrait de code : réponse d'erreur de validation}
 
 \begin{lstlisting}[language=Java,caption={Gestion centralisée des erreurs de validation},label={lst:feastverse-validation-handler}]
 @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -185,11 +256,35 @@ public ResponseEntity<ErrorResponse> handleValidationExceptions(
 }
 \end{lstlisting}
 
-\subsection{Scénarios Postman}
+Cet extrait montre que les erreurs de validation ne sont pas laissées au comportement par défaut du framework. Elles sont transformées en une réponse définie par l'application, ce qui rend le contrat d'erreur plus explicite pour le client.
 
-La validation fonctionnelle s'est principalement appuyée sur une collection Postman organisée par domaine. J'y ai construit des scénarios couvrant authentification, rôles, consultation et modification de ressources, filtrage, pagination, upload multipart, suppression logique et définitive, likes, commentaires et signalements.
+\section{Tests fonctionnels avec Postman}
 
-Certaines requêtes réutilisent les résultats d'étapes précédentes. Après authentification, par exemple, un script vérifie la réponse et stocke automatiquement le JWT dans une variable de collection pour les appels suivants.
+La validation fonctionnelle du projet s'est principalement appuyée sur une collection Postman structurée par domaine fonctionnel. Cette collection ne remplace pas une suite complète de tests unitaires et d'intégration automatisés, mais elle constitue un plan de tests fonctionnels permettant de vérifier les principaux comportements de l'API.
+
+J'y ai construit des scénarios couvrant à la fois des cas nominaux et des cas d'erreur : création de compte, authentification, récupération des jetons, accès selon les rôles, création de ressources, filtrage, pagination, modification, suppression, validation et autorisations insuffisantes.
+
+\begin{table}[H]
+\centering
+\begin{tabular}{p{4cm} p{10cm}}
+\toprule
+\textbf{Domaine testé} & \textbf{Exemples de scénarios} \\
+\midrule
+Authentification & Création de compte, connexion utilisateur, connexion modérateur, connexion administrateur, récupération des jetons. \\
+Utilisateurs & Consultation de profil, modification de profil, filtrage des utilisateurs, suppression par administrateur. \\
+Ingrédients & Recherche, pagination, filtrage, création multipart, modification, suppression logique et suppression définitive. \\
+Recettes & Consultation, recherche avancée, filtrage par critères métier, commentaires, likes et signalements. \\
+Signalements & Création par un utilisateur, consultation par un modérateur, mise à jour du statut, suppression par administrateur. \\
+Commentaires et likes & Ajout de commentaire, consultation des commentaires, like et unlike d'une recette. \\
+\bottomrule
+\end{tabular}
+\caption{Exemples de scénarios validés avec Postman}
+\label{tab:tests-postman-feastverse}
+\end{table}
+
+L'intérêt de cette collection est aussi de reproduire des parcours composés de plusieurs appels. Certaines requêtes dépendent de variables créées par des étapes précédentes, par exemple l'identifiant d'une ressource ou un jeton d'authentification.
+
+\paragraph{Extrait de script Postman : stockage d'un jeton JWT}
 
 \begin{lstlisting}[language=JavaScript,caption={Script Postman de vérification et de stockage du token},label={lst:feastverse-postman-token}]
 const jsonData = pm.response.json();
@@ -207,15 +302,26 @@ if (jsonData.accessToken) {
 }
 \end{lstlisting}
 
-Cette collection constitue un plan de validation fonctionnelle reproductible, mais elle ne remplace pas une véritable suite automatisée de tests unitaires et d'intégration. C'est l'une des limites que je retiens du projet.
+Après l'authentification, le jeton est automatiquement stocké dans une variable de collection et réutilisé par les requêtes suivantes. Cela évite de préparer manuellement chaque appel et rapproche les tests d'un parcours d'utilisation réel.
 
-\section{Documenter pour rendre l'API utilisable}
+\begin{figure}[H]
+\centering
+\fbox{\parbox{0.88\textwidth}{\centering Emplacement prévu : capture de la collection Postman avec les dossiers Authentification, User, Ingredients, Recipe, Report, Comment et Like.}}
+\caption{Organisation de la collection Postman FeastVerse}
+\label{fig:postman-feastverse}
+\end{figure}
+
+La principale limite de cette démarche est son niveau d'automatisation. Les scénarios Postman constituent une preuve de validation fonctionnelle, mais une suite de tests unitaires et d'intégration exécutée automatiquement aurait mieux sécurisé les évolutions du projet.
+
+\section{Documentation technique}
 
 \subsection{Swagger et OpenAPI}
 
-Je ne voulais pas que l'utilisation de l'API dépende de la lecture du code source. J'ai donc documenté les contrôleurs avec OpenAPI en précisant les paramètres, réponses, erreurs et exemples de payloads.
+Je ne voulais pas que l'utilisation de l'API dépende de la lecture du code source. J'ai donc documenté les contrôleurs avec Swagger/OpenAPI en précisant les paramètres, les réponses, les erreurs et des exemples de payloads.
 
 Certaines réponses variant selon le rôle de l'utilisateur, j'ai créé des annotations de documentation dédiées. Pour la consultation d'un utilisateur, par exemple, la documentation distingue les schémas public, personnel et administrateur et fournit des exemples de réponse correspondants. Cette démarche a été appliquée progressivement aux différents contrôleurs de l'application.
+
+Cette documentation reste proche du code et facilite le test immédiat d'un endpoint. Elle représente toutefois seulement une partie du besoin documentaire : elle décrit très bien les contrats HTTP, mais moins bien l'organisation générale du projet et ses cas d'utilisation.
 
 \begin{figure}[H]
 \centering
@@ -224,13 +330,13 @@ Certaines réponses variant selon le rôle de l'utilisateur, j'ai créé des ann
 \label{fig:swagger-feastverse}
 \end{figure}
 
-\subsection{Site MkDocs dédié}
+\subsection{Documentation MkDocs}
 
-J'ai également produit un site de documentation séparé avec MkDocs. Il regroupe une documentation d'authentification et des endpoints, des pages fonctionnelles et cas d'usage, une roadmap, un changelog, une présentation de l'architecture, de la stack technique ainsi qu'un glossaire.
+J'ai donc produit en complément un site de documentation séparé avec MkDocs. Il regroupe des pages dédiées à l'authentification et aux endpoints, aux fonctionnalités, aux cas d'utilisation, à la roadmap et au changelog, ainsi qu'à l'architecture, à la stack technique et aux annexes.
 
-Cette documentation répond à un besoin différent de Swagger. OpenAPI décrit précisément les contrats HTTP ; MkDocs permet de présenter le projet, son organisation et son usage avec davantage de recul. Le site intègre notamment Mermaid et un composant Swagger UI.
+Cette double documentation répond à deux besoins différents. Swagger est utile pour l'utilisation technique immédiate de l'API. MkDocs permet de présenter le projet de manière plus pédagogique, notamment pour expliquer son organisation, son vocabulaire et les principaux scénarios d'utilisation. Le site utilise également Mermaid et intègre un composant Swagger UI.
 
-J'ai ensuite conteneurisé cette documentation avec un build multi-stage : une première image Python génère le site MkDocs en mode strict, puis une image Nginx légère sert les fichiers statiques produits. La documentation a elle aussi été déployée sur Railway.
+J'ai conteneurisé cette documentation avec un build multi-stage : une première image Python installe les dépendances et construit le site MkDocs en mode strict, puis une image Nginx légère sert les fichiers statiques produits. La documentation a ensuite été déployée sur Railway, séparément de l'API.
 
 \begin{figure}[H]
 \centering
@@ -239,13 +345,17 @@ J'ai ensuite conteneurisé cette documentation avec un build multi-stage : une p
 \label{fig:mkdocs-feastverse}
 \end{figure}
 
+Un point de vigilance concerne la synchronisation entre la documentation et l'état réel du projet. Certaines pages peuvent devenir obsolètes lorsque le périmètre fonctionnel ou le mode de déploiement évolue. Avec le recul, la documentation doit donc être considérée comme un livrable vivant et revue en même temps que les évolutions du code.
+
 \section{Déploiement automatique sur Railway}
 
-J'ai déployé l'API sur Railway et relié le service à son dépôt GitHub afin qu'une nouvelle version soit reconstruite et redéployée automatiquement après mise à jour de la branche suivie. Cette étape m'a obligé à distinguer les paramètres locaux des paramètres de production et à externaliser les éléments sensibles.
+J'ai déployé l'API sur Railway et relié le service à son dépôt GitHub. Une mise à jour de la branche suivie déclenche automatiquement la reconstruction puis le redéploiement de l'application. Cette étape a transformé le projet en solution réellement accessible dans un environnement distinct de mon poste de développement.
 
-Le profil de production utilise des variables d'environnement pour la connexion PostgreSQL, le secret JWT et les paramètres Cloudinary. Le service peut ainsi être reconstruit dans Railway sans intégrer les secrets au dépôt.
+Le passage sur Railway m'a obligé à distinguer la configuration locale de la configuration de production. Les paramètres sensibles ne sont pas inscrits directement dans le code : le profil de production récupère notamment la connexion PostgreSQL, le secret JWT et les paramètres Cloudinary depuis des variables d'environnement.
 
-\begin{lstlisting}[language=yaml,caption={Extrait de configuration de production},label={lst:feastverse-config-prod}]
+\paragraph{Extrait de configuration de production}
+
+\begin{lstlisting}[language=yaml,caption={Configuration de production par variables d'environnement},label={lst:feastverse-config-prod}]
 spring:
   datasource:
     url: jdbc:postgresql://${PGHOST}:${PGPORT}/${POSTGRES_DB}
@@ -263,7 +373,9 @@ upload:
     api-secret: ${CLOUDINARY_API_SECRET}
 \end{lstlisting}
 
-Ce déploiement ne constitue pas à lui seul une chaîne DevOps complète, mais il apporte une preuve concrète de déploiement continu : le code versionné reste la source du service, Railway automatise la reconstruction et la mise en ligne, et la configuration de production est séparée du code applicatif.
+Ce mécanisme ne constitue pas à lui seul une chaîne DevOps complète, mais il apporte une preuve concrète de déploiement continu : GitHub reste la source du code versionné et Railway automatise la reconstruction et la mise en ligne du service sans intervention manuelle à chaque version.
+
+La documentation MkDocs suit la même logique de mise à disposition sur Railway. Son image Docker construit le site puis le sert avec Nginx, ce qui sépare le processus de génération de la documentation de son hébergement final.
 
 \begin{figure}[H]
 \centering
@@ -278,6 +390,8 @@ Le principal enseignement du projet tient autant à son ambition qu'à ses limit
 
 Cette ambition m'a permis d'aborder des problématiques beaucoup plus riches qu'un CRUD classique, mais elle a aussi dispersé le temps disponible. Le CRUD complet des recettes et des étapes, pourtant central dans le domaine choisi, n'a pas été terminé au même niveau que les autres ressources. De même, les scénarios Postman sont nombreux, mais la couverture automatisée par tests unitaires et d'intégration reste insuffisante.
 
-Avec le recul, je conserverais cette ambition technique, mais je définirais plus tôt un socle fonctionnel minimal à terminer intégralement avant d'ajouter les fonctionnalités secondaires. Le CRUD complet des recettes, les règles d'autorisation essentielles et une première suite de tests automatisés constitueraient les critères de sortie d'un premier incrément ; la modération, l'upload, la documentation enrichie et les fonctionnalités complémentaires viendraient ensuite.
+Avec le recul, je conserverais cette ambition technique, car elle m'a permis d'explorer des sujets que le cadre minimal n'imposait pas. En revanche, je définirais plus tôt un socle fonctionnel minimal à terminer intégralement avant d'ajouter les fonctionnalités secondaires. Le CRUD complet des recettes, les règles d'autorisation essentielles et une première suite de tests automatisés constitueraient les critères de sortie d'un premier incrément ; la modération, l'upload, la documentation enrichie et les fonctionnalités complémentaires viendraient ensuite.
+
+Je retiens également que la documentation et le déploiement ne doivent pas être considérés uniquement comme des tâches réalisées en fin de projet. Dans FeastVerse, leur ajout a fortement enrichi le rendu et m'a obligé à rendre l'API compréhensible et configurable hors de mon environnement local. Sur un projet futur, je les intégrerais plus tôt dans la définition des livrables et dans les critères de qualité.
 
 FeastVerse m'a ainsi permis de consolider mes compétences en conception et développement back-end, mais surtout de comprendre qu'aller plus loin techniquement n'est pertinent que si le périmètre reste maîtrisé. Le projet constitue une preuve forte de développement d'API, de sécurisation, de documentation et de mise à disposition automatisée, tout en offrant un recul concret sur la priorisation et la notion de produit minimum viable.
