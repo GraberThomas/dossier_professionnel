@@ -18,9 +18,10 @@
 \usepackage{csquotes}
 \usepackage[backend=biber,style=authoryear,sorting=nyt]{biblatex}
 \addbibresource{bibliographie.bib}
-\usepackage[acronym]{glossaries}
+\usepackage[acronym,toc]{glossaries}
 \makeglossaries
 \input{glossaire.tex}
+\renewcommand*{\glossaryname}{Glossaire}
 
 \definecolor{codebackground}{RGB}{248,248,248}
 \definecolor{codekeyword}{RGB}{0,70,140}
@@ -112,7 +113,11 @@
 \chapter*{Conclusion générale}
 \addcontentsline{toc}{chapter}{Conclusion générale}
 \input{sections/08-conclusion.tex}
+
+\clearpage
+\glsaddall
 \printglossaries
+
 \printbibliography
 \appendix
 \chapter{Annexes}
