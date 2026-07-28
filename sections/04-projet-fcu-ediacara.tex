@@ -1,11 +1,635 @@
-\section{Contexte et objectifs du projet}
+\section{Présentation du projet}
 
-Ce chapitre présentera le projet FCU / Ediacara, utilisé comme projet professionnel principal du dossier.
+Le projet FCU / Ediacara constitue le projet professionnel principal de ce dossier. Il m'a été confié au cours de l'année 2025 par mon tuteur et mon responsable avec un objectif formulé simplement : \og s'assurer et modifier la chaîne Ediacara afin de pouvoir prendre en charge les cartes issues du Fond de carte unifié (FCU) \fg. Derrière cette demande se trouvait toutefois une difficulté importante : intégrer un nouveau mode de production dans une chaîne cartographique historique, utilisée quotidiennement, sans perturber la production existante.
 
-\section{Compétences principalement mobilisées}
+Le FCU vise à produire les cartes papier de manière plus automatisée à partir des données du SHOM. Dans le processus historique, les cartographes travaillent avec la BDMR et déposent des sources, des fichiers de géoréférencement et différents éléments intermédiaires à partir desquels Ediacara contrôle, transforme et livre les produits. Une carte FCU arrive au contraire déjà sous la forme de produits préparés en amont, notamment des GeoTIFF géoréférencés et des fichiers PDF. Elle ne passe pas par la BDMR, ne possède pas de fichier \texttt{.lis} et n'a pas de cartouches. Elle reste néanmoins référencée dans ShomProduit et doit finalement rejoindre plusieurs espaces de diffusion communs aux cartes historiques.
 
-Les compétences principalement visées sont : C1.1, C1.3, C1.5, C1.6, C1.7, C2.1, C2.2, C2.4, C3.1, C3.2, C3.3, C3.4, C3.5, C3.6, C4.4 et C4.5.
+L'enjeu n'était donc pas d'ajouter une condition à un unique script. Il fallait comprendre une chaîne Jenkins composée de nombreux traitements interdépendants, repérer les hypothèses qui associaient implicitement \og carte connue du SHOM \fg et \og carte présente en BDMR \fg, identifier toutes les écritures susceptibles d'altérer les espaces de diffusion, adapter les composants modifiables et contourner proprement ceux qui ne l'étaient pas. Le travail a occupé une grande partie de l'année 2025, en parallèle d'autres missions. La mise en production, initialement envisagée pour novembre, a finalement été réalisée à la fin de l'année 2025. Au moment de la rédaction de ce dossier, la solution est en production et six cartes FCU sont prises en charge par ce nouveau flux.
 
-\section{Plan de rédaction prévu}
+Ce projet a également été l'occasion de moderniser une partie importante du socle Python d'Ediacara : passage de Python 3.7 à Python 3.12, déplacement des sources exécutées depuis le réseau vers le disque local du serveur, mise sous Git, centralisation de la configuration et factorisation de plusieurs traitements. La compréhension de l'existant a enfin conduit à produire une documentation MkDocs complète de la chaîne, aujourd'hui utilisée par l'équipe, ainsi qu'à initier un POC de modernisation avec Prefect. Cette dernière piste reste une perspective et ne doit pas être confondue avec la solution FCU effectivement déployée.
 
-Ce chapitre développera l'analyse de la chaîne existante, l'étude des jobs Jenkins, l'identification des dépendances, la mise en place d'un environnement proche de la production, les développements réalisés, les tests, la mise en production, la documentation et le bilan critique.
+\section{Compétences mobilisées}
+
+Le projet couvre plusieurs dimensions du référentiel, mais avec des niveaux de preuve différents. Le tableau~\ref{tab:competences-fcu} distingue volontairement les compétences fortement démontrées de celles pour lesquelles FCU ne constitue qu'un élément complémentaire. Je ne retiens notamment pas ce projet comme preuve principale de pilotage d'équipe ou de déploiement continu : le suivi projet est resté léger et la mise en production est une opération contrôlée, mais non un mécanisme de déploiement continu automatisé.
+
+\begin{table}[H]
+\centering
+\begin{tabular}{p{2.2cm} p{11.8cm}}
+\toprule
+\textbf{Compétence} & \textbf{Mobilisation dans le projet FCU / Ediacara} \\
+\midrule
+C1.1 & Étude de la faisabilité technique et organisationnelle d'une adaptation de la chaîne existante, analyse d'une proposition d'architecture dédiée et identification des contraintes de production. La dimension financière n'a pas fait l'objet d'un chiffrage complet. \\
+C1.3 & Reformulation du besoin en contraintes techniques, identification des risques de coexistence entre BDMR et FCU, puis définition d'une stratégie de séparation des flux et de protection des espaces partagés. \\
+C2.1 & Conception d'une architecture d'intégration autour de composants legacy, proposition initiale d'ArchFCU puis adaptation de l'architecture à la solution opérationnelle finalement retenue. \\
+C2.2 & Modernisation et mise sous Git des scripts Python, centralisation de la configuration, factorisation de composants communs et amélioration de la gestion des erreurs et des synchronisations. \\
+C2.4 & Réécriture de traitements back-end Python, client ShomProduit, contrôles du dépôt FCU, transformations XML et logique de livraison multi-destinations. \\
+C3.1 & Utilisation de Jenkins comme orchestrateur, mise sous contrôle de version de sa configuration et automatisation de sa sauvegarde. La chaîne n'est toutefois pas une CI logicielle classique avec build et tests automatiques à chaque commit. \\
+C3.2 & Validation itérative sur RE7, comparaison prolongée avec la production et vérification de non-régression. L'absence d'une suite de tests automatisés exhaustive limite la force de cette preuve. \\
+C3.3 & Surveillance quotidienne des jobs après mise en production, analyse des échecs et corrections à partir des retours des consommateurs. \\
+C3.5 & Réduction des synchronisations inutiles, limitation des écritures réseau et fiabilisation de l'environnement d'exécution et des traitements de livraison. \\
+C3.6 & Rétro-documentation complète des chaînes et des jobs, production de diagrammes, documentation MkDocs, matrice de migration et procédure détaillée de mise en production. \\
+C4.4 & Capitalisation et échanges techniques au sein de la petite équipe, documentation utilisée par le tuteur et un collègue. Il ne s'agit pas d'un dispositif formel de formation. \\
+\bottomrule
+\end{tabular}
+\caption{Compétences mobilisées dans le projet FCU / Ediacara}
+\label{tab:competences-fcu}
+\end{table}
+
+\section{Contexte technique : une chaîne de production historique}
+
+\subsection{Rôle d'Ediacara dans la production cartographique}
+
+Ediacara est un serveur Windows sur lequel Jenkins orchestre plusieurs chaînes liées à la production cartographique du SHOM. La chaîne de cartes papier non protégées, qui constitue le périmètre principal de mon intervention, est déclenchée automatiquement toutes les deux heures en semaine, entre 6~h et 18~h. Son point d'entrée historique est la BDMR, dépôt SVN dans lequel sont archivées les productions raster. La chaîne détecte les révisions nouvelles depuis le dernier état traité, exporte les cartes concernées vers un espace local de travail, puis enchaîne les contrôles, transformations et livraisons.
+
+La BDMR est alimentée dans le processus historique par les cartographes, notamment au travers de GRASTER, une application interne développée en WinDev qui s'appuie elle-même sur des traitements historiques. Ediacara ne se contente donc pas de copier des fichiers. À partir des données présentes en BDMR et d'informations issues de ShomProduit, elle réalise ou orchestre des contrôles de cohérence, produit des métadonnées, génère différents GeoTIFF, PDF, archives et fichiers destinés aux systèmes de diffusion, puis synchronise plusieurs espaces réseau.
+
+\begin{figure}[H]
+\centering
+\fbox{\parbox{0.9\textwidth}{\centering
+Emplacement prévu : vue simplifiée de la chaîne historique.\\[0.2cm]
+Cartographes / GRASTER $\rightarrow$ BDMR (SVN) $\rightarrow$ Jenkins Ediacara\\
+$\rightarrow$ contrôles et traitements Eiffel / Scala / Python\\
+$\rightarrow$ métadonnées, GeoTIFF, PDF, ZIP, CSV $\rightarrow$ espaces de diffusion.\\[0.2cm]
+Ajouter ShomProduit comme référentiel transversal alimentant les métadonnées et les contrôles.
+}}
+\caption{Vue fonctionnelle simplifiée de la chaîne Ediacara historique}
+\label{fig:ediacara-historique}
+\end{figure}
+
+La chaîne principale NP comprend aujourd'hui vingt-six jobs enchaînés. Mon analyse a également porté sur plusieurs traitements connexes, ce qui représente environ une trentaine de jobs directement étudiés pour comprendre les dépendances et les effets de bord du projet. Le serveur héberge en outre d'autres chaînes : contrôle des ENC, cohérence BDMR/ShomProduit, mise à jour de Cartes-en-ligne, production des variantes L et G, traitements liés aux cartes à diffusion restreinte ou encore échanges avec l'UKHO.
+
+\subsection{Une architecture technique hétérogène}
+
+L'ancienneté de la chaîne se traduit par une forte hétérogénéité technologique. Jenkins ne pilote pas une application unique mais une succession de programmes, scripts et outils spécialisés :
+
+\begin{itemize}
+    \item des exécutables Eiffel assurent encore plusieurs contrôles et traitements cartographiques importants ;
+    \item des composants Scala réalisent notamment des transformations raster, des traitements XML/XSLT et certaines productions de fichiers ;
+    \item des scripts Python assurent une part importante de la logistique, des contrôles, des interactions avec ShomProduit et des livraisons ;
+    \item des scripts Batch et PowerShell préparent les environnements d'exécution et les commandes Jenkins ;
+    \item GDAL, FWTools, Saxon, 7-Zip et SVN complètent la chaîne selon les étapes.
+\end{itemize}
+
+Le code Eiffel représente une contrainte particulière. Il ne s'agit pas d'une dépendance isolée propre à Ediacara : ce socle historique est utilisé dans d'autres briques cartographiques du SHOM, y compris autour des cartes et des ENC. Le remplacer demanderait donc un projet de migration à part entière. Dans le contexte de FCU, le délai et le risque opérationnel ne permettaient pas de refondre immédiatement ces composants. J'ai ainsi retenu une règle de conception importante : modifier et moderniser les traitements que je pouvais maîtriser, mais construire des mécanismes d'adaptation autour des exécutables legacy lorsque leur remplacement n'était pas raisonnable dans le périmètre du projet.
+
+\section{Le FCU : un nouveau flux incompatible avec les hypothèses historiques}
+
+\subsection{Un mode de production différent}
+
+Le Fond de carte unifié vise à automatiser davantage la production cartographique directement à partir des données disponibles dans les bases du SHOM. L'objectif métier est d'obtenir un processus plus simple, plus rapide et moins sensible aux erreurs liées aux manipulations intermédiaires.
+
+Cette évolution change fortement l'entrée de la chaîne. Une carte historique possède dans la BDMR les fichiers bruts, les éléments de production et les informations de géoréférencement nécessaires aux traitements. Une carte FCU ne passe jamais par ce dépôt : les GeoTIFF sont déjà géoréférencés, les produits requis sont préparés en amont et les cartes ne comportent pas de cartouches. Les traitements de construction historique à partir des fichiers de géoréférencement ne doivent donc pas leur être appliqués.
+
+En revanche, le FCU ne constitue pas un univers séparé jusqu'au bout. Les cartes sont inscrites dans ShomProduit, qui reste le référentiel commun utilisé par plusieurs contrôles et générations de listes. Elles doivent également être déposées dans les mêmes familles de répertoires que les cartes historiques pour l'impression, l'entrepôt, les GeoTIFF directs et la publication en ligne. Le projet est ainsi un problème de \textbf{coexistence de deux sources de vérité techniques vers des sorties communes}.
+
+\subsection{Le risque caché des synchronisations}
+
+Cette coexistence révélait un risque plus important qu'un simple échec de traitement. Plusieurs jobs historiques réalisaient une synchronisation entre l'état local d'Ediacara et les répertoires de diffusion. Avant le FCU, cette logique était cohérente : un produit présent en diffusion mais absent des sources locales pouvait être considéré comme orphelin et supprimé.
+
+Avec le FCU, cette hypothèse devient fausse. Une carte FCU est légitimement présente dans le répertoire de diffusion tout en étant absente de la BDMR et donc de l'inventaire local construit par le flux historique. Sans adaptation, un job de nettoyage pouvait conclure que le fichier FCU était obsolète et le supprimer quelques heures après sa livraison.
+
+Le risque se retrouvait à plusieurs niveaux :
+
+\begin{itemize}
+    \item inclusion d'une carte FCU dans un traitement ShomProduit prévu pour les cartes BDMR ;
+    \item génération de listes incohérentes, notamment pour l'impression à la demande ;
+    \item suppression de produits FCU par les jobs de synchronisation historiques ;
+    \item écriture accidentelle dans les espaces de diffusion pendant le développement et les essais ;
+    \item livraison de métadonnées incorrectes à la suite d'une régression dans un script réécrit.
+\end{itemize}
+
+La stratégie retenue a donc consisté à \textbf{séparer explicitement le flux FCU tout en sécurisant tous les points de contact avec le flux historique}. Cette décision a guidé le reste de la conception.
+
+\begin{figure}[H]
+\centering
+\fbox{\parbox{0.9\textwidth}{\centering
+Emplacement prévu : schéma des deux flux après adaptation.\\[0.2cm]
+BDMR $\rightarrow$ chaîne historique Ediacara $\searrow$\\
+\hspace{4cm} espaces de diffusion communs\\
+ArchFCU $\rightarrow$ \texttt{livraison\_fcu} $\nearrow$\\[0.2cm]
+ShomProduit apparaît au centre comme référentiel commun utilisé pour distinguer les cartes et contrôler leur état.
+}}
+\caption{Principe de coexistence entre les flux historique et FCU}
+\label{fig:flux-fcu-historique}
+\end{figure}
+
+\section{Analyse et rétro-ingénierie de l'existant}
+
+\subsection{Reconstituer la chaîne avant de la modifier}
+
+La principale difficulté du projet a été la compréhension de l'existant. Lorsque j'ai commencé l'étude, il n'existait pas de documentation fiable décrivant l'enchaînement complet. Quelques pages anciennes et les descriptions très courtes des jobs Jenkins étaient disponibles, mais elles ne suffisaient pas à comprendre les flux. Le code historique représentait en outre environ 1~500 fichiers Eiffel, peu commentés, auxquels s'ajoutaient les scripts Python, les appels Scala, les fichiers de configuration et une arborescence locale complexe.
+
+J'ai donc abordé Ediacara comme un travail de rétro-ingénierie. Pour chaque job, j'ai relevé son déclencheur, les exécutables appelés, les sources de données, les fichiers lus et produits, les dossiers locaux, les interactions avec le réseau, les dépendances avec ShomProduit et la relation avec les jobs amont et aval. Je complétais ensuite cette analyse par la lecture du code et par l'observation des exécutions Jenkins.
+
+Ce travail a progressivement fait apparaître trois catégories de composants : ceux qui pouvaient rester inchangés parce que FCU ne les traversait jamais, ceux dont les données de référence devaient être filtrées ou protégées, et ceux qu'il fallait réécrire ou entourer d'un nouveau mécanisme de synchronisation.
+
+\subsection{Une matrice technique de suivi}
+
+La reconstruction du serveur de recette a été suivie à l'aide d'une matrice technique, job par job. Pour chaque étape, je notais les interactions avec ShomProduit, la BDMR, les livraisons, le répertoire de travail et les espaces locaux, puis je comparais l'exécutable, la source et les paramètres entre production et RE7. Cette feuille ne constitue pas un planning projet complet, mais elle m'a servi de liste de contrôle pour éviter d'oublier une dépendance lors de la reproduction de l'environnement.
+
+\begin{figure}[H]
+\centering
+\fbox{\parbox{0.9\textwidth}{\centering
+Emplacement prévu : extrait anonymisé de la matrice RE7 / PROD.\\
+Faire apparaître quelques lignes de jobs et les colonnes \og interactions réseau \fg, \og source PROD \fg, \og état RE7 \fg, \og source RE7 \fg et \og paramètres \fg.
+}}
+\caption{Matrice technique utilisée pour reconstruire et contrôler RE7}
+\label{fig:matrice-re7}
+\end{figure}
+
+Le pilotage général du projet est resté plus léger : points réguliers avec mon tuteur, échanges avec mon responsable et suivi des tâches dans l'outil Kanban interne de l'équipe. Avec le recul, cette organisation était suffisante pour avancer mais pas idéale pour un projet aussi long. Une planification formalisée avec jalons, critères de sortie et suivi des risques aurait rendu l'avancement plus lisible, en particulier parce que je travaillais simultanément sur d'autres sujets.
+
+\subsection{Construire un outil pour explorer le code Eiffel}
+
+L'exploration du code Eiffel était particulièrement lente. Pour réduire cette difficulté, j'ai développé, avec l'aide d'un LLM, un navigateur de classes accessible depuis un navigateur web. Il exploite un fichier \texttt{ctags} généré à partir des sources et une analyse des relations entre classes. Graphviz permet ensuite de produire un graphe dont je peux modifier la profondeur et choisir d'afficher ou non les features ainsi que les relations d'héritage ou d'insertion.
+
+Cet outil ne fait pas partie de la solution livrée aux utilisateurs, mais il a eu un rôle concret dans mon travail : visualiser rapidement les dépendances d'une classe, remonter vers un appelant et limiter les recherches manuelles dans les centaines de fichiers. Il illustre également une démarche que j'ai souvent appliquée sur Ediacara : lorsque l'existant n'offrait pas les outils nécessaires à sa compréhension, j'ai commencé par construire les moyens de rendre cette connaissance explicite.
+
+\begin{figure}[H]
+\centering
+\fbox{\parbox{0.9\textwidth}{\centering
+Emplacement prévu : capture du navigateur Eiffel.\\
+Afficher un graphe de classes de profondeur limitée avec les relations \texttt{inherit} et \texttt{insert}, ainsi que le panneau permettant de choisir les options de visualisation.
+}}
+\caption{Navigateur développé pour explorer les dépendances du code Eiffel}
+\label{fig:navigateur-eiffel}
+\end{figure}
+
+\section{Étude de faisabilité et évolution de l'architecture}
+
+\subsection{Une première proposition de chaîne ArchFCU}
+
+Au début du projet, mon inclination était de profiter de l'arrivée du FCU pour reconstruire plus largement Ediacara avec une orchestration moderne. Cette option n'était cependant pas réaliste dans le délai disponible : la chaîne existante restait en production, le code Eiffel était partagé avec d'autres briques et une migration complète aurait considérablement augmenté le périmètre et le risque. La contrainte fixée a donc été d'adapter l'existant.
+
+En parallèle de l'analyse d'Ediacara, j'ai néanmoins participé à la conception d'un dépôt dédié pour les cartes FCU. En juin 2025, j'ai rédigé un document d'architecture de dix-huit pages présentant une proposition complète d'ArchFCU. Cette proposition envisageait un serveur Linux hébergeant une interface PHP de dépôt, un dépôt Fossil distinct par carte et une base SQLite de journalisation. Ediacara devait ensuite récupérer les productions, les confronter à ShomProduit et assurer la diffusion.
+
+Le choix de Fossil répondait au besoin de conserver l'historique de fichiers binaires tout en évitant un serveur de versionnement complexe : un dépôt pouvait être contenu dans un unique fichier et exposé en lecture via le serveur HTTP intégré. SQLite répondait au besoin de journaliser un volume modéré d'actions sans ajouter un service de base de données. L'étude comportait également des tests de concurrence ; les scénarios essayés jusqu'à cent clients simultanés n'avaient pas produit d'échec d'écriture, ce qui était très supérieur au nombre de dépôts attendu dans l'usage réel.
+
+\begin{figure}[H]
+\centering
+\fbox{\parbox{0.9\textwidth}{\centering
+Emplacement prévu : reprendre le diagramme d'architecture de la proposition ArchFCU de juin 2025.\\
+Faire apparaître les cartographes, UploadWebApp, Fossil, SQLite, Ediacara/Jenkins, ShomProduit et la diffusion.
+}}
+\caption{Architecture ArchFCU proposée pendant l'étude de faisabilité}
+\label{fig:architecture-archfcu-proposee}
+\end{figure}
+
+Cette architecture n'a pas été mise en œuvre telle quelle. Au fil des échanges, le dépôt opérationnel a été construit plus simplement sur le partage \texttt{DATA\_CARTO} et son alimentation a été prise en charge par un traitement FME développé par mon tuteur. Je n'ai pas développé ce composant FME ; nous avons en revanche réfléchi ensemble au fonctionnement général du dépôt et j'ai proposé certains mécanismes, notamment le verrou permettant d'éviter qu'Ediacara lise une carte pendant sa mise à jour.
+
+\begin{table}[H]
+\centering
+\begin{tabular}{p{3.3cm} p{5.1cm} p{5.7cm}}
+\toprule
+\textbf{Aspect} & \textbf{Proposition de juin 2025} & \textbf{Solution opérationnelle} \\
+\midrule
+Dépôt & Serveur Linux ArchFCU dédié. & Arborescence FCU sur le partage interne \texttt{DATA\_CARTO}. \\
+Dépôt utilisateur & Application web PHP en glisser-déposer. & Traitement FME mis à disposition des cartographes. \\
+Historique & Un dépôt Fossil par carte. & Arborescence par carte, édition et correction, avec espaces \texttt{en\_service}, \texttt{retirage} et \texttt{supprimees}. \\
+Traçabilité & Base SQLite locale. & Journal SQLite conservé dans l'espace FCU. \\
+Accès Ediacara & Récupération des dépôts Fossil via HTTP. & Lecture directe du dépôt par partage SMB. \\
+Sécurisation & Contrôles applicatifs et droits de dépôt. & Contrôles de présence, MD5, XML, version et mécanisme de verrou avant livraison. \\
+\bottomrule
+\end{tabular}
+\caption{Évolution entre la proposition ArchFCU et la solution retenue}
+\label{tab:evolution-archfcu}
+\end{table}
+
+Cette évolution est importante dans mon bilan du projet. Concevoir une architecture ne signifie pas imposer le premier schéma proposé. Le document initial a permis d'expliciter les besoins de traçabilité, d'isolation et d'historisation ; la solution finale a retenu ces principes tout en s'intégrant à un outillage déjà maîtrisé par l'équipe.
+
+\section{Mise en place d'un environnement de recette représentatif}
+
+\subsection{Reconstruire RE7 à partir d'un serveur partiel}
+
+Les modifications envisagées touchaient directement des dossiers de diffusion et plusieurs scripts que je souhaitais réécrire. Il n'était donc pas acceptable de développer en testant sur la production. Un serveur de recette, nommé RE7, m'a été fourni avec Windows, Jenkins opérationnel, une partie de la structure du disque local et les principaux montages réseau. Il ne s'agissait toutefois pas encore d'un clone fonctionnel de la production.
+
+J'ai reconstruit les jobs un par un et installé ou restauré les outils manquants jusqu'à reproduire le comportement du serveur de production. Ce travail m'a obligé à comprendre réellement la configuration de chaque étape : executable utilisé, variables d'environnement, fichiers \texttt{.cfg}, sources Python, commandes Jenkins et logiciels externes.
+
+\subsection{Reproduire les lectures sans reproduire les effets de bord}
+
+Le principal enjeu de RE7 était de rester représentatif tout en garantissant qu'un essai ne puisse jamais modifier une livraison réelle. J'ai donc audité les chemins réseau présents dans les fichiers de configuration. Pour chacun, j'ai déterminé si l'accès était une lecture ou une écriture. Les lectures utiles aux tests ont été conservées lorsque cela était possible ; les destinations en écriture ont été remplacées par des dossiers locaux ou des espaces de recette.
+
+Je ne me suis pas limité aux fichiers de configuration. J'ai également lu les sources de chaque job afin de vérifier qu'aucune écriture réseau n'était codée directement dans le programme. Cette précaution était nécessaire car l'ancien code mêlait parfois configuration, chemins en dur et appels à des outils système.
+
+\begin{figure}[H]
+\centering
+\fbox{\parbox{0.9\textwidth}{\centering
+Emplacement prévu : schéma PROD / RE7.\\[0.2cm]
+PROD : données réelles $\rightarrow$ traitements $\rightarrow$ livraisons réseau.\\
+RE7 : mêmes lectures utiles $\rightarrow$ traitements équivalents $\rightarrow$ destinations locales / recette.\\
+Mettre en évidence la barrière sur toutes les écritures réseau.
+}}
+\caption{Principe d'isolation de l'environnement RE7}
+\label{fig:isolation-re7}
+\end{figure}
+
+Cette démarche a fait de RE7 un livrable à part entière. Elle a ensuite servi pendant plusieurs semaines pour comparer les résultats avec la production et sécuriser la migration.
+
+\section{Modernisation du socle Python}
+
+\subsection{Passage de scripts historiques à un socle maintenable}
+
+L'adaptation FCU aurait pu être réalisée en ajoutant quelques conditions au code existant. J'ai choisi de profiter de l'intervention pour fiabiliser la partie Python que je devais toucher. Les scripts historiques provenaient de périodes différentes et comportaient de nombreux chemins en dur, fonctions dupliquées et appels système directement intégrés au code. Une partie était encore exécutée en Python 3.7 depuis un lecteur réseau.
+
+J'ai réécrit les scripts concernés pour Python 3.12 et déplacé leurs sources sur le disque local du serveur. Les projets sont désormais versionnés dans Git, tandis que Jenkins exécute le code depuis un emplacement local stable. La configuration commune est regroupée dans des fichiers INI et des modules partagés factorisent les opérations récurrentes : accès ShomProduit, lecture des paramètres historiques, comparaison et copie de fichiers, gestion des logs ou validation des numéros de carte.
+
+\begin{table}[H]
+\centering
+\begin{tabular}{p{3.2cm} p{5.4cm} p{5.4cm}}
+\toprule
+\textbf{Axe} & \textbf{Situation rencontrée} & \textbf{Évolution réalisée} \\
+\midrule
+Runtime & Plusieurs scripts historiques en Python 3.7. & Migration des traitements réécrits vers Python 3.12. \\
+Emplacement & Sources exécutées depuis des lecteurs réseau. & Déploiement des sources sur le disque local du serveur. \\
+Versionnement & Scripts présents sur le réseau sans gestion homogène de versions. & Dépôts Git pour les sources et versionnement de la configuration Jenkins. \\
+Configuration & Chemins et paramètres souvent dupliqués ou codés dans les scripts. & Centralisation progressive dans des fichiers INI et fonctions de configuration communes. \\
+Accès ShomProduit & Parsing XML et XPath répétés dans plusieurs scripts. & Client Python et modèles dédiés représentant les cartes et leurs attributs. \\
+Utilitaires & Fonctions de copie, comparaison et exécution réimplémentées dans plusieurs fichiers. & Modules communs réutilisés par plusieurs jobs. \\
+Erreurs & Gestion souvent très large par \texttt{except} et messages peu précis. & Exceptions plus ciblées, contrôles explicites et journaux exploitables. \\
+\bottomrule
+\end{tabular}
+\caption{Principales évolutions du socle Python Ediacara}
+\label{tab:modernisation-python}
+\end{table}
+
+\subsection{Un client Python commun pour ShomProduit}
+
+ShomProduit expose les informations des cartes au format XML. Historiquement, plusieurs scripts interrogeaient directement le service puis réalisaient leurs propres recherches XPath. J'ai développé un module commun qui télécharge le XML et construit des objets Python représentant une carte, son édition, sa nomenclature, sa géométrie, ses variantes et les autres informations nécessaires aux traitements.
+
+Cette centralisation était particulièrement utile pour FCU car la règle d'identification a évolué pendant le projet. Dans l'état actuel, une méthode unique détermine si une carte appartient au FCU à partir de sa nomenclature et du format de son numéro. Les cartes de nomenclature \texttt{.CA}, envisagées dans des versions antérieures de la règle, ne sont finalement jamais considérées comme FCU.
+
+\begin{lstlisting}[language=Python,caption={Identification centralisée d'une carte FCU},label={lst:fcu-est-fcu}]
+def est_fcu(self) -> bool:
+    if self.nomenclature is None or self.nomenclature.code is None:
+        return False
+
+    match self.nomenclature.code:
+        case "CG":
+            return self.numero is not None and re.match(
+                r"^[A-Z0-9]{5}$", self.numero
+            ) is not None
+        case "GSH":
+            return self.numero is not None and re.match(
+                r"^[A-Z0-9]{4}[A-FH-Z0-9]$", self.numero
+            ) is not None
+        case "ZCA":
+            return self.numero is not None and re.match(
+                r"^[A-Z0-9]{4}[A-Y0-9]$", self.numero
+            ) is not None
+        case _:
+            return False
+\end{lstlisting}
+
+Le bénéfice n'est pas seulement esthétique. Une modification de la règle FCU peut désormais être portée dans le modèle commun et réutilisée par les jobs de liste, de livraison et de protection des synchronisations, au lieu de reproduire des conditions différentes à plusieurs endroits.
+
+\section{Conception de l'adaptation FCU dans Ediacara}
+
+\subsection{Une stratégie en trois principes}
+
+La solution déployée peut être résumée par trois principes :
+
+\begin{enumerate}
+    \item \textbf{ne pas faire entrer les FCU dans les traitements BDMR qui ne leur sont pas applicables} ;
+    \item \textbf{protéger les produits FCU dans tous les espaces partagés avec la chaîne historique} ;
+    \item \textbf{ajouter un flux de livraison FCU autonome en fin de chaîne}, à partir du dépôt ArchFCU.
+\end{enumerate}
+
+Cette stratégie évitait de réécrire les traitements cartographiques Eiffel tout en maintenant un seul serveur d'orchestration et des destinations cohérentes pour les consommateurs.
+
+\begin{table}[H]
+\centering
+\begin{tabular}{p{4.1cm} p{4cm} p{6cm}}
+\toprule
+\textbf{Job / composant} & \textbf{Type d'évolution} & \textbf{Rôle dans l'adaptation} \\
+\midrule
+\texttt{XML\_Shom-produits} & Modifié / réécrit & Conserver un catalogue global tout en excluant les FCU des XML unitaires du flux historique. \\
+\texttt{liste\_imdem\_webservices} & Réécrit & Exclure les FCU de la liste IMDEM historique. \\
+\texttt{cp\_imp} & Réécrit en Python & Réconcilier IMP/IMDEM sans supprimer ni déplacer les produits FCU. \\
+\texttt{cp\_gt} et \texttt{cp\_gtw} & Réécrits en Python & Synchroniser les GeoTIFF natifs et WGS84 en préservant les FCU. \\
+\texttt{copy\_geotiffs\_direct} & Configuration modifiée & Conserver l'exécutable Eiffel mais rediriger sa sortie vers un tampon local. \\
+\texttt{make\_pdfs} & Configuration modifiée & Générer les PDF dans un tampon local plutôt que directement dans la livraison. \\
+\texttt{livre\_geotiffs\_direct\_et\_pdf\_direct} & Nouveau job Python & Effectuer la synchronisation contrôlée des deux tampons vers le réseau. \\
+\texttt{copy\_entrepot\_mtd/data} & Réécrits / modernisés & Fiabiliser l'alimentation de l'entrepôt depuis les produits de la chaîne. \\
+\texttt{livraison\_fcu} & Nouveau job Python & Contrôler ArchFCU puis livrer chaque carte FCU vers les destinations communes. \\
+\bottomrule
+\end{tabular}
+\caption{Principales interventions sur la chaîne NP}
+\label{tab:jobs-modifies-fcu}
+\end{table}
+
+\subsection{Séparer les usages du XML ShomProduit}
+
+Le job \texttt{XML\_Shom-produits} illustre bien la nécessité de raisonner en termes de consommateurs plutôt que de simplement filtrer une donnée. Historiquement, le XML global de ShomProduit était simplifié puis découpé en fichiers unitaires utilisés pour la production de métadonnées. Les FCU étant présentes dans ShomProduit mais dépourvues des fichiers BDMR attendus, elles devaient être exclues de cette partie du flux.
+
+J'ai donc séparé deux besoins. Le fichier \texttt{cartes.xml} contient les cartes non FCU utilisées par la chaîne historique. Le fichier \texttt{cartes\_all.xml} conserve au contraire le catalogue complet, y compris les FCU, car il est copié sur le réseau et consommé par d'autres briques du SHOM. Le premier peut ensuite être découpé en XML unitaires sans créer de fichiers pour des cartes que la chaîne BDMR ne saura jamais traiter.
+
+Le module dédié télécharge les XML d'origine depuis ShomProduit, exécute les transformations XSLT, produit ces deux représentations puis synchronise les XML unitaires avec gestion des suppressions. Cette solution évite deux erreurs opposées : envoyer les FCU dans un traitement incompatible ou, à l'inverse, masquer les FCU à des systèmes qui ont besoin de connaître le catalogue complet.
+
+\begin{figure}[H]
+\centering
+\fbox{\parbox{0.9\textwidth}{\centering
+Emplacement prévu : schéma du traitement ShomProduit.\\[0.2cm]
+XML ShomProduit complet $\rightarrow$ transformation XSLT\\
+$\rightarrow$ \texttt{cartes\_all.xml} (FCU + non-FCU) $\rightarrow$ consommateurs globaux\\
+$\rightarrow$ \texttt{cartes.xml} (non-FCU) $\rightarrow$ XML unitaires $\rightarrow$ chaîne historique.
+}}
+\caption{Séparation des usages du catalogue ShomProduit}
+\label{fig:separation-shomproduit}
+\end{figure}
+
+Le même principe est appliqué au job produisant la liste des cartes en impression à la demande : le flux historique doit continuer à fonctionner, mais les FCU sont retirées avant la génération de la liste afin qu'elles soient traitées par leur propre chemin de livraison.
+
+\subsection{Protéger les FCU lors des synchronisations}
+
+Les jobs \texttt{cp\_imp}, \texttt{cp\_gt} et \texttt{cp\_gtw} ont été réécrits pour distinguer une absence réelle d'une absence liée au changement de source. Les synchronisations construisent l'inventaire attendu à partir du flux historique, mettent à jour les fichiers différents puis examinent les fichiers présents uniquement en destination. Avant toute suppression d'un fichier ressemblant à une carte, ShomProduit est consulté. Si la carte est FCU, le fichier est conservé.
+
+Le principe est centralisé dans une fonction réutilisable :
+
+\begin{lstlisting}[language=Python,caption={Protection des cartes FCU pendant une synchronisation},label={lst:fcu-sync-safe}]
+def synchroniser_vers(dico_sources: dict[str, Path], dossier_dest: Path) -> None:
+    dossier_dest.mkdir(parents=True, exist_ok=True)
+
+    for nom, src in dico_sources.items():
+        dst = dossier_dest / nom
+        if not dst.exists() or not compare_file(src, dst):
+            copie(src, dst)
+
+    existants = {p.name for p in dossier_dest.iterdir() if p.is_file()}
+    attendus = set(dico_sources.keys())
+
+    for nom in existants - attendus:
+        if est_un_numero_de_carte(nom[:5]):
+            carte = shom_produit_client.get_carte(nom[:5])
+            if carte and carte.est_fcu():
+                continue
+        (dossier_dest / nom).unlink()
+\end{lstlisting}
+
+Cette fonction traduit une règle métier en invariant technique : \textbf{l'absence d'une FCU dans la BDMR n'autorise jamais sa suppression}. Elle permet aussi d'éviter des copies systématiques : la taille et la date de modification sont comparées avant de recopier les fichiers. Cette optimisation réduit les opérations inutiles sur des fichiers raster parfois volumineux et limite la charge réseau.
+
+\subsection{Créer un tampon autour des exécutables Eiffel}
+
+Deux étapes posaient un problème différent. \texttt{copy\_geotiffs\_direct} et \texttt{make\_pdfs} reposaient encore sur des exécutables Eiffel dont je ne voulais pas modifier le code dans le cadre de FCU. Or leur comportement historique consistait à mettre à jour directement les dossiers finaux \texttt{DIRECT} et \texttt{PDF}. Même si l'entrée FCU ne les traversait pas, la logique de synchronisation pouvait entrer en conflit avec des fichiers FCU présents dans ces destinations.
+
+J'ai utilisé la configuration comme point d'adaptation. Les sorties de ces exécutables ont été redirigées vers des dossiers locaux, par exemple \texttt{D:/geotiffs/tampon/direct} et \texttt{D:/geotiffs/tampon/pdf}. J'ai ensuite créé le job \texttt{livre\_geotiffs\_direct\_et\_pdf\_direct}, placé après \texttt{make\_pdfs}, qui réalise en Python la synchronisation entre les tampons et les destinations réseau en appliquant la même règle de protection FCU.
+
+\begin{figure}[H]
+\centering
+\fbox{\parbox{0.9\textwidth}{\centering
+Emplacement prévu : comparaison avant / après.\\[0.2cm]
+Avant : exécutable Eiffel $\rightarrow$ dossier réseau final.\\
+Après : exécutable Eiffel $\rightarrow$ tampon local $\rightarrow$ nouveau job Python $\rightarrow$ dossier réseau final.\\
+Indiquer que le job Python applique la règle \og ne pas supprimer une FCU \fg.
+}}
+\caption{Ajout d'un tampon autour des traitements Eiffel non modifiés}
+\label{fig:tampon-eiffel}
+\end{figure}
+
+Ce choix est représentatif de l'architecture retenue : plutôt que toucher à un composant legacy risqué, j'ai déplacé la responsabilité sensible vers une couche Python que je pouvais tester, versionner et faire évoluer.
+
+\subsection{Ajouter un flux de livraison FCU autonome}
+
+Le nouveau job \texttt{livraison\_fcu} est exécuté à la fin de la chaîne NP. Sa source n'est pas la BDMR mais l'archive FCU présente sur \texttt{DATA\_CARTO}. L'arborescence distingue les cartes en service, les retirages et les cartes supprimées. Pour une carte active, les niveaux \texttt{numero/edition/correction} permettent d'identifier précisément la version à traiter.
+
+Le dépôt contient notamment les GeoTIFF, le visuel PNG, les XML de métadonnées, un PDF source et un fichier \texttt{md5.csv}. Les métadonnées présentes dans cette archive sont préparées en amont par le flux FCU ; Ediacara ne reproduit donc pas les mêmes générations que pour une carte BDMR. Son rôle est de contrôler la cohérence de ce qui lui est fourni, de produire les dérivés qui lui incombent et de livrer les fichiers aux consommateurs existants.
+
+Avant toute livraison, l'objet \texttt{CarteDepotFcu} réalise plusieurs contrôles :
+
+\begin{itemize}
+    \item l'édition et la correction demandées doivent exister dans l'arborescence ;
+    \item les fichiers obligatoires doivent tous être présents ;
+    \item chaque empreinte déclarée dans \texttt{md5.csv} doit correspondre au fichier physique ;
+    \item le XML doit contenir le bon numéro de carte et une version cohérente avec l'édition et la correction ;
+    \item la présence du fichier \texttt{pal300.lock} interdit temporairement la lecture de la carte afin d'éviter une livraison pendant une mise à jour.
+\end{itemize}
+
+Le verrou est un mécanisme simple, mais important dans une architecture basée sur un partage de fichiers. Le producteur peut signaler qu'un ensemble n'est pas encore stable ; Ediacara abandonne alors cette carte sans lire un état intermédiaire.
+
+Le job interroge ensuite ShomProduit pour obtenir la liste officielle des FCU et traite chaque carte indépendamment. Une erreur sur une carte est enregistrée et n'empêche pas le traitement des suivantes. En fin d'exécution, un bilan distingue les succès des erreurs et le job retourne un état d'échec si au moins une carte n'a pas pu être livrée.
+
+La copie est elle aussi conditionnelle. Lorsqu'une empreinte MD5 de destination correspond déjà à celle du dépôt, aucune écriture n'est réalisée. Lorsqu'un fichier est absent ou différent, il est recopié. Le job alimente ainsi les espaces de GeoTIFF directs, PDF, impression à la demande, versions native et WGS84 ainsi que les répertoires de l'entrepôt de données et de métadonnées. Les cartes placées dans l'espace \texttt{supprimees} d'ArchFCU font l'objet d'une purge ciblée de leurs artefacts connus.
+
+\begin{figure}[H]
+\centering
+\fbox{\parbox{0.9\textwidth}{\centering
+Emplacement prévu : diagramme du job \texttt{livraison\_fcu}.\\[0.2cm]
+ShomProduit $\rightarrow$ liste FCU\\
+ArchFCU $\rightarrow$ contrôle version $\rightarrow$ lock $\rightarrow$ présence $\rightarrow$ MD5 $\rightarrow$ XML\\
+$\rightarrow$ copie conditionnelle / génération PDF $\rightarrow$ DIRECT, PDF, IMDEM, GT, GTW, ENTREPOT.\\
+Une branche séparée traite les cartes supprimées.
+}}
+\caption{Contrôles et livraisons réalisés par le flux FCU}
+\label{fig:livraison-fcu}
+\end{figure}
+
+Dans l'état actuel de la chaîne, un traitement dédié à Cartes-en-ligne complète également le flux. À partir du contenu de l'entrepôt FCU, il génère le CSV attendu par l'application, prépare une archive ZIP avec les informations géographiques nécessaires, compare les dates et tailles avec l'état publié et n'envoie que les mises à jour utiles. Cette séparation permet de conserver les mécanismes de publication existants sans réintroduire les FCU dans la chaîne BDMR.
+
+\section{Validation et non-régression}
+
+\subsection{Une recette prolongée plutôt qu'une campagne automatisée}
+
+La validation de FCU ne s'est pas appuyée sur une suite automatisée exhaustive. Ce point constitue une limite du projet et je ne souhaite pas le présenter autrement. La stratégie réellement utilisée a consisté à faire fonctionner RE7 pendant plusieurs semaines avec une configuration aussi proche que possible de la production, mais avec les écritures isolées.
+
+Je comparais les actions des deux environnements : fichiers produits, présence dans les destinations attendues, contenu des métadonnées, comportement des synchronisations et enchaînement des jobs. L'objectif principal était de démontrer que la modernisation des scripts n'introduisait pas de régression sur le flux historique avant même d'ajouter les premières FCU.
+
+Les validations ont été effectuées avec mon tuteur. Une fois la mise en production réalisée, les retours des différents consommateurs ont également constitué une validation en conditions réelles.
+
+\begin{table}[H]
+\centering
+\begin{tabular}{p{4cm} p{6.7cm} p{3.2cm}}
+\toprule
+\textbf{Scénario} & \textbf{Vérification} & \textbf{État} \\
+\midrule
+Exécution de la chaîne historique sur RE7 & Les livrables, métadonnées et actions restent équivalents à PROD. & Validé sur plusieurs semaines \\
+Isolation RE7 & Aucune écriture de test n'atteint les espaces de diffusion de production. & Validé \\
+Catalogue ShomProduit & Les FCU sont exclues des XML unitaires historiques mais restent présentes dans le catalogue global. & Validé \\
+Synchronisations historiques & Les fichiers FCU présents en destination ne sont pas supprimés comme orphelins. & Validé \\
+Contrôle ArchFCU & Les fichiers manquants, MD5 incohérents, XML incohérents ou cartes verrouillées empêchent la livraison concernée. & Fonctionnel \\
+Livraison FCU & Les produits d'une carte valide sont déposés dans les différentes destinations attendues. & Fonctionnel en production \\
+Suppression FCU & Les artefacts connus d'une carte retirée sont purgés des destinations. & Fonctionnel \\
+Tests unitaires / intégration automatisés & Couverture systématique des règles de synchronisation et de livraison. & À renforcer \\
+\bottomrule
+\end{tabular}
+\caption{Principaux scénarios de validation du projet FCU}
+\label{tab:validation-fcu}
+\end{table}
+
+Cette approche était adaptée au risque immédiat de non-régression, mais elle a un coût : elle demande du temps d'observation et dépend davantage de la connaissance de l'opérateur. Si je reprenais ce projet, je compléterais plus tôt RE7 par des tests automatisés sur les fonctions Python critiques, notamment la détection FCU, les synchronisations, les contrôles d'archive et les règles de suppression.
+
+\section{Mise en production contrôlée}
+
+\subsection{Préparer l'intervention et le retour arrière}
+
+La mise en production était suffisamment sensible pour faire l'objet d'un guide dédié de vingt-six pages. J'y ai décrit le contexte, les prérequis, les environnements, le périmètre des modifications, les dépendances à installer, les fichiers de configuration, les sources Python et les changements de chaque job Jenkins.
+
+La stratégie y était formulée autour de trois objectifs : \textbf{intégration}, pour ajouter les composants nécessaires au FCU ; \textbf{cloisonnement}, afin que le nouveau flux n'interfère pas avec l'ancien ; et \textbf{continuité}, pour maintenir la production cartographique existante.
+
+Avant l'intervention, la DSI devait assurer les sauvegardes système et applicatives nécessaires, notamment les disques du serveur, \texttt{JENKINS\_HOME} et les données de livraison concernées. Ces sauvegardes constituaient le mécanisme de retour arrière en cas d'échec majeur. J'ai réalisé les étapes applicatives de mise en production sous le contrôle de mon tuteur ; les opérations d'infrastructure et de sauvegarde sont restées du ressort de la DSI.
+
+\subsection{Mettre Jenkins lui-même sous contrôle de version}
+
+La préparation de la production m'a également conduit à améliorer la traçabilité de Jenkins. La configuration du serveur n'était pas entièrement gérée comme du code. J'ai créé un dépôt GitLab interne pour sauvegarder la configuration pertinente de \texttt{JENKINS\_HOME}, avec un fichier \texttt{.gitignore} excluant les secrets, historiques de builds, caches et autres fichiers qui ne doivent pas être versionnés.
+
+Un job d'administration, \texttt{SYSTEM\_save\_jenkins\_configuration}, permet ensuite d'enregistrer et de pousser les changements de configuration. Cette approche ne transforme pas Jenkins en plateforme Infrastructure as Code complète, mais elle fournit un historique exploitable des changements et facilite la comparaison ou la restauration d'une configuration connue.
+
+\subsection{Déployer la nouvelle cinématique}
+
+La procédure recense les vingt-six jobs de la chaîne NP et précise pour chacun s'il est inchangé, modifié ou nouveau. L'ordonnancement amont reste volontairement proche de l'existant. Le principal changement structurel est l'insertion du job pivot de livraison des tampons après \texttt{make\_pdfs}, puis l'ajout de \texttt{livraison\_fcu} en fin de chaîne.
+
+La production a également été migrée vers le nouvel environnement Python 3.12 et les sources locales versionnées dans Git. Après les validations RE7, l'intervention a finalement été réalisée à la fin de l'année 2025, quelques semaines après la date initialement envisagée. Les six cartes FCU actuellement en service ont depuis été testées et livrées par cette architecture.
+
+\begin{figure}[H]
+\centering
+\fbox{\parbox{0.9\textwidth}{\centering
+Emplacement prévu : extrait de la procédure de mise en production.\\
+Privilégier une page montrant la nouvelle cinématique ou le tableau des jobs \texttt{MODIFIÉ / INCHANGÉ / NOUVEAU}, sans afficher de secret, token ou mot de passe.
+}}
+\caption{Extrait de la procédure de mise en production Ediacara}
+\label{fig:procedure-mep-ediacara}
+\end{figure}
+
+\section{Suivi après mise en production et maintenance}
+
+\subsection{Surveillance quotidienne}
+
+La mise en production n'a pas marqué la fin du projet. Je consulte quotidiennement l'état des jobs afin de repérer rapidement les erreurs et j'interviens lorsque les retours d'un consommateur révèlent une différence de comportement. Cette phase est particulièrement importante sur une chaîne historique, car certaines règles ne sont pas formalisées et n'apparaissent qu'en observant les produits réellement utilisés.
+
+\subsection{Cas du champ PDF \texttt{/UserUnit}}
+
+Un incident après déploiement l'illustre bien. Il m'a été signalé que certains PDF produits à partir des TIFF des cartes L étaient interprétés avec des dimensions de plusieurs mètres, alors que la conversion semblait correcte. La commande utilisée reposait sur \texttt{gdal\_translate} avec un rendu PDF à 300 DPI.
+
+En inspectant le fichier généré puis le comportement de l'ancien code Eiffel, j'ai trouvé une règle qui n'avait pas été reproduite : le PDF GDAL contenait une entrée \texttt{/UserUnit 4.1666661}. Le traitement historique détectait cette valeur et la remplaçait par \texttt{1}. Certains lecteurs appliquaient sinon ce facteur à la taille physique de la page, ce qui expliquait le résultat observé.
+
+J'ai ajouté après la première mise en production une fonction \texttt{fix\_pdf\_userunit} appelée à la suite de la conversion. Ce correctif est un exemple de difficulté typique d'une migration de legacy : le comportement à conserver ne se trouve pas toujours dans une spécification. Il peut être enfoui dans une ligne de code ancienne dont l'utilité n'apparaît qu'au moment où elle disparaît.
+
+\begin{lstlisting}[language=Python,caption={Principe du correctif appliqué aux PDF générés},label={lst:fcu-userunit}]
+def fix_pdf_userunit(pdf_path: Path) -> None:
+    pattern = b"/UserUnit "
+    replacement = b"/UserUnit 1.0"
+    data = pdf_path.read_bytes()
+
+    idx = data.find(pattern)
+    if idx == -1:
+        return
+
+    # Remplacement de la valeur en conservant la taille du buffer PDF.
+    # La fonction est appelée après la conversion GDAL.
+    ...
+\end{lstlisting}
+
+\subsection{La compréhension acquise au service de la maintenance}
+
+Le travail de rétro-ingénierie m'a ensuite permis d'intervenir sur des problèmes qui ne concernaient pas directement FCU. Un exemple est la désynchronisation possible entre les titres de cartouches présents dans un fichier \texttt{.lis} et ceux déclarés dans ShomProduit. La chaîne produit certaines métadonnées en combinant ces deux sources et tente d'associer les cartouches à partir des titres, notamment à l'aide d'une distance de Levenshtein. Un écart de saisie ou de référentiel peut donc provoquer un dysfonctionnement alors que le code lui-même n'est pas la cause initiale.
+
+Ce type d'incident m'a appris à ne pas limiter le diagnostic au job en erreur. Sur Ediacara, il faut souvent remonter jusqu'à la provenance métier d'une donnée, vérifier les deux référentiels puis déterminer si la correction relève du logiciel ou de l'alignement des données sources.
+
+\section{Documentation et capitalisation}
+
+\subsection{Documenter pour comprendre, puis pour transmettre}
+
+La documentation est la partie du projet dont je suis le plus fier. Elle n'a pas été produite uniquement après le développement. J'ai commencé à l'écrire pendant l'analyse, parce que la quantité d'informations à retenir rendait impossible une compréhension fiable sans formalisation.
+
+La documentation MkDocs obtenue couvre aujourd'hui les principales chaînes du serveur et les jobs individuellement. Elle décrit le rôle de chaque traitement, sa position dans la chaîne, son déclenchement, ses entrées et sorties, les commandes exécutées, les dépendances externes, les paramètres de configuration, les logs et les points de vigilance. Les jobs que j'ai réécrits y sont décrits avec leur nouveau fonctionnement.
+
+J'ai également réalisé un diagramme de grande taille pour la chaîne de cartes papier NP. Il représente l'enchaînement des jobs mais aussi les fichiers produits, les échanges avec le disque local et les accès aux lecteurs réseau. Ce diagramme est imprimé dans le bureau de mon tuteur et sert réellement lorsqu'il faut localiser l'origine d'un problème.
+
+\begin{figure}[H]
+\centering
+\fbox{\parbox{0.9\textwidth}{\centering
+Emplacement prévu : version réduite du diagramme global de la chaîne NP.\\
+La version complète, illisible au format A4, sera placée en annexe ou fournie comme document séparé.
+}}
+\caption{Vue d'ensemble documentée de la chaîne de cartes papier NP}
+\label{fig:diagramme-np-documentation}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\fbox{\parbox{0.9\textwidth}{\centering
+Emplacement prévu : capture de la documentation MkDocs.\\
+Choisir une page de chaîne avec son schéma et une page de job montrant position, entrées, sorties et points de vigilance.
+}}
+\caption{Documentation MkDocs produite pour Ediacara}
+\label{fig:mkdocs-ediacara}
+\end{figure}
+
+Dans l'attente de la solution documentaire officielle de l'équipe DATA, cette documentation est hébergée de manière interne sur une machine de l'équipe. Elle est consultée notamment par mon tuteur et un collègue. La transmission structurée à un groupe plus large n'a pas encore eu lieu ; je préfère donc considérer ce travail comme une preuve forte de documentation et de capitalisation, mais seulement comme un élément complémentaire pour l'accompagnement d'équipe.
+
+\subsection{Des livrables de documentation complémentaires}
+
+Le projet a produit plusieurs supports répondant à des usages différents :
+
+\begin{itemize}
+    \item le diagramme global, destiné à comprendre rapidement les flux et les interactions ;
+    \item MkDocs, utilisé comme référence technique maintenable ;
+    \item la matrice RE7 / PROD, utilisée pendant la reconstruction et la migration ;
+    \item la procédure de mise en production, conçue pour exécuter une intervention sensible de manière reproductible ;
+    \item le document d'architecture ArchFCU, qui conserve la trace de l'étude de faisabilité et des choix envisagés.
+\end{itemize}
+
+Cette diversité est volontaire : un seul document ne peut pas répondre correctement au besoin d'un opérateur qui cherche la cause d'un échec, d'un développeur qui veut comprendre un script et d'une personne qui prépare une mise en production.
+
+\section{Perspective de modernisation avec Prefect}
+
+\subsection{Des limites structurelles encore présentes}
+
+L'adaptation FCU rend la chaîne compatible avec le nouveau mode de production, mais elle ne supprime pas les limites structurelles d'Ediacara. L'orchestration reste organisée autour d'une longue succession de jobs et plusieurs traitements raisonnent en batch. Une erreur sur un élément peut encore faire échouer un job global, même si les autres cartes pourraient être traitées indépendamment. Le code Eiffel reste également difficile à maintenir et l'état de la chaîne est réparti entre Jenkins, le système de fichiers et différents référentiels.
+
+Dès le début du projet, j'avais envisagé une refonte plus large. J'ai étudié plusieurs orchestrateurs et d'abord considéré Airflow. Dans mon contexte de développement Windows, sans Docker comme prérequis, Prefect s'est révélé plus simple à expérimenter. Cette réflexion a conduit à un POC local, distinct de la solution FCU mise en production.
+
+\subsection{Passer d'un batch global à un traitement par carte}
+
+L'objectif du POC est de faire de la carte l'unité de traitement. Une première tâche détecte les numéros modifiés dans la BDMR depuis la dernière révision connue. Chaque carte peut ensuite être exportée, contrôlée et traitée indépendamment. Un échec doit rester associé à la carte concernée plutôt que rendre l'ensemble du lot inexploitable.
+
+J'ai commencé à structurer ce POC selon une architecture inspirée des ports et adaptateurs. Le domaine contient les concepts de carte, version, gabarit, projection et manifeste de géoréférencement. Des interfaces abstraient le stockage, SVN et les différents parsers. Les cas d'usage portent des actions comme détecter les nouvelles cartes, exporter une carte, valider son fichier \texttt{.georef}, construire sa représentation cartographique ou contrôler la cohérence avec les métadonnées.
+
+Le travail comprend également une réécriture en Python de règles historiques : parsing des fichiers \texttt{.lis}, \texttt{\_gab.lp} et \texttt{.lp}, vérification des empreintes SHA-1 des manifestes, contrôles géométriques et comparaison entre les titres de gabarit et les métadonnées. Cette expérimentation me permet de vérifier progressivement qu'une migration hors du code Eiffel est réalisable sans tenter de tout réécrire en une seule étape.
+
+\begin{figure}[H]
+\centering
+\fbox{\parbox{0.9\textwidth}{\centering
+Emplacement prévu : architecture simplifiée du POC Prefect.\\[0.2cm]
+Prefect Flow $\rightarrow$ cas d'usage $\rightarrow$ domaine de contrôle qualité\\
+$\rightarrow$ ports SVN / stockage / parsers $\rightarrow$ adaptateurs infrastructure.\\[0.2cm]
+Mettre en évidence le traitement indépendant par carte.
+}}
+\caption{Perspective d'orchestration par carte avec Prefect}
+\label{fig:prefect-perspective-fcu}
+\end{figure}
+
+Ce POC reste local, incomplet et non déployé. Il ne constitue donc pas le résultat du projet FCU, mais une conséquence directe de l'analyse menée : après avoir compris les fragilités de l'existant et sécurisé l'évolution immédiate, je peux désormais proposer une trajectoire de modernisation progressive appuyée sur des règles métier que j'ai commencé à extraire du legacy.
+
+\section{Résultats, limites et bilan critique}
+
+\subsection{Résultats obtenus}
+
+Le résultat principal est opérationnel : la chaîne Ediacara prend désormais en charge les cartes FCU tout en maintenant la production historique. Six cartes FCU sont actuellement en service et livrées par ce flux. La solution sépare leur dépôt de la BDMR, les protège dans les espaces de diffusion communs et vérifie leur cohérence avant livraison.
+
+Le projet a produit des résultats plus larges que l'intégration FCU elle-même :
+
+\begin{itemize}
+    \item un environnement RE7 reconstruit et isolé pour tester les évolutions ;
+    \item une partie importante des scripts Python réécrite pour Python 3.12 ;
+    \item des sources exécutées localement et placées sous Git ;
+    \item un client ShomProduit réutilisable et des utilitaires communs ;
+    \item une configuration Jenkins sauvegardée et versionnée ;
+    \item une procédure détaillée de mise en production ;
+    \item une documentation technique complète et effectivement utilisée ;
+    \item une base concrète pour expérimenter la future modernisation avec Prefect.
+\end{itemize}
+
+\subsection{Limites actuelles}
+
+La solution reste volontairement une adaptation d'une architecture historique. Les exécutables Eiffel et Scala sont toujours présents et certaines règles métier restent difficiles à faire évoluer. Les nombreux échanges avec le système de fichiers et les lecteurs réseau demeurent des dépendances fortes. ShomProduit est également critique pour identifier les cartes et sécuriser plusieurs nettoyages.
+
+La validation gagnerait par ailleurs à être davantage automatisée. RE7 et les comparaisons prolongées ont permis une mise en production maîtrisée, mais une vraie suite de tests unitaires et d'intégration rendrait les réécritures futures moins coûteuses. La surveillance après déploiement repose encore en partie sur la consultation des jobs et l'analyse manuelle des logs.
+
+Enfin, mon pilotage du projet a surtout reposé sur l'autonomie technique, les échanges avec mon tuteur et le suivi interne des tâches. J'ai consacré beaucoup d'énergie à comprendre puis corriger le système, mais j'aurais dû formaliser plus tôt des jalons, un plan de tests et des critères de réussite. Cette limite n'a pas empêché la mise en production, mais elle a contribué au sentiment que le projet avançait parfois moins lisiblement qu'il aurait pu.
+
+\subsection{Prise de recul}
+
+Ce projet a changé ma manière d'aborder un logiciel existant. Au départ, la solution la plus attractive me semblait être une réécriture complète avec des technologies modernes. L'analyse m'a appris qu'une bonne décision d'architecture tient aussi compte du risque, de la continuité d'activité, des compétences disponibles et du coût de remplacement des dépendances historiques. Dans ce contexte, ajouter des frontières claires autour du legacy était plus pertinent que chercher à le supprimer immédiatement.
+
+J'ai également constaté que la documentation peut être un outil d'ingénierie avant d'être un livrable. Le diagramme, les fiches de jobs et la matrice de dépendances m'ont permis de construire ma propre compréhension, de détecter des incohérences et de sécuriser mes changements. Le fait que ces supports soient ensuite utilisés par d'autres est une conséquence de ce travail de formalisation.
+
+Enfin, l'incident \texttt{/UserUnit} rappelle qu'une migration ne consiste pas seulement à reproduire la fonction principale d'un programme. Les systèmes anciens contiennent des années de corrections et de règles implicites. La modernisation doit donc se faire progressivement, avec un environnement de recette réaliste, des observations de production et une extraction méthodique des règles métier. C'est cette démarche que je souhaite poursuivre avec le POC Prefect : remplacer progressivement les composants lorsque leur comportement est suffisamment compris, plutôt que déplacer l'ensemble de la complexité dans une nouvelle technologie.
