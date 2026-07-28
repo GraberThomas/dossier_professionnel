@@ -16,14 +16,22 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Compile LaTeX
+        id: compile
+        continue-on-error: true
         uses: xu-cheng/latex-action@v3
         with:
           root_file: main.tex
-          args: -pdf -file-line-error -interaction=nonstopmode
 
-      - name: Upload PDF
+      - name: Upload PDF and log
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: dossier-professionnel-pdf
-          path: main.pdf
-          if-no-files-found: error
+          path: |
+            main.pdf
+            main.log
+          if-no-files-found: warn
+
+      - name: Fail if compilation failed
+        if: steps.compile.outcome == 'failure'
+        run: exit 1
