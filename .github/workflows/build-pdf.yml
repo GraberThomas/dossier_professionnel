@@ -17,10 +17,20 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Compile LaTeX document
+      - name: Compile LaTeX document with glossary
         uses: xu-cheng/latex-action@v3
         with:
           root_file: main.tex
+          latexmk_use_xelatex: false
+          extra_system_packages: "perl"
+          pre_compile: |
+            pdflatex -interaction=nonstopmode main.tex || true
+            biber main || true
+            makeglossaries main || true
+          post_compile: |
+            makeglossaries main || true
+            pdflatex -interaction=nonstopmode main.tex || true
+            pdflatex -interaction=nonstopmode main.tex || true
 
       - name: Upload PDF artifact
         uses: actions/upload-artifact@v4
