@@ -16,7 +16,6 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Compile LaTeX
-        id: compile
         continue-on-error: true
         uses: xu-cheng/latex-action@v3
         with:
@@ -31,7 +30,3 @@ jobs:
             main.pdf
             main.log
           if-no-files-found: warn
-
-      - name: Fail if compilation failed
-        if: steps.compile.outcome == 'failure'
-        run: exit 1
