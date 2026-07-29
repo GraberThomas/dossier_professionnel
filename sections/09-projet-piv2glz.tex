@@ -1,0 +1,49 @@
+\section{Présentation du projet}
+
+\texttt{piv2glz} est un petit projet professionnel réalisé au SHOM pour répondre à un besoin ciblé : convertir des fichiers de données PIV, stockés au format NetCDF, vers les formats compressés \texttt{.glz} et \texttt{.lgz}. J'ai développé l'outil sous la forme d'une application Python en ligne de commande, utilisable aussi bien sur un fichier unique que sur l'ensemble des fichiers PIV d'un dossier. Le format de sortie peut être indiqué explicitement ou, dans certains cas, déduit de l'extension demandée ; l'outil prend également en charge la préparation du répertoire de destination.
+
+Le périmètre était nettement plus réduit que celui d'Ediacara, mais il m'a permis de travailler plus complètement la validation automatique du code. Là où la chaîne cartographique historique nécessite une recette longue dans un environnement représentatif, je pouvais ici isoler les comportements importants et les rejouer à chaque modification. J'ai donc construit la suite de tests en parallèle de l'outil, puis intégré son exécution et la construction des livrables dans GitLab CI.
+
+\section{Compétences mobilisées}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{p{3cm} p{11cm}}
+\toprule
+\textbf{Compétence} & \textbf{Mobilisation dans le projet piv2glz} \\
+\midrule
+C2.2 & Versionnement du projet, automatisation des vérifications avant construction des livrables et séparation entre code validé et artefacts distribuables. \\
+C3.1 & Mise en place d'une pipeline GitLab CI exécutant les tests dans un environnement Python propre avant de construire automatiquement les distributions Windows avec PyInstaller. \\
+C3.2 & Développement d'une suite Pytest couvrant les fonctions isolées, les cas d'erreur et des scénarios d'intégration exécutant réellement l'application en ligne de commande. \\
+\bottomrule
+\end{tabular}
+\caption{Compétences mobilisées dans le projet piv2glz}
+\label{tab:competences-piv2glz}
+\end{table}
+
+\section{Sécuriser un traitement de fichiers avant de l'automatiser}
+
+Le besoin initial semblait simple : lire un fichier PIV puis produire son équivalent GLZ ou LGZ. En pratique, une partie importante du travail concernait tout ce qui entourait la conversion elle-même. L'utilisateur pouvait fournir un fichier ou un dossier, choisir ou non le format de sortie, demander la création d'un répertoire absent ou au contraire travailler dans une arborescence déjà existante. Il fallait également réagir correctement à un fichier corrompu, à une structure NetCDF inattendue ou à une erreur d'accès au système de fichiers.
+
+J'ai donc progressivement couvert ces comportements avec Pytest. Pour les opérations sur les fichiers et dossiers, j'utilise notamment les répertoires temporaires fournis par \texttt{tmp\_path}. Certains tests provoquent volontairement des erreurs avec \texttt{monkeypatch}, par exemple une impossibilité de créer ou de supprimer un chemin, puis vérifient que l'erreur est traitée comme prévu. D'autres contrôlent les cas plus ordinaires : répertoire déjà présent, création de plusieurs niveaux, arborescence partiellement existante ou conservation d'un dossier qui contient encore des fichiers.
+
+J'ai appliqué la même logique à la lecture et à la conversion. Les tests vérifient les variables attendues dans les fichiers PIV, différents cas de données invalides ainsi que la génération des formats GLZ et LGZ. Enfin, j'ai ajouté des scénarios d'intégration qui lancent réellement l'application avec \texttt{subprocess}. Des fichiers PIV de référence sont convertis par la même interface en ligne de commande que celle utilisée par l'utilisateur, puis les fichiers obtenus sont comparés aux résultats attendus. Cette étape complète les tests unitaires en vérifiant l'enchaînement du programme dans son ensemble.
+
+\section{Faire des tests un prérequis à la construction}
+
+Une fois cette suite en place, j'ai ajouté une pipeline GitLab CI composée de deux stages : \texttt{test} puis \texttt{build}. Le premier démarre dans une image Python 3.13, installe les dépendances et exécute \texttt{pytest}. Le stage de construction n'est atteint que si cette validation réussit.
+
+Pour le build, j'utilise PyInstaller afin de produire deux formes de distribution Windows. La première regroupe l'application dans un exécutable autonome \texttt{piv2glz.exe}. La seconde conserve une distribution \textit{onedir}, ensuite compressée au format ZIP. Les deux fichiers sont publiés comme artefacts de la pipeline et peuvent être récupérés directement à partir de GitLab.
+
+\begin{figure}[H]
+\centering
+\fbox{\parbox{0.88\textwidth}{\centering
+\textbf{Push Git} $\rightarrow$ \textbf{GitLab CI} $\rightarrow$ \textbf{Pytest} $\rightarrow$ \textbf{PyInstaller}\\[0.12cm]
+$\hspace{5.6cm}\searrow$ \texttt{piv2glz.exe}\\[-0.02cm]
+$\hspace{5.6cm}\searrow$ \texttt{piv2glz\_dir.zip} $\rightarrow$ \textbf{artefacts GitLab}
+}}
+\caption{Validation et construction automatisées de piv2glz}
+\label{fig:piv2glz-ci}
+\end{figure}
+
+Ce fonctionnement m'a surtout permis de changer la manière de valider les évolutions de ce petit outil. Je n'avais plus à reconstruire manuellement un exécutable puis à rejouer quelques conversions avant chaque livraison : les comportements déjà couverts étaient vérifiés de manière reproductible avant la génération des binaires. La pipeline reste volontairement simple. Elle ne mesure pas encore la couverture du code et n'intègre ni analyse statique ni contrôles de sécurité dédiés ; ce sont les principales améliorations que j'ajouterais si l'outil devait continuer à évoluer ou être distribué plus largement.
