@@ -1,0 +1,48 @@
+\section{Un petit utilitaire pour un besoin concret}
+
+Le projet \texttt{piv2glz} est une mission professionnelle de périmètre beaucoup plus réduit qu'Ediacara. L'objectif était de fournir un utilitaire en ligne de commande capable de convertir des fichiers de données PIV, stockés au format NetCDF, vers les formats compressés \texttt{.glz} et \texttt{.lgz}. L'outil peut traiter un fichier unique ou parcourir un dossier complet, avec plusieurs contrôles sur les chemins, le format demandé et la création éventuelle des répertoires de sortie.
+
+La taille du projet en a fait un bon terrain pour mettre en place une démarche d'intégration plus systématique. Contrairement à Ediacara, où la validation repose en grande partie sur un environnement de recette représentatif et sur la non-régression d'une chaîne historique, \texttt{piv2glz} pouvait être testé automatiquement à chaque évolution. J'ai donc associé au dépôt une suite de tests Pytest et une pipeline GitLab CI qui conditionne la construction des livrables à leur réussite.
+
+\section{Valider le code avant de construire les livrables}
+
+La pipeline est volontairement simple. Elle comporte deux étapes successives : \texttt{test} puis \texttt{build}. La première utilise une image Python 3.13 propre, installe les dépendances du projet puis exécute \texttt{pytest}. Si cette étape échoue, la construction n'est pas poursuivie. Le stage suivant utilise PyInstaller pour produire les distributions Windows : un exécutable autonome \texttt{piv2glz.exe} et une version \textit{onedir}, ensuite compressée au format ZIP. Les deux résultats sont conservés comme artefacts GitLab.
+
+\begin{figure}[H]
+\centering
+\fbox{\parbox{0.88\textwidth}{\centering
+\textbf{Push Git} $\rightarrow$ \textbf{GitLab CI} $\rightarrow$ \textbf{Pytest}\\[0.12cm]
+$\downarrow$ succès\\[0.12cm]
+\textbf{PyInstaller} $\rightarrow$ \texttt{piv2glz.exe} + \texttt{piv2glz\_dir.zip} $\rightarrow$ \textbf{artefacts GitLab}
+}}
+\caption{Chaîne d'intégration et de construction de piv2glz}
+\label{fig:piv2glz-ci}
+\end{figure}
+
+Cette organisation apporte une garantie simple mais importante : un livrable n'est pas construit à partir d'un état du code dont les scénarios automatisés connus échouent. Sur ce projet, GitLab ne sert donc pas uniquement au versionnement ; il devient également le point d'entrée d'une validation reproductible puis de la construction du logiciel.
+
+\section{Tester les cas nominaux, mais aussi les échecs}
+
+La suite de tests ne porte pas uniquement sur la conversion finale. Elle couvre les différentes responsabilités de l'outil : validation des arguments, préparation des dossiers de sortie, lecture des fichiers PIV, génération des formats GLZ/LGZ et comportement du programme complet.
+
+Une partie importante des tests concerne les situations dégradées. Les opérations sur le système de fichiers sont par exemple vérifiées lorsque les dossiers existent déjà, lorsque seuls certains ancêtres sont présents, lorsque la création n'est pas autorisée ou lorsqu'une opération de suppression provoque une erreur. Pytest permet d'isoler ces scénarios avec des répertoires temporaires et de simuler certaines erreurs afin de vérifier que le comportement obtenu reste maîtrisé.
+
+Les tests d'intégration complètent cette validation en lançant réellement l'application par son interface en ligne de commande avec \texttt{subprocess}. Plusieurs fichiers PIV de référence sont convertis et le fichier GLZ produit est comparé au résultat attendu. D'autres scénarios fournissent volontairement un fichier texte, un PIV invalide ou un fichier corrompu et vérifient que le programme retourne une erreur sans produire de faux livrable. Le mode de traitement par dossier est également exécuté de bout en bout.
+
+\begin{table}[H]
+\centering
+\begin{tabular}{p{3.8cm} p{10.0cm}}
+\toprule
+\textbf{Périmètre} & \textbf{Exemples de vérifications} \\
+\midrule
+Arguments et configuration & Modes fichier ou dossier, format explicite ou déduit, chemins invalides et combinaisons incohérentes. \\
+Système de fichiers & Création conditionnelle, arborescences partielles, suppressions, permissions et erreurs d'entrée/sortie. \\
+Lecture et conversion & Structure des fichiers PIV, variables nécessaires, génération GLZ/LGZ et fichiers corrompus. \\
+Intégration & Exécution réelle de la CLI, codes de retour, création des sorties et comparaison avec des fichiers de référence. \\
+\bottomrule
+\end{tabular}
+\caption{Principales familles de tests de piv2glz}
+\label{tab:piv2glz-tests}
+\end{table}
+
+Ce projet reste volontairement modeste et la pipeline pourrait être enrichie, notamment par une mesure de couverture, de l'analyse statique ou des contrôles de sécurité dédiés. Il constitue néanmoins une expérience complémentaire à Ediacara : sur un périmètre maîtrisé, j'ai pu mettre en œuvre une véritable boucle \textit{versionnement -- tests automatisés -- build -- artefacts}. Il apporte ainsi une preuve directe des compétences C3.1 et C3.2, sans chercher à donner à ce petit outil le même poids qu'aux projets principaux du dossier.
