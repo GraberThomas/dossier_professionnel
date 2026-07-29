@@ -1,6 +1,6 @@
 \section{Présentation du projet}
 
-Le projet IPF 2026, d'abord intitulé \textit{5 Secondes Chrono} puis décliné sous le nom Lynx Immo dans l'application, a été réalisé pour Le Carré Pro, organisme de formation spécialisé dans l'immobilier commercial. Le besoin exprimé au démarrage était de proposer aux professionnels du secteur un outil de micro-apprentissage juridique : des sessions courtes, accessibles depuis un smartphone, permettant de réviser régulièrement des notions qui sont habituellement abordées dans des formats de formation plus longs.
+Le projet \terme{ipf} 2026, d'abord intitulé \textit{5 Secondes Chrono} puis décliné sous le nom Lynx Immo dans l'application, a été réalisé pour Le Carré Pro, organisme de formation spécialisé dans l'immobilier commercial. Le besoin exprimé au démarrage était de proposer aux professionnels du secteur un outil de micro-apprentissage juridique : des sessions courtes, accessibles depuis un smartphone, permettant de réviser régulièrement des notions qui sont habituellement abordées dans des formats de formation plus longs.
 
 Le projet s'est déroulé de novembre 2025 à juillet 2026 avec un client réel et une équipe de cinq étudiants issus de M1 et de M2. J'y ai occupé une double fonction de chef de projet et de référent technique. Mon rôle ne consistait donc pas seulement à suivre un planning. Je devais maintenir la cohérence entre le besoin métier, la capacité réelle de l'équipe, les décisions techniques, les échéances académiques et les demandes formulées au fil des échanges avec le client.
 
@@ -20,11 +20,11 @@ Le projet couvre principalement les compétences liées à la planification et a
 \midrule
 C1.4 & Construction d'une feuille de route de novembre 2025 à juillet 2026, organisation en phases et sprints, définition des jalons, dépendances, livrables et outils de suivi. \\
 C1.5 & Mise en place d'un cadre de travail associant cadrage documentaire, backlog, gestion des risques, outils collaboratifs, dépôt Git et environnements reproductibles. \\
-C1.6 & Suivi de l'avancement à partir des exigences, des tickets Jira, des jalons et de plusieurs familles de KPI, avec analyse des limites du dispositif de mesure. \\
+C1.6 & Suivi de l'avancement à partir des exigences, des tickets Jira, des jalons et de plusieurs familles de \terme{kpi}, avec analyse des limites du dispositif de mesure. \\
 C1.7 & Réévaluation du planning et du périmètre face aux retards, aux variations de disponibilité et aux retours client, puis arbitrage des fonctionnalités à protéger ou à reporter. \\
-C4.1 & Identification des domaines nécessaires au projet : UX/UI, mobile, web, données, sécurité, paiements, documentation, déploiement et pilotage. \\
+C4.1 & Identification des domaines nécessaires au projet : \terme{ux}/\terme{ui}, mobile, web, données, sécurité, paiements, documentation, déploiement et pilotage. \\
 C4.2 & Constitution opérationnelle d'une équipe imposée par le cadre pédagogique : clarification des rôles, responsabilités, circuits de décision et domaines de contribution, sans recrutement RH. \\
-C4.3 & Coordination du travail au moyen des sprints, de Jira, d'une matrice RACI, de points réguliers et de réaffectations liées à la charge réelle. \\
+C4.3 & Coordination du travail au moyen des sprints, de Jira, d'une matrice \terme{raci}, de points réguliers et de réaffectations liées à la charge réelle. \\
 C4.4 & Accompagnement des membres par les échanges techniques, les réunions, la résolution de blocages, les revues et la mise à disposition de supports communs. \\
 C4.5 & Organisation d'une montée en compétences sur les technologies et méthodes nécessaires au projet, essentiellement par apprentissage en situation, documentation, prototypes et échanges internes. \\
 C4.6 & Analyse du fonctionnement collectif à partir des indicateurs et de la rétrospective, complétée par des entretiens individuels de fin de projet. Le contexte ne comprenait ni référentiel RH ni gestion de carrière. \\
@@ -45,7 +45,7 @@ Les échanges avec Le Carré Pro ont cependant fait apparaître plusieurs besoin
 
 Le projet ne pouvait donc plus être traité comme une unique application Flutter. Il devenait un produit composé de plusieurs sous-systèmes ayant leurs propres contraintes et dépendances. Cette évolution du besoin était cohérente du point de vue du client, mais elle augmentait fortement le risque de dispersion. Une fonctionnalité comme le coaching, par exemple, paraît isolée lorsqu'elle est formulée dans un cahier des charges. Pour fonctionner réellement, elle suppose pourtant de disposer d'utilisateurs, de données de progression suffisamment fiables, de règles d'interprétation, d'une interface de restitution et d'un niveau de confiance suffisant dans les recommandations.
 
-\subsection{Définir un MVP avant de distribuer les tâches}
+\subsection{Définir un \terme{mvp} avant de distribuer les tâches}
 
 Le cadrage a donc consisté à distinguer le produit cible de ce qui devait absolument être présent dans une première version cohérente. Le parcours apprenant a servi de fil conducteur : créer un compte, renseigner son profil, accéder au quiz du jour, répondre, obtenir un résultat, retrouver sa progression et continuer à utiliser l'application. Côté client, l'interface d'administration devait permettre de maintenir les contenus et de gérer les éléments nécessaires à ce parcours.
 
@@ -54,8 +54,8 @@ Cette logique a été formalisée dans le Project Scope Statement, le Plan de D�
 \begin{figure}[H]
 \centering
 \fbox{\parbox{0.90\textwidth}{\centering
-Emplacement prévu : reprendre la matrice valeur--complexité du rapport IPF (figure 1.4) et la vue du périmètre fonctionnel.\\[0.15cm]
-Mettre en évidence le quiz quotidien, la progression et l'administration minimale comme cœur du MVP, face aux fonctions plus ambitieuses comme le coaching avancé.}}
+Emplacement prévu : reprendre la matrice valeur--complexité du rapport \terme{ipf} (figure 1.4) et la vue du périmètre fonctionnel.\\[0.15cm]
+Mettre en évidence le quiz quotidien, la progression et l'administration minimale comme cœur du \terme{mvp}, face aux fonctions plus ambitieuses comme le coaching avancé.}}
 \caption{Priorisation du périmètre de Lynx Immo}
 \label{fig:lynx-priorisation}
 \end{figure}
@@ -66,15 +66,15 @@ Le cadrage a également permis d'identifier les dépendances. La progression dé
 
 Le pilotage n'aurait eu que peu de sens s'il était resté déconnecté de la réalisation. Une partie importante de mon rôle de référent technique consistait donc à maintenir une compréhension globale de l'architecture et des dépendances entre les composants, afin que les arbitrages de planning restent techniquement réalistes.
 
-La solution finale repose sur trois briques principales. L'application apprenant est développée en Flutter pour Android et iOS. L'espace d'administration utilise React, Vite et TypeScript. Le socle commun est fourni par Supabase, avec PostgreSQL, Auth, des politiques RLS, des fonctions SQL et des Edge Functions pour certains traitements. RevenueCat complète ce dispositif pour la gestion des abonnements mobiles.
+La solution finale repose sur trois briques principales. L'application apprenant est développée en Flutter pour Android et iOS. L'espace d'administration utilise React, Vite et TypeScript. Le socle commun est fourni par Supabase, avec PostgreSQL, Auth, des politiques \terme{rls}, des fonctions SQL et des Edge Functions pour certains traitements. RevenueCat complète ce dispositif pour la gestion des abonnements mobiles.
 
-Ce choix d'architecture permettait de limiter la quantité de backend spécifique à maintenir tout en conservant une base relationnelle, une authentification commune et des règles d'accès centralisées. Il introduisait en contrepartie une responsabilité importante côté base : les politiques RLS et les fonctions SQL font partie du comportement applicatif et doivent être versionnées, comprises et testées comme le reste du code.
+Ce choix d'architecture permettait de limiter la quantité de backend spécifique à maintenir tout en conservant une base relationnelle, une authentification commune et des règles d'accès centralisées. Il introduisait en contrepartie une responsabilité importante côté base : les politiques \terme{rls} et les fonctions SQL font partie du comportement applicatif et doivent être versionnées, comprises et testées comme le reste du code.
 
 \begin{figure}[H]
 \centering
 \fbox{\parbox{0.90\textwidth}{\centering
-Emplacement prévu : reprendre l'architecture globale du rapport IPF (figure 4.11).\\[0.15cm]
-Application Flutter $\leftrightarrow$ Supabase/PostgreSQL/Auth/RLS $\leftrightarrow$ administration React, avec RevenueCat pour les abonnements et les fonctions Edge pour les traitements spécifiques.}}
+Emplacement prévu : reprendre l'architecture globale du rapport \terme{ipf} (figure 4.11).\\[0.15cm]
+Application Flutter $\leftrightarrow$ Supabase/PostgreSQL/Auth/\terme{rls} $\leftrightarrow$ administration React, avec RevenueCat pour les abonnements et les fonctions Edge pour les traitements spécifiques.}}
 \caption{Architecture générale du produit Lynx Immo}
 \label{fig:lynx-architecture}
 \end{figure}
@@ -84,7 +84,7 @@ Au moment du bilan, l'application permet notamment l'inscription, l'onboarding, 
 \begin{figure}[H]
 \centering
 \fbox{\parbox{0.90\textwidth}{\centering
-Emplacement prévu : planche d'écrans issue des figures 4.15 à 4.18 et 4.21 à 4.30 du rapport IPF.\\[0.15cm]
+Emplacement prévu : planche d'écrans issue des figures 4.15 à 4.18 et 4.21 à 4.30 du rapport \terme{ipf}.\\[0.15cm]
 À gauche : onboarding, quiz, résultats, progression et profil. À droite : tableau de bord et principaux modules de l'administration.}}
 \caption{Exemples d'écrans réalisés pour l'application et l'administration}
 \label{fig:lynx-ecrans}
@@ -96,15 +96,15 @@ Cette connaissance du produit était importante dans mon rôle de chef de projet
 
 \subsection{Une feuille de route de novembre à juillet}
 
-La feuille de route couvrait la période de novembre 2025 à juillet 2026. Les premières phases concernaient le lancement, le cadrage, la préparation des contenus et la validation du design. La réalisation devait ensuite conduire à un MVP en mars ou avril, puis à une période de tests, de stabilisation, de sécurité et de finalisation avant la soutenance.
+La feuille de route couvrait la période de novembre 2025 à juillet 2026. Les premières phases concernaient le lancement, le cadrage, la préparation des contenus et la validation du design. La réalisation devait ensuite conduire à un \terme{mvp} en mars ou avril, puis à une période de tests, de stabilisation, de sécurité et de finalisation avant la soutenance.
 
-Cette vision était déclinée dans un calendrier directeur et dans un diagramme de Gantt. Le planning distinguait notamment le cadrage et la préparation entre novembre et janvier, la conception UX/UI de décembre à février, la construction du socle technique en janvier et février, les développements fonctionnels jusqu'en mai, puis les tests, la stabilisation et la documentation jusqu'à la fin de l'année scolaire. Le chemin critique passait par le cadrage, l'architecture, les développements cœur, les tests puis la préparation de la livraison.
+Cette vision était déclinée dans un calendrier directeur et dans un diagramme de Gantt. Le planning distinguait notamment le cadrage et la préparation entre novembre et janvier, la conception \terme{ux}/\terme{ui} de décembre à février, la construction du socle technique en janvier et février, les développements fonctionnels jusqu'en mai, puis les tests, la stabilisation et la documentation jusqu'à la fin de l'année scolaire. Le chemin critique passait par le cadrage, l'architecture, les développements cœur, les tests puis la préparation de la livraison.
 
 \begin{figure}[H]
 \centering
 \fbox{\parbox{0.90\textwidth}{\centering
-Emplacement prévu : frise des jalons du rapport IPF (figure 1.9 ou 3.5) accompagnée d'un extrait du Gantt global (figure 3.4).\\[0.15cm]
-Nov. 2025 : lancement $\rightarrow$ janv. 2026 : design $\rightarrow$ mars/avril : MVP $\rightarrow$ mai : préproduction et sécurité $\rightarrow$ juin/juillet : stabilisation, documentation et soutenance.}}
+Emplacement prévu : frise des jalons du rapport \terme{ipf} (figure 1.9 ou 3.5) accompagnée d'un extrait du Gantt global (figure 3.4).\\[0.15cm]
+Nov. 2025 : lancement $\rightarrow$ janv. 2026 : design $\rightarrow$ mars/avril : \terme{mvp} $\rightarrow$ mai : préproduction et sécurité $\rightarrow$ juin/juillet : stabilisation, documentation et soutenance.}}
 \caption{Roadmap et principaux jalons du projet}
 \label{fig:lynx-roadmap}
 \end{figure}
@@ -120,7 +120,7 @@ La réalisation est ensuite devenue plus itérative. Les fonctionnalités étaie
 \begin{figure}[H]
 \centering
 \fbox{\parbox{0.90\textwidth}{\centering
-Emplacement prévu : reprendre le schéma de méthode hybride du rapport IPF (figure 3.1).\\[0.15cm]
+Emplacement prévu : reprendre le schéma de méthode hybride du rapport \terme{ipf} (figure 3.1).\\[0.15cm]
 Cadrage structuré en amont $\rightarrow$ réalisation itérative $\rightarrow$ retours client et réajustement du backlog.}}
 \caption{Méthode de travail retenue pour le projet}
 \label{fig:lynx-methode}
@@ -142,14 +142,14 @@ Un DevContainer VS Code a également été construit afin de regrouper les princ
 
 L'équipe était composée de cinq étudiants. J'assurais la fonction de chef de projet et de référent technique ; Johan Nedelec était Product Owner ; Anne-Charlotte Arnold assurait notamment le rôle de Scrum Master, le suivi opérationnel et une part importante de la documentation ; Clémence Yonkeu Wandji et William Plantec participaient au développement.
 
-Avant de distribuer les travaux, il fallait surtout identifier les compétences nécessaires. Le projet combinait UX/UI et Figma, Flutter/Dart pour le mobile, React/Vite pour l'administration, Supabase et PostgreSQL pour les données, les questions d'authentification et de sécurité, la gestion des abonnements, le déploiement, la documentation et le pilotage. Certaines compétences étaient déjà présentes dans l'équipe ; d'autres devaient être acquises pendant le projet.
+Avant de distribuer les travaux, il fallait surtout identifier les compétences nécessaires. Le projet combinait \terme{ux}/\terme{ui} et Figma, Flutter/Dart pour le mobile, React/Vite pour l'administration, Supabase et PostgreSQL pour les données, les questions d'authentification et de sécurité, la gestion des abonnements, le déploiement, la documentation et le pilotage. Certaines compétences étaient déjà présentes dans l'équipe ; d'autres devaient être acquises pendant le projet.
 
 Cette cartographie évitait de raisonner uniquement par personne. Une même personne pouvait intervenir sur plusieurs domaines, mais chaque domaine devait avoir un responsable identifiable et une solution de continuité. Dans une équipe étudiante, la disponibilité était aussi importante que le niveau technique : une compétence théoriquement présente n'est pas une ressource utilisable si la personne concernée est engagée sur plusieurs autres rendus au même moment.
 
 \begin{figure}[H]
 \centering
 \fbox{\parbox{0.90\textwidth}{\centering
-Emplacement prévu : reprendre l'organigramme de l'équipe du rapport IPF (figure 2.2) et y faire apparaître les principaux domaines de compétence.}}
+Emplacement prévu : reprendre l'organigramme de l'équipe du rapport \terme{ipf} (figure 2.2) et y faire apparaître les principaux domaines de compétence.}}
 \caption{Organisation de l'équipe et répartition des domaines}
 \label{fig:lynx-equipe}
 \end{figure}
@@ -158,7 +158,7 @@ Emplacement prévu : reprendre l'organigramme de l'équipe du rapport IPF (figur
 
 Le cadre académique fixe une limite qu'il est important de conserver dans l'analyse. Je n'ai pas recruté les membres de l'équipe et je n'ai pas participé à un processus RH. Le groupe était imposé par le projet pédagogique. Le travail d'organisation a commencé après cette constitution administrative.
 
-Il fallait alors transformer ce groupe en équipe de projet : préciser les rôles, donner un responsable aux activités structurantes, définir les circuits de validation et prévoir la continuité lorsque certains membres étaient moins disponibles. Une matrice RACI a été utilisée pour formaliser les responsabilités sur le cadrage, les besoins fonctionnels, la conception technique, le développement, les tests, les validations client, la gestion des risques, la documentation, le suivi et la livraison.
+Il fallait alors transformer ce groupe en équipe de projet : préciser les rôles, donner un responsable aux activités structurantes, définir les circuits de validation et prévoir la continuité lorsque certains membres étaient moins disponibles. Une matrice \terme{raci} a été utilisée pour formaliser les responsabilités sur le cadrage, les besoins fonctionnels, la conception technique, le développement, les tests, les validations client, la gestion des risques, la documentation, le suivi et la livraison.
 
 Cette formalisation a également mis en évidence le cumul de rôles. Ma propre position associait pilotage général et référence technique. Anne-Charlotte concentrait de son côté plusieurs tâches de suivi et de documentation. Cette concentration était efficace pour garantir la continuité, mais elle créait aussi une dépendance à quelques personnes. Ce point n'est réellement devenu visible que lorsque la charge a augmenté.
 
@@ -166,7 +166,7 @@ Cette formalisation a également mis en évidence le cumul de rôles. Ma propre 
 
 \subsection{Découper un produit large en tâches manipulables}
 
-Le produit a été découpé en grands domaines : application apprenant, contenus pédagogiques, coaching et IA, utilisateurs et abonnements, espace administrateur, backend et base de données, sécurité/infrastructure/RGPD, auxquels se sont ajoutés la gestion de projet, la documentation, la veille et les travaux de recherche.
+Le produit a été découpé en grands domaines : application apprenant, contenus pédagogiques, coaching et \terme{ia}, utilisateurs et abonnements, espace administrateur, backend et base de données, sécurité/infrastructure/\terme{rgpd}, auxquels se sont ajoutés la gestion de projet, la documentation, la veille et les travaux de recherche.
 
 Ces domaines ont ensuite été déclinés en épics, user stories et tâches. Au total, 563 tickets ont été créés dans Jira au cours du projet. Ce nombre ne correspond pas à 563 fonctionnalités : il reflète le niveau de décomposition nécessaire pour suivre un produit comprenant à la fois du mobile, du web, de la donnée, des paiements, de la sécurité, de la documentation et des activités de gestion.
 
@@ -175,7 +175,7 @@ Jira était utilisé avec plusieurs vues complémentaires. Le backlog permettait
 \begin{figure}[H]
 \centering
 \fbox{\parbox{0.90\textwidth}{\centering
-Emplacement prévu : planche issue des figures 5.5, 5.6 et 5.7 du rapport IPF.\\[0.15cm]
+Emplacement prévu : planche issue des figures 5.5, 5.6 et 5.7 du rapport \terme{ipf}.\\[0.15cm]
 Vue synthétique de l'avancement, Kanban Jira et chronologie des grands blocs de travail.}}
 \caption{Outils Jira utilisés pour le suivi opérationnel}
 \label{fig:lynx-jira}
@@ -204,17 +204,17 @@ Au moment du bilan, 158 exigences étaient recensées : 67 fonctionnelles et 91 
 \begin{figure}[H]
 \centering
 \fbox{\parbox{0.90\textwidth}{\centering
-Emplacement prévu : reprendre les figures 5.10 à 5.15 du rapport IPF sous forme d'une planche plus compacte.\\[0.15cm]
+Emplacement prévu : reprendre les figures 5.10 à 5.15 du rapport \terme{ipf} sous forme d'une planche plus compacte.\\[0.15cm]
 État global des exigences, répartition fonctionnelle/non fonctionnelle, priorités et lecture par secteur.}}
 \caption{Suivi de la couverture des exigences}
 \label{fig:lynx-exigences}
 \end{figure}
 
-\subsection{Plusieurs familles de KPI}
+\subsection{Plusieurs familles de \terme{kpi}}
 
-Le projet prévoyait également des indicateurs de pilotage, de valeur d'usage et de performance technique. Les premiers étaient directement exploitables pendant l'année : état des tickets, progression des sprints, respect des jalons, couverture du MVP, état des exigences, documentation produite et risques actifs. Les indicateurs de valeur concernaient davantage l'engagement, la rétention, le nombre de quiz réalisés, la progression ou la consultation des contenus. Les indicateurs techniques devaient suivre les temps de réponse, les erreurs, la disponibilité et le comportement sous charge.
+Le projet prévoyait également des indicateurs de pilotage, de valeur d'usage et de performance technique. Les premiers étaient directement exploitables pendant l'année : état des tickets, progression des sprints, respect des jalons, couverture du \terme{mvp}, état des exigences, documentation produite et risques actifs. Les indicateurs de valeur concernaient davantage l'engagement, la rétention, le nombre de quiz réalisés, la progression ou la consultation des contenus. Les indicateurs techniques devaient suivre les temps de réponse, les erreurs, la disponibilité et le comportement sous charge.
 
-Cette distinction était nécessaire, car ces indicateurs ne répondent pas aux mêmes questions. Un projet peut respecter son planning sans que le produit soit réellement utilisé ; inversement, un prototype peut être apprécié alors que son exploitation n'est pas suffisamment robuste. Dans le cadre académique, les KPI de pilotage ont été les plus mesurables. Les KPI d'usage auraient demandé un nombre d'apprenants et une durée d'observation que le projet ne possédait pas encore.
+Cette distinction était nécessaire, car ces indicateurs ne répondent pas aux mêmes questions. Un projet peut respecter son planning sans que le produit soit réellement utilisé ; inversement, un prototype peut être apprécié alors que son exploitation n'est pas suffisamment robuste. Dans le cadre académique, les \terme{kpi} de pilotage ont été les plus mesurables. Les \terme{kpi} d'usage auraient demandé un nombre d'apprenants et une durée d'observation que le projet ne possédait pas encore.
 
 La vue Jira active en fin de projet contenait encore 121 tickets : 53 à faire, 27 en cours, 8 en revue, 17 en test et 16 terminés. Ces nombres ne décrivent pas l'ensemble des 563 tickets créés pendant l'année ; ils correspondent à la vue encore active au moment du bilan. Ils rendent néanmoins visible le niveau de finition inégal entre les domaines et l'importance des éléments qui avaient été reportés.
 
@@ -229,7 +229,7 @@ Valeur et usage & Partielle & Nécessite davantage d'utilisateurs réels et une 
 Performance technique & Qualitative et ponctuelle & Base de suivi définie, mais campagne de mesure complète encore nécessaire avant exploitation à grande échelle. \\
 \bottomrule
 \end{tabular}
-\caption{Utilisation réelle des différentes familles de KPI}
+\caption{Utilisation réelle des différentes familles de \terme{kpi}}
 \label{tab:lynx-kpi}
 \end{table}
 
@@ -237,14 +237,14 @@ Le dispositif avait ses limites. Autour de mars et avril, la pression liée aux 
 
 \section{Gérer les risques comme des sujets de décision}
 
-Un registre des risques avait été construit dès le cadrage. Les risques étaient regroupés selon plusieurs familles : stratégiques, planning, techniques, organisationnels et qualité/UX. Ils étaient évalués selon leur probabilité et leur impact afin de distinguer les points à surveiller des risques nécessitant un arbitrage.
+Un registre des risques avait été construit dès le cadrage. Les risques étaient regroupés selon plusieurs familles : stratégiques, planning, techniques, organisationnels et qualité/\terme{ux}. Ils étaient évalués selon leur probabilité et leur impact afin de distinguer les points à surveiller des risques nécessitant un arbitrage.
 
-Parmi les risques structurants figuraient la disponibilité variable de l'équipe, le retard des contenus pédagogiques, le volume insuffisant de données pour une IA avancée, la complexité technique du produit et la difficulté à maintenir le niveau de qualité attendu sur l'ensemble des composants. Le plan prévoyait un mécanisme d'escalade : un score suffisamment élevé, notamment à partir d'un niveau 16 dans la matrice utilisée, déclenchait une attention renforcée puis un arbitrage avec le Product Owner ou le client lorsque le planning, le périmètre ou la valeur pédagogique étaient concernés.
+Parmi les risques structurants figuraient la disponibilité variable de l'équipe, le retard des contenus pédagogiques, le volume insuffisant de données pour une \terme{ia} avancée, la complexité technique du produit et la difficulté à maintenir le niveau de qualité attendu sur l'ensemble des composants. Le plan prévoyait un mécanisme d'escalade : un score suffisamment élevé, notamment à partir d'un niveau 16 dans la matrice utilisée, déclenchait une attention renforcée puis un arbitrage avec le Product Owner ou le client lorsque le planning, le périmètre ou la valeur pédagogique étaient concernés.
 
 \begin{figure}[H]
 \centering
 \fbox{\parbox{0.90\textwidth}{\centering
-Emplacement prévu : matrice probabilité $\times$ impact et mécanisme d'escalade issus des figures 1.7 et 1.8 du rapport IPF.}}
+Emplacement prévu : matrice probabilité $\times$ impact et mécanisme d'escalade issus des figures 1.7 et 1.8 du rapport \terme{ipf}.}}
 \caption{Évaluation et escalade des risques du projet}
 \label{fig:lynx-risques}
 \end{figure}
@@ -283,15 +283,15 @@ La relation client ne consistait donc pas à accepter successivement toutes les 
 
 \subsection{Prévoir l'apprentissage comme une charge du projet}
 
-Plusieurs domaines étaient nouveaux pour certains membres de l'équipe. Le Plan de Développement Logiciel prévoyait donc un plan de formation couvrant notamment l'UX/UI, le backend et les données, le frontend web, le mobile, la gestion de projet, le déploiement, les paiements et la conformité.
+Plusieurs domaines étaient nouveaux pour certains membres de l'équipe. Le Plan de Développement Logiciel prévoyait donc un plan de formation couvrant notamment l'\terme{ux}/\terme{ui}, le backend et les données, le frontend web, le mobile, la gestion de projet, le déploiement, les paiements et la conformité.
 
 La montée en compétences reposait principalement sur l'apprentissage en situation. Un membre pouvait commencer par consulter la documentation officielle ou un tutoriel ciblé, réaliser un prototype limité, puis appliquer progressivement la technologie sur une tâche du projet. Les échanges internes et les apports de la formation complétaient ce dispositif. Il ne s'agissait pas d'un programme de formation d'entreprise avec sessions obligatoires et organisme externe, mais d'une organisation permettant d'intégrer le temps d'apprentissage dans la réalisation.
 
 \begin{figure}[H]
 \centering
 \fbox{\parbox{0.90\textwidth}{\centering
-Emplacement prévu : synthèse visuelle du plan de formation à partir du tableau 2.2 du rapport IPF / tableau 8.1 du PDL.\\[0.15cm]
-Domaines : UX/UI, Flutter, React, Supabase/PostgreSQL, sécurité, paiements, déploiement et gestion de projet.}}
+Emplacement prévu : synthèse visuelle du plan de formation à partir du tableau 2.2 du rapport \terme{ipf} / tableau 8.1 du PDL.\\[0.15cm]
+Domaines : \terme{ux}/\terme{ui}, Flutter, React, Supabase/PostgreSQL, sécurité, paiements, déploiement et gestion de projet.}}
 \caption{Domaines de montée en compétences identifiés pendant le projet}
 \label{fig:lynx-formation}
 \end{figure}
@@ -324,7 +324,7 @@ Si je reprenais cette organisation, je réaliserais ce type de feedback plus tô
 
 La fin d'un projet étudiant pose un problème particulier : l'équipe qui connaît le produit disparaît presque immédiatement après la soutenance. Dans le cas de Lynx Immo, cette situation était d'autant plus importante que Le Carré Pro peut décider de poursuivre le produit avec une entreprise ou une nouvelle équipe. La documentation de reprise a donc été considérée comme un livrable à part entière.
 
-Une documentation développeur MkDocs de plus d'une centaine de pages a été construite. Elle couvre le démarrage, le contexte du projet, l'architecture, l'API, la base de données, le frontend, l'application mobile, le backend Supabase, les règles métier, la sécurité, les tests, le déploiement, la maintenance, les évolutions et les annexes. L'objectif est qu'une personne qui découvre le produit puisse commencer par comprendre son périmètre, installer l'environnement, suivre les flux principaux et retrouver les procédures nécessaires à la maintenance.
+Une documentation développeur MkDocs de plus d'une centaine de pages a été construite. Elle couvre le démarrage, le contexte du projet, l'architecture, l'\terme{api}, la base de données, le frontend, l'application mobile, le backend Supabase, les règles métier, la sécurité, les tests, le déploiement, la maintenance, les évolutions et les annexes. L'objectif est qu'une personne qui découvre le produit puisse commencer par comprendre son périmètre, installer l'environnement, suivre les flux principaux et retrouver les procédures nécessaires à la maintenance.
 
 Cette documentation est complétée par l'organisation du dépôt, le DevContainer, les migrations de base de données, les scripts d'initialisation et la séparation des environnements. La transmissibilité ne dépend donc pas uniquement d'un document final : elle repose également sur la capacité du projet à être installé et exécuté ailleurs que sur les postes des membres qui l'ont développé.
 
@@ -332,7 +332,7 @@ Cette documentation est complétée par l'organisation du dépôt, le DevContain
 \centering
 \fbox{\parbox{0.90\textwidth}{\centering
 Emplacement prévu : capture de l'accueil et du menu de la documentation MkDocs de reprise.\\[0.15cm]
-Faire apparaître les sections Architecture, API, Base de données, Frontend, Mobile, Backend, Sécurité, Tests, Déploiement, Maintenance et Évolutions.}}
+Faire apparaître les sections Architecture, \terme{api}, Base de données, Frontend, Mobile, Backend, Sécurité, Tests, Déploiement, Maintenance et Évolutions.}}
 \caption{Documentation développeur préparée pour la reprise de Lynx Immo}
 \label{fig:lynx-mkdocs}
 \end{figure}
