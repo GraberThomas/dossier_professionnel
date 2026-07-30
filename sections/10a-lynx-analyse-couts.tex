@@ -1,0 +1,40 @@
+\section{Étude technico-économique de l'architecture}
+
+Le choix de l'architecture de Lynx Immo ne reposait pas uniquement sur des critères techniques. Le produit avait vocation à pouvoir être repris puis exploité après la fin du projet étudiant. Il fallait donc comparer non seulement les fonctionnalités offertes par les différentes solutions, mais aussi leur coût récurrent, leur charge d'exploitation et le niveau de compétences nécessaires pour les maintenir.
+
+Plusieurs scénarios ont été étudiés. Une première approche consistait à louer un serveur virtuel privé (\terme{vps}) et à y héberger une API, PostgreSQL, l'interface d'administration et les services nécessaires au fonctionnement du produit. Cette solution offrait une maîtrise importante de l'infrastructure et un coût d'hébergement direct limité. En contrepartie, elle transférait à l'équipe la responsabilité de l'administration système, des mises à jour, des sauvegardes, de la supervision, de la sécurisation et de la disponibilité des services.
+
+Une seconde approche reposait davantage sur des services managés. Supabase regroupait PostgreSQL, l'authentification, les politiques \terme{rls}, le stockage, les fonctions SQL et les Edge Functions, tandis que l'administration web pouvait être déployée indépendamment. RevenueCat complétait cet ensemble pour la gestion des abonnements mobiles. Cette solution augmentait le coût récurrent des services, mais réduisait fortement le nombre de composants d'infrastructure que l'équipe devait administrer elle-même.
+
+Pour objectiver cet arbitrage, nous avons raisonné en coût de possession et non uniquement en prix mensuel d'un serveur. Le tableau~\ref{tab:lynx-couts-architecture} reprend les hypothèses de cadrage utilisées pour comparer une première année d'exploitation avec une charge encore modérée. Il s'agit d'ordres de grandeur destinés à comparer les scénarios ; les coûts réels dépendent naturellement de la consommation, du nombre d'utilisateurs et des conditions tarifaires au moment de l'exploitation.
+
+\begin{table}[H]
+\centering
+\begin{tabular}{p{4.0cm} p{3.0cm} p{3.0cm} p{4.0cm}}
+\toprule
+\textbf{Poste} & \textbf{Solution managée} & \textbf{Scénario VPS} & \textbf{Analyse} \\
+\midrule
+Backend et base de données & Supabase Pro : env. 25 \$/mois & Inclus dans le serveur & PostgreSQL, Auth, RLS et services backend sont intégrés à Supabase. \\
+Administration web & Enveloppe Railway : env. 25 \$/mois & Hébergée sur le VPS & Un hébergement indépendant simplifie le déploiement et la séparation des composants. \\
+Serveur applicatif & Non nécessaire pour le socle principal & env. 20--30 \$/mois & Le VPS demande un dimensionnement et une administration propres. \\
+Sauvegarde, mises à jour et supervision & En grande partie prises en charge par les services managés & À organiser et maintenir & Le coût direct du VPS ne représente pas le coût complet de son exploitation. \\
+Apple Developer Program & env. 99 \$/an & env. 99 \$/an & Nécessaire à la distribution sur l'App Store. \\
+Google Play Console & env. 25 \$ à l'inscription & env. 25 \$ à l'inscription & Coût initial de création du compte développeur. \\
+RevenueCat & Pas de coût fixe retenu au lancement & Pas de coût fixe retenu au lancement & La tarification devient variable avec le niveau de revenus suivi. \\
+\bottomrule
+\end{tabular}
+\caption{Comparaison simplifiée des coûts d'exploitation envisagés pour Lynx Immo}
+\label{tab:lynx-couts-architecture}
+\end{table}
+
+Dans le scénario managé, l'hypothèse de 25~\$ par mois pour Supabase et d'une enveloppe équivalente pour l'hébergement de l'administration représente environ 600~\$ de services récurrents sur une année. En ajoutant les coûts de mise à disposition sur les plateformes mobiles, l'ordre de grandeur de la première année se situe autour de 724~\$, hors dépassements de consommation et commissions liées aux ventes d'abonnements. À partir de la deuxième année, le coût d'inscription Google Play n'est plus à renouveler, contrairement au programme développeur Apple.
+
+Le scénario fondé sur un VPS pouvait donc apparaître moins coûteux en dépenses d'infrastructure directes. Avec une hypothèse de 20 à 30~\$ par mois, le serveur représente environ 240 à 360~\$ par an, auxquels s'ajoutent les coûts de distribution mobile. Cette lecture reste cependant incomplète si elle ne valorise pas le temps d'exploitation. Héberger soi-même PostgreSQL, l'API et l'administration impose de maintenir le système, appliquer les mises à jour, surveiller les services, organiser les sauvegardes et leur restauration, sécuriser les accès et intervenir lors d'un incident.
+
+Dans notre contexte, la ressource la plus contrainte n'était donc pas uniquement financière, mais également humaine. L'équipe devait déjà développer et maintenir une application Flutter, une administration React, les règles métier, les abonnements et le contenu applicatif. Réduire de quelques centaines de dollars le coût annuel de l'infrastructure en augmentant sensiblement la charge d'exploitation aurait mobilisé des compétences et du temps déjà nécessaires à la réalisation du produit.
+
+Le choix de Supabase ne correspondait donc pas à la recherche de la solution la moins chère. Il constituait un compromis entre coût, rapidité de développement, sécurité, maintenabilité et capacité de reprise par une équipe future. La comparaison a également contribué au choix d'une architecture limitant le backend spécifique à développer, tout en conservant une base relationnelle et des règles d'accès centralisées.
+
+Cette étude complète les dimensions de faisabilité et de conception mobilisées dans le projet. Elle apporte notamment une preuve pour la compétence C1.1, par la prise en compte conjointe des moyens techniques, humains et financiers, et pour C1.3, par la comparaison de plusieurs scénarios avant le choix de l'architecture finalement retenue.
+
+Cette analyse reste liée au scénario de lancement. Une augmentation importante du nombre d'utilisateurs, du stockage ou des traitements nécessiterait de réévaluer les coûts réels. À partir d'un certain niveau de charge, une infrastructure dédiée ou partiellement auto-hébergée pourrait redevenir économiquement pertinente. Le choix d'architecture doit ainsi être réévalué au cours du cycle de vie du produit plutôt que considéré comme définitif.
