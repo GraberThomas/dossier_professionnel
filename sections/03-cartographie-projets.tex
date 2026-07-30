@@ -1,13 +1,105 @@
 \section{Logique de sélection des projets}
 
-Le dossier s'appuie sur une sélection de projets professionnels, académiques et complémentaires. Le projet \terme{fcu} / Ediacara constitue le projet principal, car il permet de démontrer une démarche complète : analyse d'un existant complexe, adaptation technique, tests, documentation et transmission de connaissances.
+Le dossier est volontairement structuré par projet plutôt que par bloc de compétences. Ce choix permet de conserver le contexte réel des réalisations, de montrer l'enchaînement entre analyse, conception, développement, validation et exploitation, et d'éviter une succession artificielle de preuves isolées. La cartographie présentée dans ce chapitre fournit en contrepartie une lecture transversale du dossier : elle indique au jury où sont principalement démontrées les compétences du référentiel.
 
-Les autres projets complètent la couverture du référentiel, notamment sur le développement back-end, le développement front-end, le traitement de données, le \terme{devops} et le pilotage d'équipe. Le homelab personnel occupe une place volontairement complémentaire : il ne constitue pas une mission professionnelle ni un projet académique évalué, mais un environnement d'expérimentation continue utilisé pour approfondir les pratiques de déploiement, de GitOps et d'observabilité abordées en formation.
+Les projets retenus n'ont pas tous le même statut ni le même poids. Le projet \terme{fcu} / Ediacara constitue la réalisation professionnelle principale. Les projets \terme{s123} et \texttt{piv2glz} complètent ce socle par des travaux professionnels plus ciblés. FeastVerse, Brise-glace et Lynx Immo sont des projets académiques permettant d'exposer des dimensions moins présentes dans les missions réalisées au Shom, notamment le développement front-end, le pilotage d'équipe et une chaîne \terme{ci} construite dès le développement. Le homelab personnel est enfin utilisé comme terrain d'expérimentation complémentaire pour le GitOps, le déploiement et l'observabilité ; il n'est pas présenté comme équivalent à une mission professionnelle.
 
-\section{Projets retenus}
+Cette combinaison répond à la logique de la certification : l'objectif n'est pas qu'un projet unique couvre artificiellement l'ensemble du référentiel, mais que les réalisations présentées apportent, ensemble, des preuves cohérentes de maîtrise des quatre blocs. Le référentiel comprend sept compétences dans le bloc~1, cinq dans le bloc~2, six dans le bloc~3 et six dans le bloc~4. Certaines sont naturellement démontrées par plusieurs projets, alors que d'autres reposent sur une réalisation principale clairement identifiée. \cite{referentiel-eadl}
 
-Les projets retenus sont les suivants : \terme{fcu} / Ediacara, \terme{s123}, FeastVerse, Brise-glace, Projet Data / IA, Homelab personnel : GitOps, CI/CD et observabilité, et IPF 2026 Lynx Immo.
+\section{Vue d'ensemble du portefeuille}
 
-\section{Correspondance générale avec les blocs}
+\begin{table}[H]
+\centering
+\small
+\begin{tabular}{p{3.1cm} p{2.4cm} p{8.4cm}}
+\toprule
+\textbf{Projet} & \textbf{Contexte} & \textbf{Rôle principal dans le dossier} \\
+\midrule
+FCU / Ediacara & Professionnel & Projet principal : analyse d'un existant complexe, évolution d'une chaîne de production, sécurisation des traitements, validation, mise en production et documentation. \\
+S-123 & Professionnel & Conception d'un méta-modèle métier, parsing XML/XSD, PostgreSQL et développement d'une API REST ; preuve forte d'architecture et de back-end. \\
+FeastVerse & Académique & API REST Spring Boot sécurisée, architecture en couches, persistance, règles métier, tests, documentation et déploiement. \\
+Brise-glace & Académique & Preuve principale du développement front-end : React, TypeScript, temps réel, interface dépendante de l'état et intégration Supabase. \\
+Projet Data / IA & Académique & Projet prévu pour démontrer spécifiquement le traitement, la préparation et l'exploitation de données à grande échelle ou à vocation analytique. \\
+Homelab & Personnel & Complément du bloc~3 : GitHub Actions, k3s, Helm, Argo CD, Prometheus, Grafana, Loki et Alloy dans un environnement exploité en continu. \\
+\texttt{piv2glz} & Professionnel & Projet ciblé sur l'intégrité du code, les tests automatisés et une pipeline GitLab CI produisant les livrables Windows. \\
+Lynx Immo & Académique, client réel & Preuve principale du pilotage : faisabilité, architecture, feuille de route, suivi, arbitrages, coordination d'une équipe de cinq étudiants et bilan collectif. \\
+\bottomrule
+\end{tabular}
+\caption{Rôle des projets retenus dans le dossier professionnel}
+\label{tab:cartographie-portefeuille}
+\end{table}
 
-Une synthèse détaillée par compétence est présentée en fin de dossier. Cette cartographie initiale sert de repère de lecture pour comprendre le rôle de chaque projet dans la validation des blocs de compétences.
+La lecture du tableau~\ref{tab:cartographie-portefeuille} montre que le portefeuille n'est pas organisé selon une séparation stricte entre projets techniques et projets de pilotage. Plusieurs réalisations traversent plusieurs blocs : \terme{fcu} / Ediacara combine par exemple analyse, architecture, développement, exploitation et documentation ; Lynx Immo associe cadrage, choix d'architecture et pilotage d'équipe. Dans les chapitres correspondants, les compétences sont donc mobilisées uniquement lorsque les éléments effectivement réalisés permettent de les étayer, avec mention explicite des limites lorsque la preuve reste partielle.
+
+\section{Correspondance entre projets et blocs de compétences}
+
+\begin{table}[H]
+\centering
+\small
+\begin{tabular}{p{4.1cm} c c c c}
+\toprule
+\textbf{Projet} & \textbf{Bloc 1} & \textbf{Bloc 2} & \textbf{Bloc 3} & \textbf{Bloc 4} \\
+\midrule
+FCU / Ediacara & \textbullet & \textbullet & \textbullet & \textbullet \\
+S-123 & \textbullet & \textbullet & \textbullet &  \\
+FeastVerse & \textbullet & \textbullet & \textbullet &  \\
+Brise-glace & \textbullet & \textbullet & \textbullet &  \\
+Projet Data / IA &  & \textbullet & \textbullet &  \\
+Homelab & \textbullet &  & \textbullet &  \\
+\texttt{piv2glz} &  & \textbullet & \textbullet &  \\
+Lynx Immo & \textbullet &  & \textbullet & \textbullet \\
+\bottomrule
+\end{tabular}
+\caption{Contribution générale des projets aux quatre blocs de compétences}
+\label{tab:cartographie-blocs}
+\end{table}
+
+Le symbole indique qu'un projet apporte au moins un élément de preuve pour le bloc concerné ; il ne signifie pas qu'il en couvre toutes les compétences. Ainsi, le bloc~4 repose principalement sur Lynx Immo. La contribution de \terme{fcu} / Ediacara y est plus limitée et concerne surtout l'accompagnement et la capitalisation de connaissances. À l'inverse, le bloc~3 bénéficie de plusieurs contextes complémentaires : exploitation d'une chaîne professionnelle avec Ediacara, tests et intégration continue avec \texttt{piv2glz}, déploiement applicatif avec FeastVerse et expérimentation GitOps/observabilité dans le homelab.
+
+\section{Cartographie détaillée des compétences}
+
+Le tableau~\ref{tab:cartographie-competences} identifie pour chaque compétence le projet utilisé comme preuve principale et, lorsque cela apporte un éclairage différent, un ou plusieurs projets complémentaires. Cette cartographie constitue une carte de lecture ; les justifications et limites sont développées dans les chapitres concernés puis reprises dans la synthèse finale.
+
+\begin{longtable}{p{1.4cm} p{5.7cm} p{3.1cm} p{4.0cm}}
+\caption{Correspondance détaillée entre compétences et projets}\label{tab:cartographie-competences}\\
+\toprule
+\textbf{Comp.} & \textbf{Objet de la compétence} & \textbf{Preuve principale} & \textbf{Compléments} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Comp.} & \textbf{Objet de la compétence} & \textbf{Preuve principale} & \textbf{Compléments} \\
+\midrule
+\endhead
+C1.1 & Étudier la faisabilité organisationnelle, technique et financière & Lynx Immo & FCU / Ediacara, S-123 \\
+C1.2 & Concevoir un système de veille technologique & Homelab & FCU / Ediacara, veille à formaliser \\
+C1.3 & Concevoir la solution informatique et ses spécifications & FCU / Ediacara & Lynx Immo, S-123, FeastVerse, Brise-glace \\
+C1.4 & Établir la feuille de route du projet & Lynx Immo & FCU / Ediacara \\
+C1.5 & Mettre en place le projet selon la méthode retenue & Lynx Immo & FCU / Ediacara \\
+C1.6 & Mesurer la performance et l'avancement du projet & Lynx Immo & FCU / Ediacara \\
+C1.7 & Superviser le déroulement et adapter le projet & Lynx Immo & FCU / Ediacara \\
+\midrule
+C2.1 & Élaborer l'architecture de l'application & S-123 & FCU / Ediacara, FeastVerse, Brise-glace \\
+C2.2 & Préparer et garantir l'intégrité du code & \texttt{piv2glz} & FeastVerse, S-123, FCU / Ediacara \\
+C2.3 & Piloter le développement front-end & Brise-glace & Lynx Immo \\
+C2.4 & Piloter le développement back-end & FeastVerse & S-123, FCU / Ediacara, Brise-glace \\
+C2.5 & Coordonner le traitement de données à grande échelle & Projet Data / IA & S-123 comme complément de structuration uniquement \\
+\midrule
+C3.1 & Piloter le système d'intégration continue & \texttt{piv2glz} & FCU / Ediacara, homelab \\
+C3.2 & Organiser un plan de tests itératifs & \texttt{piv2glz} & FeastVerse, FCU / Ediacara, S-123 \\
+C3.3 & Surveiller les automatisations et mises à jour & FCU / Ediacara & Homelab \\
+C3.4 & Piloter le déploiement continu & Homelab & FeastVerse, Brise-glace \\
+C3.5 & Piloter l'optimisation des applications et environnements & Homelab & FCU / Ediacara \\
+C3.6 & Organiser la documentation technique & FCU / Ediacara & Lynx Immo, FeastVerse, S-123, homelab \\
+\midrule
+C4.1 & Déterminer les compétences nécessaires & Lynx Immo & --- \\
+C4.2 & Constituer l'équipe projet & Lynx Immo & --- \\
+C4.3 & Coordonner l'activité de l'équipe & Lynx Immo & Brise-glace \\
+C4.4 & Accompagner les membres de l'équipe & Lynx Immo & FCU / Ediacara \\
+C4.5 & Planifier la montée en compétences & Lynx Immo & FCU / Ediacara \\
+C4.6 & Évaluer la performance de l'équipe & Lynx Immo & --- \\
+\bottomrule
+\end{longtable}
+
+Deux points demandent une attention particulière dans la suite du dossier. Premièrement, C2.5 repose sur le chapitre Data / IA, encore à finaliser au moment de cette cartographie : cette compétence ne doit pas être revendiquée uniquement à partir de S-123, qui traite surtout de structuration de données métier et non de traitement massif. Deuxièmement, C1.2 doit être appuyée par une veille formalisée et sourcée, comprenant notamment des références anglophones, conformément aux attentes transversales de la certification. Ces éléments sont donc identifiés comme des points à consolider plutôt que masqués par une correspondance artificielle.
+
+Enfin, les deux compétences transversales sont traitées au fil des projets. La maîtrise de l'anglais technique est mobilisée dans la lecture de documentations et devra être rendue visible par une veille technologique sourcée. Le numérique responsable apparaît notamment dans le réemploi du matériel du homelab, dans les arbitrages de ressources et dans la réflexion sur l'efficience des architectures ; il doit cependant être analysé comme un critère de décision technique et non comme une simple déclaration d'intention.
