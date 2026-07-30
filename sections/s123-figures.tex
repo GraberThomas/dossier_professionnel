@@ -1,0 +1,25 @@
+% Remplacement local des encadrés de placeholders du chapitre S-123 par les
+% illustrations réelles. Ce fichier est chargé dans un groupe LaTeX dédié au
+% chapitre S-123 afin de ne pas modifier le comportement de \fbox ailleurs.
+\newcounter{sonefigureplaceholder}
+\setcounter{sonefigureplaceholder}{0}
+
+\renewcommand{\fbox}[1]{%
+  \stepcounter{sonefigureplaceholder}%
+  \ifcase\value{sonefigureplaceholder}%
+  \or
+    \includegraphics[width=0.92\textwidth,height=0.48\textheight,keepaspectratio]{figures/s123/correspondance.PNG}%
+  \or
+    \includegraphics[width=\textwidth,height=0.30\textheight,keepaspectratio]{figures/s123/chronologie.png}%
+  \or
+    \includegraphics[width=\textwidth,height=0.52\textheight,keepaspectratio]{figures/s123/diagramme_classe_simplifiee.png}%
+  \or
+    \includegraphics[width=\textwidth,height=0.42\textheight,keepaspectratio]{figures/s123/chaine_technique_complete.png}%
+  \or
+    \includegraphics[width=0.96\textwidth,height=0.50\textheight,keepaspectratio]{figures/s123/coexistence_multi_norme.png}%
+  \or
+    \includegraphics[width=\textwidth,height=0.52\textheight,keepaspectratio]{figures/s123/archi_api.png}%
+  \else
+    \PackageError{s123-figures}{Nombre de placeholders S-123 inattendu}{Le chapitre S-123 contient plus de 6 appels a \string\fbox.}%
+  \fi
+}
