@@ -18,6 +18,8 @@ Le projet couvre principalement les compétences liées à la planification et a
 \toprule
 \textbf{Compétence} & \textbf{Mobilisation dans le projet Lynx Immo} \\
 \midrule
+C1.1 & Étude de faisabilité technico-économique de l'architecture, avec comparaison de plusieurs scénarios d'hébergement et de backend, prise en compte des coûts récurrents, de la charge d'exploitation et des ressources humaines nécessaires. \\
+C1.3 & Comparaison de scénarios techniques puis choix d'une architecture Flutter / React / Supabase / RevenueCat cohérente avec les besoins, la capacité de l'équipe, le coût d'exploitation et les contraintes de maintenance. \\
 C1.4 & Construction d'une feuille de route de novembre 2025 à juillet 2026, organisation en phases et sprints, définition des jalons, dépendances, livrables et outils de suivi. \\
 C1.5 & Mise en place d'un cadre de travail associant cadrage documentaire, backlog, gestion des risques, outils collaboratifs, dépôt Git et environnements reproductibles. \\
 C1.6 & Suivi de l'avancement à partir des exigences, des tickets Jira, des jalons et de plusieurs familles de \terme{kpi}, avec analyse des limites du dispositif de mesure. \\
@@ -65,6 +67,10 @@ Le cadrage a également permis d'identifier les dépendances. La progression dé
 \section{Disposer d'un produit suffisamment concret pour piloter}
 
 Le pilotage n'aurait eu que peu de sens s'il était resté déconnecté de la réalisation. Une partie importante de mon rôle de référent technique consistait donc à maintenir une compréhension globale de l'architecture et des dépendances entre les composants, afin que les arbitrages de planning restent techniquement réalistes.
+
+\input{sections/10a-lynx-analyse-couts.tex}
+
+\subsection{Architecture retenue}
 
 La solution finale repose sur trois briques principales. L'application apprenant est développée en Flutter pour Android et iOS. L'espace d'administration utilise React, Vite et TypeScript. Le socle commun est fourni par Supabase, avec PostgreSQL, Auth, des politiques \terme{rls}, des fonctions SQL et des Edge Functions pour certains traitements. RevenueCat complète ce dispositif pour la gestion des abonnements mobiles.
 
