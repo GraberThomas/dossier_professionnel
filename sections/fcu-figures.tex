@@ -1,0 +1,43 @@
+% Remplacement local des encadrés de placeholders du chapitre FCU par les
+% illustrations réelles. Ce fichier est chargé dans un groupe LaTeX dédié au
+% chapitre FCU afin de ne pas modifier le comportement de \fbox ailleurs.
+\newcounter{fcufigureplaceholder}
+\setcounter{fcufigureplaceholder}{0}
+
+\renewcommand{\fbox}[1]{%
+  \stepcounter{fcufigureplaceholder}%
+  \ifcase\value{fcufigureplaceholder}%
+  \or
+    \includegraphics[width=\textwidth,height=0.50\textheight,keepaspectratio]{figures/fcu/chaine_ediacara_historique.png}%
+  \or
+    \includegraphics[width=\textwidth,height=0.50\textheight,keepaspectratio]{figures/fcu/coexistence_flux_historique_fcu.png}%
+  \or
+    \includegraphics[width=\textwidth,height=0.48\textheight,keepaspectratio]{figures/fcu/extrait_matrice.png}%
+  \or
+    \includegraphics[width=\textwidth,height=0.52\textheight,keepaspectratio]{figures/fcu/navigateur_eiffel.png}%
+  \or
+    \includegraphics[width=\textwidth,height=0.54\textheight,keepaspectratio]{figures/fcu/Architecture_proposition_FCU.png}%
+  \or
+    \includegraphics[width=\textwidth,height=0.48\textheight,keepaspectratio]{figures/fcu/comparaison_prod_re7_ecriture_reseau.drawio.png}%
+  \or
+    \includegraphics[width=\textwidth,height=0.48\textheight,keepaspectratio]{figures/fcu/separation_usages_shomproduit.drawio.png}%
+  \or
+    \includegraphics[width=\textwidth,height=0.48\textheight,keepaspectratio]{figures/fcu/tampon_executables_eiffel.png}%
+  \or
+    \includegraphics[width=\textwidth,height=0.52\textheight,keepaspectratio]{figures/fcu/flux_livraison_fcu.png}%
+  \or
+    \includegraphics[width=\textwidth,height=0.58\textheight,keepaspectratio]{figures/fcu/capture_mep.PNG}%
+  \or
+    \includegraphics[width=\textwidth,height=0.52\textheight,keepaspectratio]{figures/fcu/extrait_doc_drawio.PNG}%
+  \or
+    \begin{minipage}{\textwidth}
+      \centering
+      \includegraphics[width=\textwidth,height=0.29\textheight,keepaspectratio]{figures/fcu/doc_mkdocs_chaine.PNG}\\[0.3cm]
+      \includegraphics[width=\textwidth,height=0.29\textheight,keepaspectratio]{figures/fcu/doc_mkdocs_job.PNG}
+    \end{minipage}%
+  \or
+    \includegraphics[width=\textwidth,height=0.52\textheight,keepaspectratio]{figures/fcu/architecture_poc_prefect.png}%
+  \else
+    \PackageError{fcu-figures}{Nombre de placeholders FCU inattendu}{Le chapitre FCU contient plus de 13 appels a \string\fbox.}%
+  \fi
+}
