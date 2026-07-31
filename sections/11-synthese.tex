@@ -4,11 +4,11 @@ Les projets précédents sont complémentaires : aucun ne cherche à couvrir art
 
 \subsection*{Bloc 1 --- Planifier et organiser un projet de développement logiciel}
 
-Le bloc~1 repose principalement sur FCU / Ediacara et Lynx Immo. Ediacara démontre l'analyse d'un environnement professionnel complexe, l'identification des risques et la conception d'une adaptation compatible avec la production existante. Lynx Immo complète cette dimension par une étude de faisabilité plus complète, intégrant les aspects techniques, humains et financiers, puis par une feuille de route, des jalons, des outils de suivi et des arbitrages de périmètre. Le homelab apporte un complément sur la veille et l'expérimentation technologique, qui reste à formaliser davantage avec des sources anglophones.
+Le bloc~1 repose principalement sur FCU / Ediacara et Lynx Immo. Ediacara démontre l'analyse d'un environnement professionnel complexe, l'identification des risques et la conception d'une adaptation compatible avec la production existante. Lynx Immo complète cette dimension par une étude de faisabilité plus complète, intégrant les aspects techniques, humains et financiers, puis par une feuille de route, des jalons, des outils de suivi et des arbitrages de périmètre. Le homelab apporte un complément sur la veille et l'expérimentation technologique ; cette pratique gagnerait encore à être davantage structurée et sourcée, notamment à partir de références anglophones.
 
 \subsection*{Bloc 2 --- Concevoir et développer des solutions logicielles}
 
-Les preuves sont volontairement réparties entre plusieurs projets. S-123 illustre principalement la conception d'architecture et l'évolution d'un modèle devenu trop couplé à la norme. \texttt{piv2glz} apporte une preuve claire d'intégrité du code par les tests automatisés et la CI. Brise-glace constitue la preuve principale du front-end avec React, TypeScript et une interface temps réel, tandis que FeastVerse démontre le développement back-end avec Spring Boot, PostgreSQL, JWT et une architecture en couches. Le projet Data / IA doit enfin porter C2.5 ; tant que ce chapitre n'est pas finalisé, cette compétence reste le principal point à sécuriser dans ce bloc.
+Les preuves sont volontairement réparties entre plusieurs projets. S-123 illustre principalement la conception d'architecture et l'évolution d'un modèle devenu trop couplé à la norme. \texttt{piv2glz} apporte une preuve claire d'intégrité du code par les tests automatisés et la CI. Brise-glace constitue la preuve principale du front-end avec React, TypeScript et une interface temps réel, tandis que FeastVerse démontre le développement back-end avec Spring Boot, PostgreSQL, JWT et une architecture en couches. Le projet de prédiction des coûts d'assurance porte C2.5 en démontrant une chaîne complète de valorisation de la donnée, depuis l'exploration et la préparation jusqu'à l'entraînement, l'évaluation, l'explicabilité, l'exposition du modèle et la persistance des résultats. La dimension de traitement à grande échelle y est abordée comme une conception d'évolution de l'architecture, en distinguant clairement la solution effectivement réalisée de celle que j'adopterais lorsque la volumétrie et la fréquence des flux rendraient les traitements locaux insuffisants.
 
 \subsection*{Bloc 3 --- Piloter la mise en production et l'évolution}
 
@@ -44,7 +44,7 @@ C2.1 & Architecture logicielle & S-123 & p.~\pageref{chap:s123} \\
 C2.2 & Intégrité du code & \texttt{piv2glz} & p.~\pageref{chap:piv2glz} \\
 C2.3 & Développement front-end & Brise-glace & p.~\pageref{chap:brise-glace} \\
 C2.4 & Développement back-end & FeastVerse & p.~\pageref{chap:feastverse} \\
-C2.5 & Traitement de données & Projet Data / IA & p.~\pageref{chap:data-ia} \\
+C2.5 & Traitement de données & Prédiction des coûts d'assurance & p.~\pageref{chap:data-ia} \\
 \midrule
 C3.1 & Intégration continue & \texttt{piv2glz} & p.~\pageref{chap:piv2glz} \\
 C3.2 & Tests itératifs & \texttt{piv2glz} & p.~\pageref{chap:piv2glz} \\
@@ -62,4 +62,4 @@ C4.6 & Évaluation de la performance collective & Lynx Immo & p.~\pageref{chap:l
 \bottomrule
 \end{longtable}
 
-Deux points restent à consolider avant la version finale : C2.5 par la rédaction du chapitre Data / IA, et C1.2 par une veille technologique explicitement sourcée, notamment à partir de références anglophones. La prise en compte du numérique responsable doit également rester visible dans les choix d'architecture et d'exploitation, sans être isolée artificiellement du reste des projets.
+La couverture du référentiel repose ainsi sur des projets complémentaires, avec des niveaux de preuve différents selon les contextes. Les perspectives identifiées ne remettent pas en cause les réalisations présentées : elles servent à expliciter les limites rencontrées et la manière dont les pratiques pourraient être renforcées dans un cadre d'exploitation plus large, notamment pour la veille technologique, l'accessibilité, le numérique responsable ou la formalisation de certains dispositifs de suivi.

@@ -1,11 +1,218 @@
-\section{Contexte et objectifs du projet}
+\section{Présentation du projet}
 
-Ce chapitre présentera le projet Data / IA retenu pour démontrer la capacité à traiter, structurer et exploiter des données.
+Le projet de prédiction des coûts d'assurance est un projet académique réalisé autour d'une question métier volontairement simple : à partir du profil d'un client, peut-on estimer le niveau de charges d'assurance auquel il est susceptible d'être exposé et utiliser cette estimation pour proposer une offre adaptée ? Derrière cette question se trouvait toutefois un sujet plus large que la seule construction d'un modèle de machine learning. Une prédiction n'a de valeur que si les données ont été comprises et préparées, si les résultats du modèle peuvent être évalués, si le service est accessible depuis une application et si la prédiction peut être conservée puis expliquée.
 
-\section{Compétences principalement mobilisées}
+Le projet a donc progressivement pris la forme d'une petite chaîne de valorisation de la donnée. Un premier composant, \texttt{data\_model}, est consacré à l'exploration du jeu de données, à sa préparation et à l'entraînement de plusieurs modèles. Une API FastAPI expose ensuite ces modèles et fournit les prédictions. Un second service back-end persiste les profils, les prédictions et les recommandations dans PostgreSQL. Enfin, une interface React/TypeScript permet de saisir un profil, sélectionner un modèle, consulter les résultats et retrouver l'historique des prédictions. L'ensemble peut être exécuté avec Docker Compose.
 
-La compétence principalement visée est C2.5. Les compétences C2.2 et C3.2 pourront être mobilisées en complément si la démarche de validation est détaillée.
+Ce projet occupe une place particulière dans le dossier car il permet de montrer le chemin complet entre une donnée brute et une information exploitée par une application. Il présente également une limite importante au regard de la compétence C2.5 : le jeu de données utilisé contient 1~338 observations et sept variables, ce qui ne constitue pas une volumétrie nécessitant une infrastructure distribuée. J'ai donc choisi de ne pas présenter artificiellement ce projet comme un système Big Data. La dernière partie du chapitre explique au contraire comment je ferais évoluer cette architecture si la volumétrie, le nombre de sources et la fréquence d'arrivée des données rendaient les traitements locaux insuffisants.
 
-\section{Plan de rédaction prévu}
+\section{Compétences mobilisées}
 
-Ce chapitre développera les données utilisées, la préparation, le nettoyage, la structuration du jeu de données, le feature engineering, l'analyse descriptive ou prédictive, les résultats, les limites et le bilan critique.
+La compétence C2.5 constitue l'objectif principal de ce chapitre. Le projet met réellement en œuvre la préparation de données, leur analyse, plusieurs traitements prédictifs et leur exploitation dans un système applicatif. La dimension de traitement à grande échelle est traitée séparément sous la forme d'une conception d'évolution, afin de distinguer ce qui a été réalisé de ce que je mettrais en place dans un contexte de forte volumétrie. Le projet apporte également un élément complémentaire pour C2.4 grâce aux API, à PostgreSQL et à l'organisation en services.
+
+\begin{table}[H]
+\centering
+\begin{tabular}{p{2.2cm} p{11.8cm}}
+\toprule
+\textbf{Compétence} & \textbf{Mobilisation dans le projet de prédiction des coûts d'assurance} \\
+\midrule
+C2.5 & Préparation et analyse d'un jeu de données, comparaison de plusieurs modèles prédictifs, exploitation des prédictions et de leur explicabilité, puis conception de l'évolution de la chaîne pour des volumes et des flux beaucoup plus importants. La partie distribuée n'a pas été déployée sur le jeu de données initial, dont la volumétrie ne le justifiait pas. \\
+C2.4 & Conception de services FastAPI, persistance PostgreSQL, migrations Alembic, séparation entre service de prédiction et service de persistance, puis intégration avec une interface React/TypeScript. \\
+\bottomrule
+\end{tabular}
+\caption{Compétences mobilisées dans le projet de prédiction des coûts d'assurance}
+\label{tab:competences-insurance}
+\end{table}
+
+\section{De la question métier à une chaîne complète de prédiction}
+
+\subsection{Un problème de régression avant d'être un problème d'architecture}
+
+Le point de départ du projet est un fichier CSV décrivant 1~338 profils. Chaque ligne contient l'âge, le sexe, l'indice de masse corporelle, le nombre d'enfants, le statut fumeur ou non-fumeur, la région et le montant de charges associé. La variable à prédire est donc continue : le problème relève de la régression et non d'une classification de clients dans des catégories prédéfinies.
+
+Le faible nombre de variables rendait le problème facile à formuler, mais pas nécessairement trivial à traiter. Certaines caractéristiques sont numériques, d'autres catégorielles, et toutes n'ont pas le même lien avec la charge. Avant d'entraîner un modèle, il fallait donc vérifier ce que contenait réellement le jeu de données et éviter de considérer le fichier comme une simple matrice prête à être donnée à un algorithme.
+
+Un notebook d'analyse exploratoire a constitué cette première étape. Il charge le fichier avec pandas puis étudie notamment les répartitions des variables et les relations entre certaines caractéristiques et les charges. Cette phase m'a permis de passer d'une liste de colonnes à une compréhension plus concrète du problème : les données décrivent des profils hétérogènes et l'objectif du modèle est de retrouver, à partir de ces caractéristiques, une relation suffisamment stable pour estimer une charge sur un profil qui n'a pas servi à l'entraînement.
+
+\begin{figure}[H]
+\centering
+\fbox{\parbox{0.90\textwidth}{\centering
+Emplacement prévu : planche issue du notebook \texttt{data\_visualisation.ipynb}.\\[0.15cm]
+Présenter le jeu de 1~338 lignes et quelques visualisations utiles : répartition fumeurs/non-fumeurs, distribution des charges et relation entre caractéristiques du profil et charges.
+}}
+\caption{Analyse exploratoire du jeu de données d'assurance}
+\label{fig:insurance-exploration}
+\end{figure}
+
+Cette étape est importante dans ma lecture du projet. Un modèle plus complexe ne compense pas une donnée mal comprise. L'analyse exploratoire devait donc précéder le choix des algorithmes et fournir des points de contrôle sur le contenu du dataset, ses variables et les ordres de grandeur manipulés.
+
+\subsection{Préparer les données sans mélanger apprentissage et cible}
+
+La construction des modèles est réalisée dans un second notebook. Le jeu de caractéristiques est d'abord séparé de la colonne \texttt{charges}, qui constitue la cible. Les variables catégorielles sont transformées avec \texttt{get\_dummies} afin de produire des colonnes numériques utilisables par les algorithmes, puis l'ensemble des caractéristiques est converti en valeurs numériques.
+
+Le jeu est ensuite séparé en données d'entraînement et de test avec une proportion de 80/20. Cette séparation joue un rôle central : évaluer un modèle sur les mêmes observations que celles utilisées pour son apprentissage donnerait une mesure trompeuse de ses capacités. La partie de test doit au contraire représenter des profils que le modèle n'a pas utilisés pour ajuster ses paramètres.
+
+Dans ce projet, la préparation reste volontairement simple car les données sont elles-mêmes structurées et de taille réduite. Il n'existe pas de chaîne d'ingestion multi-source, de traitement distribué ou de feature store. Cette simplicité est cohérente avec le problème rencontré : charger 1~338 lignes avec pandas ne pose aucune contrainte de mémoire ou de temps justifiant une architecture plus lourde.
+
+\section{Comparer plusieurs modèles plutôt que retenir le premier résultat}
+
+\subsection{Cinq approches entraînées sur le même problème}
+
+Je n'ai pas limité l'expérimentation à un seul algorithme. Le notebook entraîne successivement une régression linéaire, une régression Ridge, un Random Forest Regressor, un Gradient Boosting Regressor et XGBoost. Ces cinq modèles sont évalués sur le même jeu de test à l'aide de trois métriques : l'erreur absolue moyenne (MAE), la racine de l'erreur quadratique moyenne (RMSE) et le coefficient de détermination $R^2$.
+
+L'intérêt de cette comparaison n'était pas de rechercher le modèle le plus sophistiqué par principe. Elle permettait de disposer d'une base commune pour comparer une relation linéaire simple à plusieurs méthodes capables de représenter des relations non linéaires. Le résultat du projet ne se réduit donc pas à l'affichage d'une valeur prédite : chaque modèle est associé à des indicateurs permettant d'apprécier la qualité de ses prédictions sur le jeu de test.
+
+\begin{table}[H]
+\centering
+\begin{tabular}{p{5.0cm} p{8.6cm}}
+\toprule
+\textbf{Élément} & \textbf{Mise en œuvre dans le projet} \\
+\midrule
+Modèles comparés & Régression linéaire, Ridge, Random Forest, Gradient Boosting et XGBoost. \\
+Séparation des données & 80\% pour l'entraînement et 20\% pour le test. \\
+Évaluation & MAE, RMSE et $R^2$ calculés sur le jeu de test. \\
+Analyse des résultats & Comparaison des métriques et visualisation des charges réelles face aux charges prédites. \\
+Explicabilité & Analyse de l'importance des variables pour les modèles qui la fournissent, complétée par SHAP dans le service de prédiction. \\
+\bottomrule
+\end{tabular}
+\caption{Démarche de construction et d'évaluation des modèles}
+\label{tab:insurance-modeles}
+\end{table}
+
+La présence de plusieurs métriques est également utile. Une seule valeur de $R^2$ donne une lecture globale de la part de variance expliquée, mais ne donne pas directement l'erreur exprimée dans l'unité métier. La MAE permet au contraire de conserver une lecture en montant moyen d'erreur, tandis que la RMSE pénalise davantage les erreurs importantes. Le projet m'a ainsi conduit à raisonner sur l'évaluation comme une étape du traitement, et non comme une ligne ajoutée à la fin du notebook.
+
+\subsection{Comprendre ce qui influence une prédiction}
+
+Une estimation de coût est plus utile si l'on peut également comprendre les facteurs qui y contribuent. Un troisième notebook parcourt les modèles sérialisés et affiche l'importance des variables lorsque le modèle expose une propriété \texttt{feature\_importances\_}. Cette analyse donne une première lecture globale de l'influence des caractéristiques utilisées par les modèles concernés.
+
+L'API va plus loin dans la restitution individuelle. La réponse de prédiction peut inclure les principaux facteurs associés à la prédiction au travers de valeurs SHAP. Le résultat retourné ne contient donc pas uniquement un montant : il peut également indiquer quelles caractéristiques du profil ont contribué le plus fortement à la sortie du modèle.
+
+Cette explicabilité est particulièrement importante dans le scénario métier retenu. Une estimation sans contexte serait difficile à exploiter par un utilisateur. La possibilité de relier la prédiction à des facteurs d'entrée permet de rendre le résultat plus compréhensible, même si elle ne transforme pas pour autant une corrélation du modèle en causalité métier. Cette distinction reste essentielle : le modèle apprend une relation statistique dans le dataset disponible ; il ne démontre pas qu'une variable cause à elle seule le niveau de charge observé.
+
+\section{Sortir du notebook pour rendre le modèle utilisable}
+
+\subsection{Exposer les modèles avec FastAPI}
+
+La première version utile du projet aurait pu s'arrêter aux notebooks, mais cela aurait laissé le modèle isolé du reste d'une application. J'ai donc intégré les modèles dans un service FastAPI. L'API expose la liste des modèles disponibles, leurs informations et un endpoint de prédiction recevant un profil d'assurance.
+
+Le contrat d'entrée reprend les caractéristiques utilisées pendant l'apprentissage : âge, sexe, indice de masse corporelle, nombre d'enfants, statut de fumeur et région. La sortie est plus riche qu'un simple nombre. Elle contient la prédiction de coût, un intervalle, la MAE associée au modèle, un niveau de risque, une offre calculée, les principaux facteurs explicatifs et des suggestions.
+
+Le passage du notebook à l'API a modifié la manière de considérer le modèle. Dans le notebook, l'entrée est une ligne d'un DataFrame déjà préparé. Dans l'application, l'entrée est une requête provenant d'un utilisateur et doit respecter un contrat. Les données doivent donc être validées, transformées selon les mêmes conventions que lors de l'apprentissage puis converties dans le format attendu par le modèle. Le modèle devient un composant d'un système, avec les contraintes d'interface que cela implique.
+
+\subsection{Transformer la prédiction en recommandation métier}
+
+La prédiction sert ensuite à construire une restitution plus directement exploitable. Le service distingue différents niveaux de risque et génère une proposition d'offre avec franchise, plafond, estimation de remboursement et prix annuel ou mensuel. Le projet ne cherche donc pas uniquement à répondre à la question \og combien ce profil pourrait-il coûter ? \fg, mais à transformer cette estimation en une aide à la proposition d'une offre.
+
+Cette partie constitue pour moi le lien entre analyse prédictive et création de valeur. La sortie brute du modèle reste une estimation statistique. Son intégration dans une règle de recommandation, sa présentation à l'utilisateur et la conservation de son contexte permettent de l'inscrire dans un usage applicatif. Cette logique rend également visibles les limites : une recommandation n'est pertinente que si le modèle, les règles métier et les données utilisées restent cohérents dans le temps.
+
+\begin{figure}[H]
+\centering
+\fbox{\parbox{0.90\textwidth}{\centering
+Emplacement prévu : schéma du flux réellement développé.\\[0.15cm]
+Jeu CSV $\rightarrow$ exploration / préparation $\rightarrow$ entraînement et évaluation\\
+$\rightarrow$ modèles sérialisés $\rightarrow$ API FastAPI $\rightarrow$ prédiction / recommandation\\
+$\rightarrow$ service de persistance PostgreSQL $\rightarrow$ historique affiché dans l'interface React.
+}}
+\caption{Chaîne de valorisation de la donnée mise en œuvre dans le projet}
+\label{fig:insurance-flux-reel}
+\end{figure}
+
+\section{Conserver l'historique sans confondre données d'apprentissage et données opérationnelles}
+
+Un second service FastAPI est dédié à la persistance. Il conserve les prédictions produites par le système avec les informations du profil, le modèle utilisé, les métriques disponibles, la recommandation et les facteurs influents. PostgreSQL est utilisé comme base relationnelle et les évolutions du schéma sont gérées avec Alembic.
+
+Cette séparation entre service de prédiction et service de persistance évite de concentrer toutes les responsabilités dans une API unique. Le service de modèle peut se concentrer sur le chargement et l'exécution des modèles, tandis que le service de persistance gère l'historique consultable par l'application. Docker Compose assemble les services, PostgreSQL et les jobs de migration dans un environnement commun.
+
+L'interface React/TypeScript donne finalement une forme visible à cette architecture. Elle propose un formulaire en plusieurs étapes, permet de sélectionner différents modèles, affiche leurs métriques, exécute une prédiction et offre une vue sur l'historique avec filtres, tri, pagination et export. Le dépôt prévoit également une option de sauvegarde des données présentée comme compatible avec les exigences RGPD. Cette interface m'a permis de valider que la donnée circulait réellement de la saisie utilisateur jusqu'au modèle, puis vers la persistance et la restitution.
+
+\section{La limite du projet : un pipeline de données, mais pas un système Big Data}
+
+La chaîne réalisée couvre plusieurs éléments attendus pour C2.5 : préparation, structuration, analyse descriptive, apprentissage supervisé, comparaison de modèles, exploitation prédictive et stockage des résultats. En revanche, la volumétrie du dataset initial change la manière dont je dois présenter la compétence. Avec 1~338 lignes et sept colonnes, un traitement distribué serait disproportionné. pandas charge l'ensemble du fichier en mémoire sans difficulté et l'entraînement des modèles est réalisé sur une seule machine.
+
+Ajouter Spark, Kafka ou un cluster uniquement pour pouvoir employer le terme \og Big Data \fg aurait complexifié le projet sans résoudre un problème réel. Je considère au contraire que le premier choix d'architecture consiste à dimensionner les outils au besoin. Dans ce contexte, le traitement local était adapté.
+
+Cette limite devient néanmoins intéressante lorsqu'on projette le système vers une utilisation réelle à plus grande échelle. Le problème changerait si le dataset ne provenait plus d'un fichier de démonstration mais de plusieurs années de contrats, profils, historiques de prédictions, remboursements et événements, avec plusieurs millions de lignes et des données arrivant en continu. Le point de rupture ne concernerait alors pas uniquement l'algorithme de machine learning : ingestion, stockage, préparation, réentraînement, traçabilité et exposition du modèle devraient évoluer ensemble.
+
+\section{Comment je ferais évoluer la solution pour un traitement à grande échelle}
+
+\subsection{Séparer ingestion, stockage brut et exploitation}
+
+Dans une évolution à forte volumétrie, je ne ferais plus du fichier CSV le point central du pipeline. Les données pourraient provenir de bases métier, de fichiers déposés périodiquement et d'événements produits par les applications. Je distinguerais alors deux modes d'ingestion selon le besoin : des traitements batch pour les sources consolidées et un flux événementiel uniquement pour les données dont la fraîcheur justifie un traitement continu.
+
+Les données reçues seraient d'abord conservées dans une zone brute sur un stockage objet, par exemple S3 ou MinIO, avec des fichiers Parquet partitionnés. Cette zone aurait deux objectifs : conserver une trace de la donnée reçue avant transformation et éviter de dépendre d'une base transactionnelle pour reconstruire les jeux d'entraînement. Les transformations produiraient ensuite des datasets préparés, versionnés et adaptés aux usages analytiques.
+
+Je conserverais PostgreSQL dans cette architecture, mais pas pour le même usage. La base resterait adaptée à la partie opérationnelle : utilisateurs, prédictions récentes, historique consulté par l'application et relations transactionnelles. Les volumes analytiques destinés aux agrégations et à l'entraînement seraient stockés séparément. Cette distinction entre stockage opérationnel et analytique éviterait que les traitements lourds de préparation du modèle concurrencent directement les requêtes de l'application.
+
+\subsection{Distribuer les traitements lorsque la volumétrie le justifie}
+
+La préparation actuelle avec pandas repose sur la mémoire d'une seule machine. À grande échelle, les opérations de nettoyage, jointure, agrégation et feature engineering pourraient être réalisées par Spark en batch sur des partitions de données. Le rôle de Spark ne serait pas de rendre le modèle plus intelligent, mais de permettre de préparer un volume de données qui ne peut plus être traité raisonnablement comme un unique DataFrame local.
+
+Le batch resterait le mode principal pour la construction du dataset d'entraînement : intégration des nouvelles périodes, contrôle de qualité, calcul des variables, séparation des jeux puis entraînement. Un traitement temps réel ne serait ajouté que lorsqu'un besoin métier l'exige réellement. Par exemple, l'enregistrement d'une prédiction pourrait produire un événement consommé de manière asynchrone pour alimenter les statistiques, l'archivage analytique ou un futur jeu d'apprentissage, sans ralentir la réponse envoyée à l'utilisateur.
+
+Dans ce scénario, Kafka pourrait servir de bus d'événements entre les services si le volume et le nombre de producteurs le justifient. Je ne l'utiliserais pas pour remplacer les appels synchrones nécessaires à la prédiction : l'utilisateur attend une réponse immédiate de l'API. Il serait surtout utile pour découpler les traitements secondaires et absorber des pics de charge.
+
+\begin{figure}[H]
+\centering
+\fbox{\parbox{0.92\textwidth}{\centering
+Emplacement prévu : architecture cible pour le passage à l'échelle.\\[0.15cm]
+Sources métier / fichiers / événements\\
+$\downarrow$\\
+Ingestion batch + flux événementiel $\rightarrow$ stockage objet brut (Parquet)\\
+$\downarrow$\\
+Traitements distribués Spark $\rightarrow$ zone préparée / analytique\\
+$\downarrow$\\
+Entraînement, évaluation et versionnement des modèles\\
+$\downarrow$\\
+Service d'inférence FastAPI $\leftrightarrow$ PostgreSQL opérationnel\\
+$\downarrow$\\
+Interface utilisateur ; événements secondaires vers statistiques et archivage.
+}}
+\caption{Évolution envisagée de l'architecture pour le traitement à grande échelle}
+\label{fig:insurance-scale}
+\end{figure}
+
+\subsection{Faire évoluer le cycle de vie du modèle, pas seulement l'infrastructure}
+
+À plus grande échelle, la question de la donnée devient aussi une question de cycle de vie du modèle. Le projet actuel compare les modèles dans un notebook et les rend disponibles à l'API. Dans une exploitation durable, je formaliserais un pipeline de réentraînement : construction d'une version du dataset, entraînement des modèles candidats, calcul des métriques sur un jeu indépendant, comparaison avec le modèle actuellement déployé puis publication uniquement si les critères de qualité sont respectés.
+
+J'ajouterais également un registre de modèles, par exemple avec MLflow, afin d'associer une version du modèle à ses métriques, ses paramètres, la version du dataset et sa date de création. Cette traçabilité est importante pour pouvoir expliquer quelle version a produit une prédiction et revenir à un modèle précédent en cas de régression.
+
+Le suivi ne s'arrêterait pas au déploiement. Les distributions des données d'entrée et les erreurs observables devraient être surveillées afin de repérer une dérive entre les données sur lesquelles le modèle a appris et celles réellement rencontrées. Une baisse des performances ou une modification importante des profils pourrait alors déclencher une analyse puis un réentraînement. Cette boucle permettrait de transformer un modèle statique en un composant maintenu dans le temps.
+
+\subsection{Prendre en compte la sensibilité des données dès l'ingestion}
+
+Le changement d'échelle augmenterait enfin l'impact d'une mauvaise gestion des données. Des millions de profils associés à des caractéristiques personnelles ne peuvent pas être considérés comme un simple dataset technique. Je formaliserais donc la minimisation des données collectées, la séparation des identifiants lorsque leur présence n'est pas nécessaire à l'analyse, les durées de conservation, les droits d'accès et la traçabilité des traitements.
+
+Cette dimension existe déjà de manière limitée dans l'application avec le choix de conserver ou non les informations saisies. À grande échelle, elle devrait devenir une contrainte d'architecture : les données nécessaires au fonctionnement opérationnel, celles destinées à l'analyse et celles utilisées pour l'entraînement ne doivent pas automatiquement avoir les mêmes droits d'accès ni la même durée de vie.
+
+\begin{table}[H]
+\centering
+\small
+\begin{tabular}{p{3.5cm} p{4.8cm} p{5.8cm}}
+\toprule
+\textbf{Dimension} & \textbf{Projet réalisé} & \textbf{Évolution en forte volumétrie} \\
+\midrule
+Collecte & Fichier CSV et profils saisis par l'application & Ingestion multi-source batch et événements selon le besoin de fraîcheur. \\
+Stockage analytique & CSV chargé localement & Stockage objet, Parquet partitionné et séparation zone brute / zone préparée. \\
+Traitement & pandas sur une machine & Spark pour les transformations distribuées lorsque le volume l'exige. \\
+Prédiction & FastAPI à la demande & Service d'inférence répliqué horizontalement, en conservant la réponse synchrone. \\
+Persistance & PostgreSQL & PostgreSQL maintenu pour l'opérationnel, stockage analytique séparé pour les volumes historiques. \\
+Cycle du modèle & Comparaison puis sérialisation des modèles & Pipeline de réentraînement, registre de modèles, versionnement et contrôle de dérive. \\
+Temps réel & Requête de prédiction synchrone & Bus d'événements pour découpler archivage, statistiques et alimentation analytique si la charge le justifie. \\
+\bottomrule
+\end{tabular}
+\caption{Évolution du projet actuel vers une architecture de traitement à grande échelle}
+\label{tab:insurance-scale}
+\end{table}
+
+\section{Bilan critique}
+
+Ce projet m'a surtout permis de comprendre qu'un projet de machine learning ne commence pas avec l'appel à \texttt{fit()} et ne se termine pas avec une métrique. Le modèle n'est qu'une étape d'une chaîne qui part des données, passe par leur préparation et leur évaluation, puis doit rejoindre un système capable de fournir, expliquer et conserver le résultat.
+
+La première limite est la taille et la richesse du dataset. Avec 1~338 observations et sept variables, les modèles peuvent être comparés et l'architecture applicative validée, mais le jeu ne représente ni la diversité ni la volumétrie d'un système d'assurance réel. Il ne permet pas non plus d'évaluer les problèmes qui apparaissent lorsque plusieurs sources historiques doivent être rapprochées ou que la donnée évolue continuellement.
+
+La deuxième limite concerne la construction des modèles elle-même. Le projet compare plusieurs familles d'algorithmes avec un découpage train/test et plusieurs métriques, mais une exploitation plus rigoureuse demanderait de formaliser davantage la validation croisée, la recherche d'hyperparamètres, le suivi des expériences et la détection de dérive. Ces évolutions seraient particulièrement importantes si les recommandations produites influençaient réellement une décision métier.
+
+La troisième limite est directement liée à C2.5 : je n'ai pas déployé de pipeline distribué sur ce projet. Je considère cependant qu'utiliser une infrastructure lourde sur 1~338 lignes aurait constitué une mauvaise décision technique. Le travail présenté dans la dernière partie formalise donc la manière dont je ferais évoluer l'architecture lorsque le problème change réellement d'échelle : conservation d'une zone brute, séparation des stockages opérationnel et analytique, traitements batch distribués, flux événementiels lorsque leur intérêt est démontré, versionnement des datasets et des modèles, puis surveillance du système dans le temps.
+
+Cette réflexion me paraît plus représentative de la compétence recherchée que l'ajout artificiel d'un outil Big Data dans une situation qui n'en a pas besoin. Le projet réel démontre la chaîne de valorisation de la donnée jusqu'à son exploitation dans une application ; la projection à grande échelle montre comment j'identifierais les composants à faire évoluer et comment je coordonnerais les solutions de collecte, traitement, stockage et analyse lorsque la volumétrie devient une contrainte d'architecture.
