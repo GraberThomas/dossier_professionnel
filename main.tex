@@ -1,0 +1,148 @@
+\documentclass[12pt,a4paper]{report}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage[french]{babel}
+\usepackage{geometry}
+\geometry{margin=2.5cm}
+\usepackage{setspace}
+\onehalfspacing
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{array}
+\usepackage{longtable}
+\usepackage{booktabs}
+\usepackage{xcolor}
+\usepackage{listings}
+\usepackage[hidelinks]{hyperref}
+\usepackage{csquotes}
+\usepackage[backend=biber,style=authoryear,sorting=nyt]{biblatex}
+\addbibresource{bibliographie.bib}
+\usepackage[acronym,toc]{glossaries}
+\makeglossaries
+\input{glossaire.tex}
+\renewcommand*{\glossaryname}{Glossaire}
+
+% Les termes faisant l'objet d'une entrée dans le glossaire sont signalés
+% par un astérisque à chaque utilisation dans le corps du dossier.
+% \gls rend également le terme cliquable vers sa définition et enregistre
+% la page courante dans l'index du glossaire.
+\newcommand{\terme}[1]{\gls{#1}\textsuperscript{*}}
+
+\definecolor{codebackground}{RGB}{248,248,248}
+\definecolor{codekeyword}{RGB}{0,70,140}
+\definecolor{codestring}{RGB}{150,70,0}
+\definecolor{codecomment}{RGB}{90,110,90}
+\definecolor{codenumber}{RGB}{120,120,120}
+
+\lstdefinelanguage{yaml}{
+  keywords={true,false,null,y,n},
+  keywordstyle=\color{codekeyword}\bfseries,
+  basicstyle=\ttfamily\footnotesize,
+  sensitive=false,
+  comment=[l]{\#},
+  morecomment=[l]{\#},
+  stringstyle=\color{codestring},
+  morestring=[b]',
+  morestring=[b]"
+}
+
+\lstdefinelanguage{JavaScript}{
+  keywords={const,let,var,if,else,function,return,true,false,null,new},
+  keywordstyle=\color{codekeyword}\bfseries,
+  sensitive=true,
+  comment=[l]{//},
+  morecomment=[s]{/*}{*/},
+  stringstyle=\color{codestring},
+  morestring=[b]',
+  morestring=[b]"
+}
+
+\lstset{
+  backgroundcolor=\color{codebackground},
+  basicstyle=\ttfamily\footnotesize,
+  breaklines=true,
+  captionpos=b,
+  columns=fullflexible,
+  commentstyle=\color{codecomment}\itshape,
+  frame=single,
+  keepspaces=true,
+  keywordstyle=\color{codekeyword}\bfseries,
+  numbers=left,
+  numbersep=8pt,
+  numberstyle=\tiny\color{codenumber},
+  showstringspaces=false,
+  stringstyle=\color{codestring},
+  tabsize=2,
+  literate=
+    {é}{{\'e}}1 {è}{{\`e}}1 {ê}{{\^e}}1 {ë}{{\"e}}1
+    {à}{{\`a}}1 {â}{{\^a}}1 {ä}{{\"a}}1
+    {ù}{{\`u}}1 {û}{{\^u}}1 {ü}{{\"u}}1
+    {î}{{\^i}}1 {ï}{{\"i}}1
+    {ô}{{\^o}}1 {ö}{{\"o}}1
+    {ç}{{\c c}}1
+    {É}{{\'E}}1 {È}{{\`E}}1 {À}{{\`A}}1 {Ç}{{\c C}}1
+}
+
+\begin{document}
+\pagenumbering{gobble}
+\input{cover.tex}
+\clearpage
+\pagenumbering{arabic}
+\setcounter{page}{1}
+\tableofcontents
+\listoffigures
+\listoftables
+\chapter*{Introduction générale}
+\addcontentsline{toc}{chapter}{Introduction générale}
+\input{sections/00-introduction.tex}
+\chapter{Contexte professionnel}
+\label{chap:contexte-professionnel}
+\input{sections/01-contexte-professionnel.tex}
+\chapter{Cartographie des projets et des compétences}
+\label{chap:cartographie}
+\input{sections/03-cartographie-projets.tex}
+\chapter{FCU / Ediacara}
+\label{chap:fcu}
+\begingroup
+\input{sections/fcu-figures.tex}
+\input{sections/04-projet-fcu-ediacara.tex}
+\endgroup
+\chapter{S-123}
+\label{chap:s123}
+\begingroup
+\input{sections/s123-figures.tex}
+\input{sections/05-projet-s123.tex}
+\endgroup
+\chapter{FeastVerse}
+\label{chap:feastverse}
+\input{sections/06-projet-feastverse.tex}
+\chapter{Brise-glace}
+\label{chap:brise-glace}
+\input{sections/07-projet-brise-glace.tex}
+\chapter{Prédiction des coûts d'assurance}
+\label{chap:data-ia}
+\input{sections/08-projet-data-ia.tex}
+\chapter{Homelab personnel : GitOps, CI/CD et observabilité}
+\label{chap:homelab}
+\input{sections/09-projet-observability.tex}
+\chapter{piv2glz : tests automatisés et intégration continue}
+\label{chap:piv2glz}
+\input{sections/09-projet-piv2glz.tex}
+\chapter{IPF 2026 Lynx Immo}
+\label{chap:lynx}
+\input{sections/10-projet-lynx-immo.tex}
+\chapter{Synthèse finale}
+\label{chap:synthese}
+\input{sections/11-synthese.tex}
+\chapter*{Conclusion générale}
+\addcontentsline{toc}{chapter}{Conclusion générale}
+\input{sections/08-conclusion.tex}
+
+\clearpage
+\printglossaries
+
+\printbibliography
+\appendix
+\chapter{Annexes}
+\end{document}
