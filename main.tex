@@ -8,6 +8,7 @@
 \usepackage{setspace}
 \onehalfspacing
 \usepackage{graphicx}
+\usepackage{pdfpages}
 \usepackage{float}
 \usepackage{array}
 \usepackage{longtable}
@@ -107,12 +108,14 @@
 \begingroup
 \input{sections/fcu-figures.tex}
 \input{sections/04-projet-fcu-ediacara.tex}
+\input{sections/04-renvois-annexes.tex}
 \endgroup
 \chapter{S-123}
 \label{chap:s123}
 \begingroup
 \input{sections/s123-figures.tex}
 \input{sections/05-projet-s123.tex}
+\input{sections/05-renvois-annexes.tex}
 \endgroup
 \chapter{FeastVerse}
 \label{chap:feastverse}
@@ -129,6 +132,7 @@
 \chapter{piv2glz : tests automatisés et intégration continue}
 \label{chap:piv2glz}
 \input{sections/09-projet-piv2glz.tex}
+\input{sections/09-renvois-annexes-piv2glz.tex}
 \chapter{IPF 2026 Lynx Immo}
 \label{chap:lynx}
 \input{sections/10-projet-lynx-immo.tex}
@@ -144,5 +148,5 @@
 
 \printbibliography
 \appendix
-\chapter{Annexes}
+\input{sections/12-annexes.tex}
 \end{document}
