@@ -1,119 +1,65 @@
-\section{Une lecture transversale du parcours}
+\section{Synthèse des quatre blocs}
 
-Les chapitres précédents ont présenté les projets dans leur contexte propre. Cette organisation rend compte de la manière dont les compétences ont réellement été mobilisées : rarement de façon isolée, et souvent à travers plusieurs étapes d'un même problème. La présente synthèse inverse volontairement le point de vue. Elle repart des quatre blocs du référentiel pour vérifier que les réalisations décrites permettent d'en couvrir les différentes dimensions et pour expliciter les limites des preuves apportées.
+Les projets précédents sont complémentaires : aucun ne cherche à couvrir artificiellement l'ensemble du référentiel. Leur combinaison permet en revanche de montrer une progression allant de l'analyse d'un existant complexe à la conception, au développement, à l'industrialisation puis au pilotage d'un projet collectif.
 
-Cette lecture met également en évidence une progression. Les premières missions professionnelles m'ont principalement demandé de comprendre et de modifier un existant complexe. Les projets suivants m'ont amené à concevoir davantage l'architecture des solutions, à automatiser leur validation et leur déploiement, puis à prendre une responsabilité plus importante dans le cadrage et la coordination d'un projet collectif. Le portefeuille présenté ne correspond donc pas à quatre ensembles indépendants : il montre progressivement le passage du développement d'un composant à la maîtrise d'un cycle de vie logiciel plus complet.
+\subsection*{Bloc 1 --- Planifier et organiser un projet de développement logiciel}
 
-\section{Bloc 1 --- Planifier et organiser un projet de développement logiciel}
+Le bloc~1 repose principalement sur FCU / Ediacara et Lynx Immo. Ediacara démontre l'analyse d'un environnement professionnel complexe, l'identification des risques et la conception d'une adaptation compatible avec la production existante. Lynx Immo complète cette dimension par une étude de faisabilité plus complète, intégrant les aspects techniques, humains et financiers, puis par une feuille de route, des jalons, des outils de suivi et des arbitrages de périmètre. Le homelab apporte un complément sur la veille et l'expérimentation technologique, qui reste à formaliser davantage avec des sources anglophones.
 
-Le bloc~1 est principalement démontré par deux projets complémentaires : \terme{fcu} / Ediacara pour l'analyse et la transformation d'un environnement professionnel existant, et Lynx Immo pour le cadrage, la planification et le suivi explicite d'un projet mené pendant plusieurs mois.
+\subsection*{Bloc 2 --- Concevoir et développer des solutions logicielles}
 
-Sur \terme{fcu} / Ediacara, l'étude initiale a consisté à déterminer si une chaîne historique pouvait prendre en charge un nouveau mode de production sans mettre en danger les flux existants. La difficulté ne résidait pas seulement dans la compatibilité de quelques scripts : elle concernait une trentaine de jobs étudiés, plusieurs technologies legacy, des sources de données différentes et des espaces de diffusion communs. L'analyse a conduit à identifier les hypothèses devenues invalides avec le \terme{fcu}, notamment celles qui pouvaient entraîner la suppression de produits pourtant légitimes. Cette démarche apporte une preuve forte de l'analyse technique et organisationnelle associée à C1.1 et de la conception de la solution demandée par C1.3. Sa limite est claire : l'étude financière n'était pas suffisamment développée pour constituer à elle seule une preuve complète de faisabilité.
+Les preuves sont volontairement réparties entre plusieurs projets. S-123 illustre principalement la conception d'architecture et l'évolution d'un modèle devenu trop couplé à la norme. \texttt{piv2glz} apporte une preuve claire d'intégrité du code par les tests automatisés et la CI. Brise-glace constitue la preuve principale du front-end avec React, TypeScript et une interface temps réel, tandis que FeastVerse démontre le développement back-end avec Spring Boot, PostgreSQL, JWT et une architecture en couches. Le projet Data / IA doit enfin porter C2.5 ; tant que ce chapitre n'est pas finalisé, cette compétence reste le principal point à sécuriser dans ce bloc.
 
-Lynx Immo complète précisément cette dimension. Plusieurs scénarios d'architecture y ont été comparés non seulement sur leurs capacités techniques, mais aussi sur leur coût récurrent, leur charge d'exploitation et les compétences nécessaires à leur maintien. Le choix d'une solution reposant largement sur des services managés a ainsi été justifié par un compromis entre dépenses directes, temps humain, sécurité et maintenabilité. Cette analyse permet de couvrir plus complètement C1.1.
+\subsection*{Bloc 3 --- Piloter la mise en production et l'évolution}
 
-Le projet Lynx Immo constitue également la preuve principale des compétences C1.4 à C1.7. Une feuille de route de novembre 2025 à juillet 2026 a été définie avec phases, jalons, dépendances et livrables. Le projet a ensuite été mis en place au moyen d'un backlog, d'outils collaboratifs, de dépôts Git et de documents de cadrage. Le suivi a reposé sur les exigences, les tickets Jira, les jalons et différents indicateurs. Enfin, l'écart entre le produit cible et la capacité réelle de l'équipe a nécessité des arbitrages de périmètre et des réaffectations. Ces ajustements sont importants : ils montrent que la supervision d'un projet ne consiste pas à faire respecter mécaniquement un planning initial, mais à conserver un produit cohérent lorsque les hypothèses de départ évoluent.
+Ce bloc s'appuie sur plusieurs niveaux d'industrialisation. \texttt{piv2glz} montre une chaîne simple et reproductible où les tests précèdent la construction des livrables. Ediacara apporte l'expérience d'une mise en production contrôlée dans un environnement legacy, avec validation sur RE7, surveillance des jobs et documentation de la procédure. FeastVerse et Brise-glace illustrent des déploiements automatisés d'applications, tandis que le homelab permet d'expérimenter GitHub Actions, Helm, Argo CD, Kubernetes et une stack d'observabilité. Ces expériences montrent surtout qu'une mise en production fiable combine versionnement, validation, automatisation, surveillance et documentation selon les contraintes du contexte.
 
-La compétence C1.2 sur la veille technologique est plus transversale. Le homelab montre une démarche d'expérimentation continue : Docker, Kubernetes, Terraform, Argo CD, Helm et les outils d'observabilité ont été comparés et mis en œuvre progressivement plutôt que choisis une fois pour toutes. Cette pratique doit néanmoins être complétée par une veille formalisée, sourcée et incluant des références techniques anglophones. Elle constitue donc un axe de consolidation du dossier plutôt qu'une compétence que je souhaite surévaluer à partir de la seule expérimentation.
+\subsection*{Bloc 4 --- Piloter l'équipe du projet de développement logiciel}
 
-\paragraph{Bilan du bloc 1.}
-Je retiens surtout de ce bloc que la conception d'une solution commence avant le code. Les décisions d'architecture sont contraintes par l'existant, le coût, les compétences disponibles, les risques et la capacité à exploiter la solution dans le temps. Le projet \terme{fcu} m'a appris à cadrer une transformation sans déstabiliser une production existante ; Lynx Immo m'a confronté plus directement au pilotage d'un périmètre, d'un calendrier et de ressources collectives.
-
-\section{Bloc 2 --- Concevoir et développer des solutions logicielles}
-
-Le bloc~2 est le plus réparti entre les projets, car les différentes compétences correspondent à des spécialités techniques distinctes. S-123 est utilisé comme preuve principale d'architecture, \texttt{piv2glz} pour l'intégrité du code, Brise-glace pour le front-end, FeastVerse pour le back-end et le projet Data / IA pour le traitement de données.
-
-S-123 illustre C2.1 par une évolution importante de conception. Une première approche consistait à reproduire directement le modèle S-123 dans une base relationnelle. L'implémentation partielle avait déjà conduit à 73 tables et restait fortement couplée à une version de la norme. L'évolution entre les versions étudiées a rendu cette fragilité concrète. J'ai alors proposé de distinguer le format d'échange du modèle de stockage et de construire un méta-modèle plus générique décrivant les concepts du Feature Catalogue S-100. Le projet ne montre donc pas uniquement la production d'un schéma : il montre un choix d'architecture révisé après confrontation aux limites d'une première solution.
-
-C2.2 est particulièrement visible dans \texttt{piv2glz}. Le projet a été versionné et la construction des livrables a été conditionnée par l'exécution d'une suite Pytest dans GitLab CI. Cette organisation transforme les tests en prérequis à la production de l'exécutable Windows et du ZIP distribuable. FeastVerse, S-123 et Ediacara apportent en complément des pratiques de séparation des responsabilités, de validation des données, de gestion des erreurs, de migrations ou de mise sous Git, mais \texttt{piv2glz} présente la chaîne la plus explicite entre modification du code, vérification et artefact.
-
-Brise-glace constitue la preuve principale de C2.3. J'y ai réalisé le client React/TypeScript, organisé les pages, composants, contextes et services, et développé une interface dont le comportement varie selon le rôle de l'utilisateur, la phase de la partie et les événements temps réel. L'adaptation du glisser-déposer aux interfaces tactiles illustre également une dimension importante du front-end : une interface utilisable ne se réduit pas à afficher correctement les mêmes composants sur plusieurs tailles d'écran ; certaines interactions doivent être repensées selon le support.
-
-FeastVerse apporte la preuve principale de C2.4. L'API Spring Boot associe contrôleurs, services, repositories, DTO, mappers, PostgreSQL, authentification JWT et règles d'autorisation. Le projet m'a permis de travailler la séparation entre modèle de persistance, logique métier et contrat HTTP, ainsi que des problématiques de propriété, de rôles, de filtrage, de pagination et de visibilité des ressources. S-123 complète cette compétence avec un back-end Python/FastAPI et Ediacara avec des traitements Python intégrés à une chaîne de production existante.
-
-C2.5 reste volontairement isolée des autres compétences. La structuration de données dans S-123 ne suffit pas à démontrer le traitement de données massives tel qu'il est formulé dans le référentiel. Le chapitre Data / IA doit donc fournir la preuve principale à partir d'une démarche de collecte ou préparation, traitement, analyse et validation. Tant que ce chapitre n'est pas finalisé, cette compétence doit être considérée comme un point restant à sécuriser.
-
-\paragraph{Bilan du bloc 2.}
-Ces projets ont renforcé une conception de l'architecture comme séparation de responsabilités plutôt que comme empilement de technologies. Qu'il s'agisse de distinguer stockage interne et norme d'échange, modèle persistant et DTO, affichage et état partagé, ou tests et production d'artefacts, les solutions les plus maintenables sont celles dont les frontières sont explicites et justifiées.
-
-\section{Bloc 3 --- Piloter la mise en production des solutions et leur évolution}
-
-Le bloc~3 s'appuie sur des contextes très différents. Ediacara permet d'aborder l'exploitation et la surveillance d'une chaîne professionnelle ; \texttt{piv2glz} fournit une intégration continue simple mais complète ; FeastVerse et Brise-glace montrent la mise à disposition automatique d'applications ; le homelab permet enfin d'expérimenter un pipeline de déploiement, GitOps et observabilité sur un environnement réellement exploité.
-
-Pour C3.1 et C3.2, \texttt{piv2glz} constitue la preuve la plus nette. La pipeline GitLab CI sépare un stage de tests d'un stage de build. Les tests unitaires et d'intégration sont exécutés dans un environnement Python propre et les distributions PyInstaller ne sont produites que si la validation réussit. Le projet reste volontairement simple : il n'intègre pas encore d'analyse statique, de contrôle de sécurité dédié ni de mesure de couverture. Cette limite est utile pour distinguer une première industrialisation d'une chaîne de qualité exhaustive.
-
-Ediacara apporte un autre type d'expérience. Les validations y sont plus proches d'une recette d'exploitation : environnement RE7 reproduisant la production, comparaison prolongée, vérification de non-régression et surveillance des jobs après mise en production. Cette démarche est moins automatisée que celle de \texttt{piv2glz}, mais elle répond à un contexte où la chaîne dépend de nombreux composants historiques et de données métier difficiles à reproduire dans des tests unitaires classiques. C3.3 est ainsi particulièrement visible dans le suivi des exécutions après livraison et l'analyse des erreurs remontées par la chaîne.
-
-Le homelab constitue la preuve principale de C3.4 et C3.5. Une petite application sert de support à une chaîne associant GitHub Actions, construction d'image Docker, publication dans GHCR, Helm et k3s. La stack d'observabilité ajoute Prometheus, Grafana, Loki et Alloy, tandis qu'Argo CD maintient l'état déclaré de certains composants. L'intérêt n'est pas de présenter ce serveur personnel comme une infrastructure de production d'entreprise : il est mono-nœud, sans haute disponibilité et sans supervision proactive complète. Son intérêt est d'avoir permis d'expérimenter le cycle complet sur un environnement persistant, avec de vraies contraintes de réseau, de ressources, de certificats, de routage et de collecte de métriques et de logs.
-
-C3.6 est principalement démontrée par Ediacara. L'analyse du legacy a donné lieu à une rétro-documentation complète des jobs et des chaînes, à des diagrammes, à une documentation MkDocs, à une matrice de migration et à une procédure détaillée de mise en production. La documentation n'était pas seulement un livrable de fin de projet : elle a servi à comprendre le système, sécuriser la transformation et permettre à d'autres membres de l'équipe de reprendre les traitements. FeastVerse et Lynx Immo complètent cette dimension avec leurs documentations applicatives et de transmission.
-
-\paragraph{Bilan du bloc 3.}
-Le principal apprentissage de ce bloc est qu'une mise en production fiable ne dépend pas d'un outil unique. Les tests automatisés réduisent certains risques, le versionnement rend les changements traçables, l'automatisation rend le déploiement reproductible, l'observabilité permet de comprendre l'état réel du système et la documentation rend l'ensemble transmissible. Selon le contexte, la combinaison de ces mécanismes diffère fortement : une CLI Python récente et une chaîne cartographique legacy ne s'industrialisent pas de la même façon.
-
-\section{Bloc 4 --- Piloter l'équipe du projet de développement logiciel}
-
-Le bloc~4 repose principalement sur Lynx Immo, projet réalisé avec un client réel et une équipe de cinq étudiants. J'y occupais les rôles de chef de projet et de référent technique. Cette situation ne doit pas être assimilée à une fonction de manager RH : je n'ai ni recruté les membres de l'équipe ni géré leurs carrières. Elle m'a néanmoins permis de travailler les dimensions opérationnelles attendues par le bloc dans le cadre d'un projet collectif réel.
-
-C4.1 a été abordée en identifiant les domaines nécessaires au produit : conception \terme{ux}/\terme{ui}, Flutter, React, données, sécurité, paiements, documentation, déploiement et pilotage. Pour C4.2, l'équipe était imposée par le cadre pédagogique ; mon rôle a donc consisté à la constituer fonctionnellement en clarifiant les responsabilités et les circuits de décision, et non à conduire un recrutement. Cette distinction est importante pour rester fidèle à l'expérience réellement acquise.
-
-C4.3 et C4.4 ont été mobilisées tout au long du projet par la répartition des tâches, les sprints, Jira, les points d'avancement, la matrice \terme{raci}, les échanges techniques et les réaffectations nécessaires lorsque la charge ou la disponibilité variaient. Le rôle de référent technique me permettait d'aider à lever certains blocages, mais il a également créé une concentration de responsabilités. Avec le recul, mieux déléguer certains domaines techniques aurait réduit cette dépendance et facilité la responsabilisation des autres membres.
-
-La montée en compétences relevant de C4.5 s'est principalement faite par apprentissage en situation, lecture de documentation, prototypes et échanges internes. Elle n'a pas pris la forme d'un plan de formation d'entreprise formalisé. De même, C4.6 a été abordée par la rétrospective, les indicateurs du projet et des entretiens individuels de fin de projet, sans référentiel RH ni gestion de carrière. Ces limites ne retirent pas l'intérêt de l'expérience ; elles définissent simplement le niveau auquel ces compétences ont été exercées.
-
-Le projet Ediacara apporte un complément à C4.4 et C4.5 par la capitalisation autour d'un système historiquement peu documenté. La documentation produite a facilité les échanges avec mon tuteur et un collègue et réduit la dépendance à une connaissance détenue implicitement par quelques personnes. Je considère toutefois cette contribution comme un accompagnement technique et une transmission de connaissances, pas comme du management d'équipe.
-
-\paragraph{Bilan du bloc 4.}
-Cette expérience a surtout modifié ma perception du pilotage. Répartir des tâches ne suffit pas : il faut comprendre les dépendances, rendre les responsabilités explicites, détecter les blocages, ajuster le périmètre et créer les conditions permettant aux autres membres de contribuer. La double fonction de chef de projet et référent technique a facilité certains arbitrages, mais elle m'a aussi montré l'importance de la délégation et de la circulation de l'information.
-
-\section{Compétences transversales et points de vigilance}
-
-Deux exigences transversales complètent les quatre blocs. La première concerne l'anglais technique. Une partie importante des documentations utilisées dans les projets --- frameworks, outils DevOps, normes et services --- est disponible en anglais. Cette pratique doit être rendue démontrable dans le dossier par une veille technologique structurée à partir de sources anglophones et référencées dans la bibliographie. À ce stade, la bibliographie et la veille constituent donc encore un travail à finaliser.
-
-La seconde concerne l'économie verte et le numérique responsable. Plusieurs projets fournissent des situations concrètes de réflexion. Le homelab repose sur le réemploi d'un ancien ordinateur portable et sur un dimensionnement volontairement proportionné à un cluster mono-nœud. Dans Lynx Immo, le choix de services managés a été analysé en fonction des ressources humaines et de la charge d'exploitation plutôt que sous le seul angle des fonctionnalités. Dans Ediacara, la réduction de synchronisations et d'écritures réseau inutiles améliore à la fois la robustesse et l'efficience. Ces éléments ne constituent pas à eux seuls une démarche complète d'éco-conception ; ils montrent toutefois que l'utilisation des ressources peut faire partie des critères de conception et d'exploitation.
+Lynx Immo constitue la preuve principale du bloc~4. Mon rôle de chef de projet et de référent technique m'a amené à identifier les compétences nécessaires, clarifier les responsabilités, répartir les tâches, coordonner l'activité, accompagner les membres et réajuster le projet face aux retards et aux variations de disponibilité. Le contexte reste celui d'une équipe étudiante : je n'ai ni recruté l'équipe ni exercé de fonction RH. La montée en compétences s'est faite principalement par documentation, prototypes et échanges internes, et l'évaluation du fonctionnement collectif par rétrospective et entretiens de fin de projet. Ediacara complète ce bloc par la transmission et la capitalisation de connaissances techniques.
 
 \section{Tableau final de couverture}
 
-Le tableau~\ref{tab:synthese-couverture} récapitule les preuves principales et renvoie aux chapitres où elles sont détaillées. Les pages exactes sont obtenues automatiquement dans la version compilée grâce aux références LaTeX.
+Le tableau~\ref{tab:synthese-competences} fournit une dernière carte de lecture. Il indique le projet utilisé comme preuve principale et renvoie vers le chapitre où cette preuve est développée.
 
-\begin{longtable}{p{1.5cm} p{4.5cm} p{4.0cm} p{4.0cm}}
-\caption{Synthèse finale des compétences, preuves et renvois}\label{tab:synthese-couverture}\\
+\begin{longtable}{p{1.4cm} p{5.6cm} p{4.0cm} p{3.4cm}}
+\caption{Synthèse des compétences et des projets de référence}\label{tab:synthese-competences}\\
 \toprule
-\textbf{Comp.} & \textbf{Projet principal} & \textbf{Preuve centrale} & \textbf{Renvoi} \\
+\textbf{Comp.} & \textbf{Objet} & \textbf{Projet principal} & \textbf{Renvoi} \\
 \midrule
 \endfirsthead
 \toprule
-\textbf{Comp.} & \textbf{Projet principal} & \textbf{Preuve centrale} & \textbf{Renvoi} \\
+\textbf{Comp.} & \textbf{Objet} & \textbf{Projet principal} & \textbf{Renvoi} \\
 \midrule
 \endhead
-C1.1 & Lynx Immo & Faisabilité technique, humaine et économique & chap.~\ref{chap:lynx}, p.~\pageref{chap:lynx} \\
-C1.2 & Homelab & Expérimentation et comparaison d'outils ; veille à formaliser & chap.~\ref{chap:homelab}, p.~\pageref{chap:homelab} \\
-C1.3 & FCU / Ediacara & Contraintes, risques et stratégie d'intégration & chap.~\ref{chap:fcu}, p.~\pageref{chap:fcu} \\
-C1.4 & Lynx Immo & Roadmap, phases, jalons et livrables & chap.~\ref{chap:lynx}, p.~\pageref{chap:lynx} \\
-C1.5 & Lynx Immo & Mise en place du cadre projet & chap.~\ref{chap:lynx}, p.~\pageref{chap:lynx} \\
-C1.6 & Lynx Immo & Suivi de l'avancement et indicateurs & chap.~\ref{chap:lynx}, p.~\pageref{chap:lynx} \\
-C1.7 & Lynx Immo & Arbitrages, réajustements et supervision & chap.~\ref{chap:lynx}, p.~\pageref{chap:lynx} \\
+C1.1 & Étude de faisabilité & Lynx Immo & p.~\pageref{chap:lynx} \\
+C1.2 & Veille technologique & Homelab & p.~\pageref{chap:homelab} \\
+C1.3 & Conception de la solution & FCU / Ediacara & p.~\pageref{chap:fcu} \\
+C1.4 & Feuille de route & Lynx Immo & p.~\pageref{chap:lynx} \\
+C1.5 & Mise en place du projet & Lynx Immo & p.~\pageref{chap:lynx} \\
+C1.6 & Mesure de la performance & Lynx Immo & p.~\pageref{chap:lynx} \\
+C1.7 & Supervision du projet & Lynx Immo & p.~\pageref{chap:lynx} \\
 \midrule
-C2.1 & S-123 & Passage d'un modèle direct à un méta-modèle générique & chap.~\ref{chap:s123}, p.~\pageref{chap:s123} \\
-C2.2 & \texttt{piv2glz} & Tests préalables au build et versionnement & chap.~\ref{chap:piv2glz}, p.~\pageref{chap:piv2glz} \\
-C2.3 & Brise-glace & Client React interactif et temps réel & chap.~\ref{chap:brise-glace}, p.~\pageref{chap:brise-glace} \\
-C2.4 & FeastVerse & API Spring Boot, sécurité, persistance et logique métier & chap.~\ref{chap:feastverse}, p.~\pageref{chap:feastverse} \\
-C2.5 & Projet Data / IA & Traitement et exploitation de données à finaliser & chap.~\ref{chap:data-ia}, p.~\pageref{chap:data-ia} \\
+C2.1 & Architecture logicielle & S-123 & p.~\pageref{chap:s123} \\
+C2.2 & Intégrité du code & \texttt{piv2glz} & p.~\pageref{chap:piv2glz} \\
+C2.3 & Développement front-end & Brise-glace & p.~\pageref{chap:brise-glace} \\
+C2.4 & Développement back-end & FeastVerse & p.~\pageref{chap:feastverse} \\
+C2.5 & Traitement de données & Projet Data / IA & p.~\pageref{chap:data-ia} \\
 \midrule
-C3.1 & \texttt{piv2glz} & Pipeline GitLab CI test puis build & chap.~\ref{chap:piv2glz}, p.~\pageref{chap:piv2glz} \\
-C3.2 & \texttt{piv2glz} & Pytest unitaires et intégration CLI & chap.~\ref{chap:piv2glz}, p.~\pageref{chap:piv2glz} \\
-C3.3 & FCU / Ediacara & Surveillance des jobs et correction après mise en production & chap.~\ref{chap:fcu}, p.~\pageref{chap:fcu} \\
-C3.4 & Homelab & GitHub Actions, GHCR, Helm et k3s & chap.~\ref{chap:homelab}, p.~\pageref{chap:homelab} \\
-C3.5 & Homelab & Prometheus, Grafana, Loki, Alloy et GitOps & chap.~\ref{chap:homelab}, p.~\pageref{chap:homelab} \\
-C3.6 & FCU / Ediacara & MkDocs, diagrammes et procédure de production & chap.~\ref{chap:fcu}, p.~\pageref{chap:fcu} \\
+C3.1 & Intégration continue & \texttt{piv2glz} & p.~\pageref{chap:piv2glz} \\
+C3.2 & Tests itératifs & \texttt{piv2glz} & p.~\pageref{chap:piv2glz} \\
+C3.3 & Surveillance des automatisations & FCU / Ediacara & p.~\pageref{chap:fcu} \\
+C3.4 & Déploiement continu & Homelab & p.~\pageref{chap:homelab} \\
+C3.5 & Optimisation et observabilité & Homelab & p.~\pageref{chap:homelab} \\
+C3.6 & Documentation technique & FCU / Ediacara & p.~\pageref{chap:fcu} \\
 \midrule
-C4.1 & Lynx Immo & Identification des domaines de compétences & chap.~\ref{chap:lynx}, p.~\pageref{chap:lynx} \\
-C4.2 & Lynx Immo & Constitution fonctionnelle et responsabilités & chap.~\ref{chap:lynx}, p.~\pageref{chap:lynx} \\
-C4.3 & Lynx Immo & Sprints, Jira, RACI et allocation des tâches & chap.~\ref{chap:lynx}, p.~\pageref{chap:lynx} \\
-C4.4 & Lynx Immo & Accompagnement, échanges et résolution de blocages & chap.~\ref{chap:lynx}, p.~\pageref{chap:lynx} \\
-C4.5 & Lynx Immo & Montée en compétences par documentation et pratique & chap.~\ref{chap:lynx}, p.~\pageref{chap:lynx} \\
-C4.6 & Lynx Immo & Rétrospective, indicateurs et entretiens de bilan & chap.~\ref{chap:lynx}, p.~\pageref{chap:lynx} \\
+C4.1 & Compétences nécessaires & Lynx Immo & p.~\pageref{chap:lynx} \\
+C4.2 & Constitution de l'équipe & Lynx Immo & p.~\pageref{chap:lynx} \\
+C4.3 & Coordination & Lynx Immo & p.~\pageref{chap:lynx} \\
+C4.4 & Accompagnement & Lynx Immo & p.~\pageref{chap:lynx} \\
+C4.5 & Montée en compétences & Lynx Immo & p.~\pageref{chap:lynx} \\
+C4.6 & Évaluation de la performance collective & Lynx Immo & p.~\pageref{chap:lynx} \\
 \bottomrule
 \end{longtable}
 
-Cette synthèse fait apparaître une couverture large du référentiel, mais elle ne doit pas masquer les éléments encore à terminer. La priorité avant remise est de finaliser le chapitre Data / IA pour C2.5, de formaliser la veille technologique et ses sources anglophones pour C1.2 et la compétence transversale d'anglais, puis de vérifier que la réflexion sur le numérique responsable est explicitement reliée aux décisions présentées dans les blocs~2 et~3. Ces points identifiés, le reste du dossier repose sur des réalisations déjà décrites et sur des preuves réparties de manière cohérente entre contexte professionnel, projets académiques et expérimentation personnelle.
+Deux points restent à consolider avant la version finale : C2.5 par la rédaction du chapitre Data / IA, et C1.2 par une veille technologique explicitement sourcée, notamment à partir de références anglophones. La prise en compte du numérique responsable doit également rester visible dans les choix d'architecture et d'exploitation, sans être isolée artificiellement du reste des projets.
