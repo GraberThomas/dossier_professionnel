@@ -2,13 +2,13 @@
 
 Ce projet occupe une place particulière dans ce dossier. Il ne s'agit ni d'une mission réalisée au SHOM, ni d'un projet scolaire imposé. Il correspond à un environnement personnel que je fais évoluer depuis plusieurs années et que j'utilise comme terrain d'expérimentation pour les technologies de déploiement, d'orchestration et de supervision découvertes en formation. Son intérêt dans le dossier est donc complémentaire : il ne remplace pas les projets professionnels, mais me permet d'illustrer concrètement des pratiques modernes de \terme{devops}, de \terme{ci}, de \terme{cd} et de \terme{gitops}.
 
-Le serveur a d'abord répondu à un besoin très simple : héberger Jellyfin pour disposer d'un serveur multimédia personnel. J'y ai ensuite ajouté Nextcloud afin de synchroniser mon dossier de documents entre ma tour et mon ordinateur portable, tous deux sous Manjaro. Progressivement, la machine est devenue un environnement permanent de test et de déploiement. Lorsqu'une technologie abordée en cours pouvait être expérimentée sur une infrastructure réelle, je cherchais à l'intégrer ou à la tester sur ce serveur plutôt que de limiter l'exercice à une machine virtuelle jetable.
+Le serveur a d'abord répondu à un besoin simple : héberger Jellyfin pour disposer d'un serveur multimédia personnel. J'y ai ensuite ajouté Nextcloud afin de synchroniser mes documents entre ma tour et mon ordinateur portable. Progressivement, la machine est devenue un environnement permanent de test et de déploiement. Lorsqu'une technologie abordée en cours pouvait être expérimentée sur une infrastructure réelle, je cherchais à l'intégrer ou à la tester sur ce serveur plutôt que de limiter l'exercice à une machine virtuelle temporaire.
 
-Cette démarche a notamment conduit à l'utilisation de Docker, puis de Kubernetes avec k3s, à la mise en place d'un runner GitHub Actions auto-hébergé, à différentes expérimentations de déploiement avec Terraform, Argo CD et Helm, puis à l'installation d'une stack d'observabilité composée de Prometheus, Grafana, Loki et Grafana Alloy. L'objectif n'était pas de construire une plateforme de production hautement disponible, mais de disposer d'un environnement suffisamment réaliste pour confronter les outils étudiés à des contraintes concrètes d'exploitation.
+Cette démarche a conduit à l'utilisation de Docker, puis de Kubernetes avec k3s, à la mise en place de deux runners GitHub Actions auto-hébergés, à différentes expérimentations de déploiement avec Terraform, Argo CD et Helm, puis à l'installation d'une stack d'observabilité composée de Prometheus, Grafana, Loki et Grafana Alloy. L'objectif n'était pas de construire une plateforme de production hautement disponible, mais de disposer d'un environnement suffisamment réaliste pour confronter les outils étudiés à des contraintes concrètes d'exploitation.
 
 \section{Compétences principalement mobilisées}
 
-Le projet renforce principalement les compétences du bloc 3 liées à l'intégration, au déploiement et aux opérations continues. Il apporte également un exemple de veille et d'appropriation technologique réalisée en dehors d'un cadre imposé.
+Le projet renforce principalement les compétences du bloc 3 liées à l'intégration, au déploiement et aux opérations continues. Il apporte également un exemple d'appropriation technologique réalisée en dehors d'un cadre imposé. Les compétences associées doivent toutefois être lues avec prudence : ce projet constitue un terrain d'expérimentation et non une preuve unique d'industrialisation complète.
 
 \begin{table}[H]
 \centering
@@ -16,11 +16,11 @@ Le projet renforce principalement les compétences du bloc 3 liées à l'intégr
 \toprule
 \textbf{Compétence} & \textbf{Mobilisation dans le homelab} \\
 \midrule
-C1.2 & Expérimentation de technologies découvertes en formation et comparaison progressive de plusieurs modes de déploiement : Docker, Kubernetes, Terraform, Argo CD et Helm. \\
-C3.1 & Utilisation de GitHub Actions et d'un runner auto-hébergé pour construire des images, publier des artefacts et déclencher les opérations de déploiement. \\
-C3.3 & Mise sous gestion Git de la stack d'observabilité et synchronisation automatique de son état avec Argo CD. \\
+C1.2 & Expérimentation et comparaison progressive de plusieurs technologies et modes de déploiement : Docker, Kubernetes, Terraform, Argo CD et Helm. Cette démarche complète une veille plus structurée sans s'y substituer. \\
+C3.1 & Utilisation de GitHub Actions et de runners auto-hébergés pour construire des images, publier des artefacts et déclencher les opérations de déploiement. La preuve reste partielle en l'absence de tests automatisés dans le pipeline de PasswordGenerator. \\
+C3.3 & Mise sous gestion Git de la stack d'observabilité et réconciliation de son état avec Argo CD. \\
 C3.4 & Déploiement automatisé d'une application conteneurisée avec GitHub Actions, GHCR, Helm et k3s. \\
-C3.5 & Mise en place d'une stack Prometheus/Grafana/Loki/Alloy pour observer les ressources Kubernetes, le serveur et l'activité HTTP du reverse proxy. \\
+C3.5 & Collecte, centralisation, visualisation et diagnostic de métriques et de logs avec Prometheus, Grafana, Loki et Alloy. La supervision proactive reste incomplète faute de notifications Alertmanager. \\
 C3.6 & Formalisation de l'architecture, des procédures d'installation et des commandes de vérification afin de rendre l'environnement compréhensible et reproductible. \\
 \bottomrule
 \end{tabular}
@@ -30,20 +30,22 @@ C3.6 & Formalisation de l'architecture, des procédures d'installation et des co
 
 \section{Une infrastructure personnelle contrainte mais représentative}
 
-Le serveur repose sur un ancien ordinateur portable Asus VivoBook récupéré et réemployé plutôt que sur une machine achetée spécifiquement pour cet usage. Il est équipé d'un AMD Ryzen 7 3700U, d'environ 18~Go de mémoire vive, d'un SSD interne de 500~Go et d'un second SSD externe de 500~Go. Le système utilisé est Ubuntu Server 24.04 LTS, sans environnement graphique.
+Le serveur repose sur un ancien ordinateur portable Asus VivoBook récupéré et réemployé plutôt que sur une machine achetée spécifiquement pour cet usage. Il est équipé d'un processeur AMD Ryzen 7 3700U, d'environ 18~Go de mémoire vive, d'un SSD interne de 500~Go et d'un second SSD de 500~Go dédié aux données Nextcloud. Le système utilisé est Ubuntu Server 24.04 LTS, sans environnement graphique.
 
 Ce matériel est suffisamment dimensionné pour héberger plusieurs services et un cluster k3s mono-nœud, mais il impose de rester proportionné dans les choix d'architecture. Le cluster n'est pas conçu pour assurer de la haute disponibilité et l'ensemble de l'infrastructure dépend physiquement d'une seule machine. En contrepartie, ce contexte rend les expérimentations proches de contraintes réelles : ressources limitées, stockage local, exposition réseau, certificats, supervision et coexistence de plusieurs modes d'exécution.
 
-Tous les services ne sont volontairement pas placés dans Kubernetes. Jellyfin fonctionne directement sur l'hôte afin de simplifier l'utilisation de l'accélération matérielle. Nextcloud et MariaDB sont regroupés dans un Docker Compose dédié. Caddy possède également son propre Docker Compose et joue le rôle de reverse proxy central. Le cluster k3s est utilisé pour les expérimentations Kubernetes, la stack d'observabilité et certaines applications, dont PasswordGenerator. Enfin, le runner GitHub Actions fonctionne directement sur le serveur afin d'exécuter les commandes nécessitant un accès local au cluster.
+Tous les services ne sont volontairement pas placés dans Kubernetes. Jellyfin fonctionne directement sur l'hôte afin de simplifier l'utilisation de l'accélération matérielle. Nextcloud et MariaDB sont regroupés dans un Docker Compose dédié. Caddy possède également son propre Docker Compose et joue le rôle de reverse proxy central. Samba expose le volume multimédia sur le réseau local. Le cluster k3s est utilisé pour les expérimentations Kubernetes, la stack d'observabilité et certaines applications, dont PasswordGenerator.
+
+Deux runners GitHub Actions sont installés directement sur le serveur et enregistrés comme services systemd. Le premier est rattaché au dépôt PasswordGenerator et assure la construction de l'image ainsi que son déploiement avec Helm. Le second est dédié au dépôt d'observabilité et applique les objets \texttt{Application} avant de demander leur actualisation à Argo CD. Cette séparation conserve l'accès local nécessaire au cluster tout en distinguant clairement les deux chaînes de livraison.
 
 \begin{figure}[H]
 \centering
 \fbox{\parbox{0.90\textwidth}{\centering
 Emplacement prévu : schéma global du homelab.\\[0.15cm]
 Internet $\rightarrow$ Cloudflare $\rightarrow$ Caddy $\rightarrow$ services locaux.\\
-Caddy distribue vers Jellyfin en bare metal, Nextcloud/MariaDB sous Docker Compose et le cluster k3s.\\
-Dans k3s : Argo CD, PasswordGenerator et le namespace observability avec Prometheus, Grafana, Loki et Alloy.\\
-Le runner GitHub Actions est installé directement sur le serveur.}}
+Caddy distribue vers Jellyfin sur l'hôte, Nextcloud/MariaDB sous Docker Compose et le cluster k3s.\\
+Dans k3s : Argo CD, PasswordGenerator et le namespace \texttt{observability} avec Prometheus, Grafana, Loki, MinIO et Alloy.\\
+Deux runners GitHub Actions sont installés directement sur le serveur.}}
 \caption{Architecture générale du homelab personnel}
 \label{fig:homelab-architecture}
 \end{figure}
@@ -56,7 +58,9 @@ L'accès depuis Internet introduit une contrainte supplémentaire : ma connexion
 
 Le trafic HTTP et HTTPS passe ainsi par Cloudflare avant d'atteindre le serveur en IPv6. Le mode SSL/TLS utilisé est \textit{Full}, ce qui conserve une connexion chiffrée entre le client et Cloudflare, puis entre Cloudflare et le serveur d'origine. Caddy reçoit les requêtes et les relaie vers les services locaux en fonction du nom de domaine demandé.
 
-Par exemple, \texttt{password.thomasgraber.fr} est redirigé vers le NodePort Kubernetes du générateur de mots de passe, \texttt{nc.thomasgraber.fr} vers Nextcloud et \texttt{jellyfin.thomasgraber.fr} vers le service Jellyfin exécuté sur l'hôte. Les interfaces Grafana, Prometheus et Argo CD peuvent être exposées selon le même principe. Cette configuration m'a permis de manipuler concrètement des sujets qui dépassent le seul développement applicatif : résolution DNS, IPv6, reverse proxy, TLS et routage vers plusieurs modes d'hébergement.
+Par exemple, \texttt{password.thomasgraber.fr} est redirigé vers le NodePort Kubernetes du générateur de mots de passe, \texttt{nc.thomasgraber.fr} vers Nextcloud et \texttt{jellyfin.thomasgraber.fr} vers le service Jellyfin exécuté sur l'hôte. Les interfaces Grafana et Argo CD sont exposées selon le même principe. Cette configuration m'a permis de manipuler concrètement des sujets qui dépassent le seul développement applicatif : résolution DNS, IPv6, reverse proxy, TLS et routage vers plusieurs modes d'hébergement.
+
+Une ancienne expérimentation reposait sur un tunnel Cloudflare. Elle a depuis été abandonnée au profit de l'exposition IPv6 directe derrière le proxy Cloudflare. L'audit du serveur a permis d'identifier les fichiers résiduels associés à cette ancienne solution et de distinguer les éléments encore actifs de ceux qui n'étaient plus utilisés.
 
 \section{PasswordGenerator comme support d'expérimentation du déploiement}
 
@@ -68,7 +72,7 @@ Ces étapes ne correspondent pas à cinq architectures totalement distinctes. Do
 
 \subsection{Pipeline actuellement utilisé}
 
-Le workflow actuel se déclenche lors d'un push sur la branche principale. Il s'exécute sur le runner auto-hébergé, se connecte à GitHub Container Registry, construit une image Docker et la publie avec le SHA du commit comme tag. Cette stratégie permet d'associer précisément une version déployée à un état du dépôt. Le workflow exécute ensuite un \texttt{helm upgrade --install} en fournissant au chart le repository de l'image et le SHA courant.
+Le workflow actuel se déclenche lors d'un push sur la branche principale. Il s'exécute sur le runner auto-hébergé dédié au dépôt, se connecte à GitHub Container Registry, construit une image Docker et la publie avec le SHA du commit comme tag. Cette stratégie permet d'associer précisément une version déployée à un état du dépôt. Le workflow exécute ensuite un \texttt{helm upgrade --install} en fournissant au chart le dépôt de l'image et le SHA courant.
 
 \begin{figure}[H]
 \centering
@@ -80,15 +84,19 @@ $\rightarrow$ \texttt{helm upgrade --install} avec le SHA du commit $\rightarrow
 \label{fig:password-cicd}
 \end{figure}
 
-Le chart configure notamment plusieurs réplicas, un service NodePort ainsi que des probes de disponibilité et de vivacité. L'application est ensuite rendue accessible publiquement via Caddy et Cloudflare. Le pipeline automatise donc effectivement la construction, la publication et le déploiement. Il comporte cependant une limite importante : l'application étant très simple et ayant principalement servi de support d'expérimentation, aucune suite de tests automatisés n'est actuellement exécutée avant la mise en production. Cet élément distingue une chaîne technique fonctionnelle d'un pipeline pleinement industrialisé.
+Le chart configure quatre réplicas, un service NodePort ainsi que des probes de disponibilité et de vivacité. L'application est ensuite rendue accessible publiquement via Caddy et Cloudflare. Le pipeline automatise donc effectivement la construction, la publication et le déploiement. Il comporte cependant une limite importante : l'application étant très simple et ayant principalement servi de support d'expérimentation, aucune suite de tests automatisés n'est actuellement exécutée avant la mise en production. Cet élément distingue une chaîne technique fonctionnelle d'un pipeline pleinement industrialisé.
 
-\section{Mettre en place l'observabilité du cluster}
+Le déploiement actuel est géré directement par Helm dans le namespace \texttt{default}. Un ancien manifeste Argo CD destiné à PasswordGenerator était encore présent sur le serveur, mais aucune \texttt{Application} correspondante n'était active dans le cluster. L'audit a donc permis de confirmer qu'il s'agissait d'un vestige d'expérimentation et d'écarter l'hypothèse d'une double gestion concurrente par Helm et Argo CD.
 
-La stack d'observabilité est issue d'un enseignement consacré à Prometheus, Grafana et aux outils associés. Après avoir découvert leur rôle en cours, j'ai choisi de ne pas conserver l'exercice dans un environnement temporaire et de l'intégrer à mon propre serveur. La démarche était donc d'abord pédagogique, mais l'environnement obtenu fonctionne aujourd'hui en continu sur le homelab.
+\section{Faire évoluer l'observabilité de Docker vers Kubernetes}
 
-J'ai commencé par installer manuellement les composants avec Helm afin de comprendre les charts utilisés et de valider les fichiers de valeurs. Prometheus et Grafana sont fournis par \texttt{kube-prometheus-stack}, qui installe également Alertmanager, kube-state-metrics et node-exporter. Loki est utilisé pour le stockage et l'interrogation des logs. Grafana Alloy assure la collecte de logs et d'événements Kubernetes et les transmet à Loki.
+Une première stack d'observabilité a été déployée avec Docker Compose. Elle regroupait Prometheus, Grafana, node-exporter et cAdvisor afin de suivre les ressources du serveur et l'activité des conteneurs Docker. Cette première version m'a permis de découvrir les principes de collecte, de stockage et de visualisation des métriques, mais sa configuration restait locale au serveur et séparée du cluster Kubernetes.
 
-Les choix sont adaptés au contexte mono-nœud. Loki utilise un déploiement monolithique avec une seule réplique et un stockage persistant local. Prometheus conserve les métriques pendant sept jours avec une limite de taille de 6~Go. Ces réglages évitent de dimensionner l'installation comme une plateforme distribuée alors que le besoin est celui d'un homelab personnel.
+Lors des enseignements consacrés à Kubernetes et à l'observabilité, j'ai choisi de faire évoluer cette première expérimentation plutôt que de conserver deux plateformes parallèles. L'ancienne stack Docker a été arrêtée et remplacée par une installation dans k3s reposant sur \texttt{kube-prometheus-stack}, Loki et Grafana Alloy. Cette migration a élargi le périmètre observé aux ressources Kubernetes, aux événements du cluster et aux logs centralisés.
+
+Prometheus et Grafana sont fournis par \texttt{kube-prometheus-stack}, qui installe également Alertmanager, kube-state-metrics et node-exporter. Loki est utilisé pour le stockage et l'interrogation des logs. Grafana Alloy assure la collecte de logs système, de logs Docker et d'événements Kubernetes, puis les transmet à Loki.
+
+Les choix sont adaptés au contexte mono-nœud. Prometheus conserve les métriques pendant sept jours avec une limite de taille de 6~Go et un volume persistant de 8~Go. Loki fonctionne en mode monolithique avec une seule réplique. Les données sont stockées à travers une instance MinIO locale fournissant une interface compatible S3, elle-même adossée à des volumes persistants \texttt{local-path}. Cette architecture reproduit le fonctionnement d'un stockage objet sans introduire un service externe, mais elle reste dépendante du disque et du nœud unique du homelab.
 
 Grafana fournit les tableaux de bord Kubernetes installés avec la stack : ressources des pods et workloads, kubelet, réseau par cluster ou namespace, volumes persistants, métriques des nœuds et vue d'ensemble de Prometheus. Dans mon usage actuel, je consulte principalement la consommation du serveur, l'état des workloads et l'activité réseau. La stack ne constitue pas encore un dispositif de supervision proactif complet : Alertmanager est installé mais aucune chaîne de notification n'est configurée.
 
@@ -96,19 +104,21 @@ Grafana fournit les tableaux de bord Kubernetes installés avec la stack : resso
 
 Prometheus n'observe pas uniquement Kubernetes. J'ai activé l'exposition des métriques dans Caddy et ajouté un scrape spécifique dans la configuration Prometheus. Prometheus interroge ainsi périodiquement l'endpoint \texttt{/metrics} de Caddy et peut intégrer son activité HTTP dans les données consultées depuis Grafana.
 
-Alloy complète cette approche pour les logs. Il récupère notamment des fichiers système de l'hôte et découvre les conteneurs Docker à partir du socket Docker monté en lecture. Les logs des conteneurs peuvent ensuite être enrichis par des labels avant leur envoi vers Loki. Pour Caddy, un traitement spécifique extrait plusieurs champs structurés, par exemple le statut HTTP, l'hôte demandé et le niveau du message.
+Alloy complète cette approche pour les logs. Il récupère des fichiers système de l'hôte et découvre les conteneurs Docker à partir du socket Docker monté en lecture. Les logs des conteneurs sont enrichis par des labels avant leur envoi vers Loki. Pour Caddy, un traitement spécifique extrait notamment le statut HTTP, l'hôte demandé, l'URI, la méthode et le niveau du message.
 
 Cette partie a demandé plusieurs ajustements. Une première configuration basée directement sur les fichiers de logs Docker ne faisait pas apparaître correctement les conteneurs. Je l'ai remplacée par la découverte Docker d'Alloy via le socket de l'hôte et par des règles de relabellisation. Cette correction est représentative de l'intérêt du serveur personnel : au-delà de la configuration théorique d'un outil, il faut comprendre pourquoi les données attendues n'arrivent pas et adapter la collecte au contexte réel.
+
+La collecte technique est aujourd'hui en place, mais son exploitation dans Grafana reste partiellement expérimentale. Les tableaux de bord Caddy testés ont été importés manuellement et ne sont pas encore versionnés dans le dépôt GitOps. Certains panneaux doivent encore être adaptés aux métriques et aux labels réellement produits par la version actuelle de Caddy. Une évolution prévue consiste à stabiliser les requêtes PromQL et LogQL, puis à exporter le tableau de bord validé sous forme JSON et à le provisionner depuis Git afin qu'il soit reproductible au même titre que le reste de la stack.
 
 \section{Passer de Helm manuel à une gestion GitOps}
 
 Après avoir validé manuellement la stack d'observabilité, j'ai placé les fichiers \texttt{values} et les objets \texttt{Application} Argo CD dans un dépôt GitHub dédié. Le but était que Git devienne la référence décrivant l'état attendu de la supervision.
 
-Les objets Argo CD utilisent deux sources. La première est le repository Helm officiel correspondant au composant à déployer. La seconde est mon dépôt Git, dans lequel sont stockés les fichiers de configuration spécifiques au homelab. Argo CD récupère ainsi le chart officiel mais utilise les valeurs versionnées dans mon dépôt.
+Les objets Argo CD utilisent deux sources. La première est le repository Helm officiel correspondant au composant à déployer. La seconde est mon dépôt Git privé, dans lequel sont stockés les fichiers de configuration spécifiques au homelab. Argo CD récupère ainsi le chart officiel mais utilise les valeurs versionnées dans mon dépôt.
 
 Les politiques de synchronisation sont automatisées avec \texttt{prune} et \texttt{selfHeal}. Une ressource supprimée de la déclaration peut donc être nettoyée, tandis qu'un écart entre l'état du cluster et l'état attendu peut être corrigé par Argo CD. Comme le dépôt est privé, l'accès d'Argo CD repose sur une clé SSH dédiée, configurée côté GitHub comme deploy key et côté Kubernetes sous forme de Secret.
 
-Un workflow GitHub Actions complète ce dispositif. Il ne déploie pas directement Prometheus, Grafana ou Loki. Lorsqu'un changement concerne les fichiers Argo CD ou les fichiers de valeurs, le runner applique les objets \texttt{Application}, force leur rafraîchissement puis affiche leur état. Argo CD reste ensuite responsable de la synchronisation avec Kubernetes.
+Un workflow GitHub Actions complète ce dispositif. Il ne déploie pas directement Prometheus, Grafana ou Loki. Lorsqu'un changement concerne les fichiers Argo CD ou les fichiers de valeurs, le runner dédié applique les quatre objets \texttt{Application}, force leur rafraîchissement puis affiche leur état. Argo CD reste ensuite responsable de la synchronisation avec Kubernetes.
 
 \begin{figure}[H]
 \centering
@@ -130,30 +140,36 @@ Ce test a également mis en évidence un effet de bord intéressant : Caddy poin
 
 Cette situation montre une limite du périmètre GitOps actuel : Argo CD garantit l'état des ressources qu'il gère dans Kubernetes, mais Caddy est exploité séparément avec Docker Compose. Une modification d'interface entre les deux environnements peut donc nécessiter une adaptation manuelle. L'automatisation d'un sous-système ne supprime pas les dépendances avec les composants placés hors de son périmètre.
 
-\section{Difficultés rencontrées}
+\section{Difficultés rencontrées et diagnostic de l'état réel}
 
-Plusieurs difficultés rencontrées pendant la mise en place ont participé à l'apprentissage. La configuration d'un runner auto-hébergé a d'abord posé des problèmes de droits sur son répertoire d'installation. Il a fallu distinguer les opérations nécessitant les privilèges système de la configuration du runner lui-même et corriger le propriétaire du dossier.
+Plusieurs difficultés rencontrées pendant la mise en place ont participé à l'apprentissage. La configuration des runners auto-hébergés a d'abord posé des problèmes de droits sur leurs répertoires d'installation. Il a fallu distinguer les opérations nécessitant les privilèges système de la configuration des runners eux-mêmes et corriger les propriétaires ainsi que les permissions des fichiers sensibles.
 
 Argo CD a également produit une erreur de comparaison tant qu'il ne disposait pas des credentials nécessaires pour lire le dépôt privé contenant les fichiers de valeurs. La mise en place d'une deploy key SSH dédiée a permis de conserver le dépôt privé sans placer de clé dans Git.
 
+Un incident ultérieur a montré la différence entre la disponibilité des applications et le fonctionnement de leur gestion GitOps. Les composants d'observabilité continuaient à fonctionner et apparaissaient comme sains, mais les Applications Argo CD affichaient un état de synchronisation \texttt{Unknown}. Le diagnostic a montré que le \texttt{repo-server} n'était plus disponible : son conteneur principal était arrêté et son init container échouait en boucle lors de la création d'un lien symbolique déjà présent dans le volume temporaire du pod.
+
+La suppression du seul pod concerné a permis au Deployment de le recréer avec un volume temporaire propre. Après son redémarrage, les Applications ont de nouveau pu comparer l'état du cluster avec les dépôts Git. Cet incident m'a conduit à ne pas assimiler l'état fonctionnel des workloads à l'état de la chaîne de déploiement qui les administre.
+
 Enfin, l'installation de \texttt{kube-prometheus-stack} sur k3s faisait apparaître comme indisponibles certains endpoints que cette distribution n'expose pas de la même manière qu'un cluster Kubernetes classique. J'ai désactivé les cibles concernées afin de ne pas conserver des indicateurs \texttt{DOWN} artificiels. Ces adaptations rappellent qu'un chart Helm fournit une base générique mais ne dispense pas de comprendre l'environnement dans lequel il est installé.
+
+L'audit de l'état réel du serveur a également mis en évidence plusieurs vestiges des expérimentations successives : l'ancienne stack d'observabilité Docker arrêtée, un manifeste Argo CD de PasswordGenerator qui n'était plus appliqué et une ancienne configuration de tunnel Cloudflare abandonnée. Leur identification montre l'importance de distinguer les fichiers présents sur une machine des composants effectivement actifs et de prévoir une phase de nettoyage après les migrations.
 
 \section{Limites et prise de recul}
 
 Le homelab reste avant tout un environnement personnel d'apprentissage. Plusieurs choix seraient insuffisants pour une infrastructure de production critique. Le cluster k3s ne comporte qu'un seul nœud ; la multiplication des réplicas d'une application améliore certains scénarios de redémarrage mais ne protège pas contre la panne physique de la machine. Le stockage \texttt{local-path} lie également les volumes au nœud unique.
 
-Le runner GitHub Actions est installé sur le même serveur que l'environnement qu'il déploie. Cette organisation est pratique dans un homelab mais crée un couplage fort entre l'outil de livraison et la cible. De même, certaines interfaces techniques sont exposées derrière le reverse proxy et nécessiteraient une politique d'accès plus restrictive dans un contexte professionnel. La configuration Caddy utilisée pour joindre Argo CD contient par ailleurs une désactivation de la vérification TLS du certificat de l'upstream local, simplification qu'il serait préférable de supprimer dans une architecture plus stricte.
+Les runners GitHub Actions sont installés sur le même serveur que l'environnement qu'ils déploient. Cette organisation est pratique dans un homelab mais crée un couplage fort entre l'outil de livraison et la cible. De même, certaines interfaces techniques sont exposées derrière le reverse proxy et nécessiteraient une politique d'accès plus restrictive dans un contexte professionnel. La configuration Caddy utilisée pour joindre Argo CD contient par ailleurs une désactivation de la vérification TLS du certificat de l'upstream local, simplification qu'il serait préférable de supprimer dans une architecture plus stricte.
 
 L'observabilité reste majoritairement passive. Je consulte les métriques et l'activité réseau, mais Alertmanager n'est pas encore configuré pour notifier une anomalie. Une évolution logique serait de définir quelques alertes réellement utiles, par exemple sur l'espace disque, la mémoire disponible, l'indisponibilité d'un service ou les erreurs HTTP, puis de configurer un canal de notification.
 
 La stratégie de sauvegarde constitue une autre limite. Les documents Nextcloud sont synchronisés entre le serveur, ma tour et mon ordinateur portable. Cette réplication protège contre la perte isolée d'un équipement, mais elle ne remplace pas une sauvegarde indépendante et versionnée : une suppression ou une corruption synchronisée peut se propager aux différentes copies. Les composants Kubernetes et les bases de données ne disposent pas non plus aujourd'hui d'une politique de sauvegarde complète.
 
-Enfin, le projet met en évidence une différence importante entre expérimentation et industrialisation. PasswordGenerator dispose d'une chaîne de déploiement automatisée, mais pas encore d'un plan de tests automatisés avant déploiement. La stack d'observabilité est gérée en GitOps, mais plusieurs services du homelab restent administrés séparément. Ces écarts ne remettent pas en cause l'intérêt du projet ; ils permettent au contraire d'identifier ce qui serait nécessaire pour passer d'un laboratoire personnel à une infrastructure professionnelle plus robuste.
+Enfin, le projet met en évidence une différence importante entre expérimentation et industrialisation. PasswordGenerator dispose d'une chaîne de déploiement automatisée, mais pas encore d'un plan de tests automatisés avant déploiement. La stack d'observabilité est gérée en GitOps, mais plusieurs services du homelab restent administrés séparément. Les tableaux de bord Caddy doivent encore être stabilisés et versionnés. Ces écarts ne remettent pas en cause l'intérêt du projet ; ils permettent au contraire d'identifier ce qui serait nécessaire pour passer d'un laboratoire personnel à une infrastructure professionnelle plus robuste.
 
 \section{Bilan}
 
 Ce homelab m'a permis d'approfondir des sujets que je manipule moins directement dans mes missions professionnelles : conteneurisation, orchestration Kubernetes, runners auto-hébergés, registres d'images, Helm, GitOps, collecte de métriques et centralisation des logs. La réutilisation du même environnement dans plusieurs enseignements a également rendu visibles les différences entre outils qui peuvent sembler similaires lorsqu'ils sont étudiés séparément.
 
-L'évolution de PasswordGenerator illustre particulièrement cette démarche. Une application simple a servi de support à plusieurs modèles de déploiement successifs, tandis que la stack d'observabilité m'a permis de mettre en pratique une approche GitOps plus complète avec Argo CD. Le serveur est ainsi devenu moins un produit à terminer qu'un environnement de veille et d'expérimentation continue.
+L'évolution de PasswordGenerator illustre particulièrement cette démarche. Une application simple a servi de support à plusieurs modèles de déploiement successifs, tandis que la migration de l'observabilité depuis Docker Compose vers k3s m'a permis de mettre en pratique une approche GitOps plus complète avec Argo CD. L'audit et la réparation du \texttt{repo-server} ont enfin ajouté une dimension d'exploitation et de diagnostic qui dépasse la seule installation initiale.
 
-Le projet présente enfin un intérêt en matière de numérique responsable à une échelle modeste mais concrète. L'infrastructure repose sur le réemploi d'un ancien ordinateur portable et les composants sont dimensionnés pour un besoin personnel, par exemple avec des durées de rétention limitées et une architecture Loki monolithique. Je ne considère pas cela comme une démarche complète d'éco-conception, mais comme un choix cohérent avec le niveau de service recherché et les ressources réellement nécessaires.
+Le serveur est ainsi devenu moins un produit à terminer qu'un environnement de veille et d'expérimentation continue. Le projet présente enfin un intérêt en matière de numérique responsable à une échelle modeste mais concrète. L'infrastructure repose sur le réemploi d'un ancien ordinateur portable et les composants sont dimensionnés pour un besoin personnel, par exemple avec des durées de rétention limitées et une architecture Loki monolithique. Je ne considère pas cela comme une démarche complète d'éco-conception, mais comme un choix cohérent avec le niveau de service recherché et les ressources réellement nécessaires.
