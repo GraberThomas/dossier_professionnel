@@ -1,0 +1,2443 @@
+\chapter{Fiches de tests fonctionnels}
+
+Cette annexe présente les fiches de tests fonctionnels prévues pour valider les principaux parcours de l'application \emph{5 Secondes Chrono}. 
+Les scénarios sont construits à partir des personae définis dans le projet afin de vérifier que l'application répond aux besoins concrets des utilisateurs cibles.
+
+Chaque fiche de test permet de vérifier un parcours ou une fonctionnalité importante, aussi bien du côté de l'application mobile apprenant que de l'interface administrateur.
+
+\section{Méthodologie de test}
+
+Les tests sont organisés autour de scénarios utilisateurs. Chaque scénario est associé à un persona, un objectif, des préconditions, des étapes de test et des critères de validation.
+
+Les statuts utilisés sont les suivants :
+
+\begin{itemize}
+    \item \textbf{Non testé} : le test n'a pas encore été réalisé ;
+    \item \textbf{Validé} : le résultat obtenu correspond au résultat attendu ;
+    \item \textbf{Partiellement validé} : le parcours fonctionne, mais une anomalie ou une amélioration est identifiée ;
+    \item \textbf{Non validé} : le résultat obtenu ne correspond pas au comportement attendu.
+\end{itemize}
+
+\section{Modèle de fiche de test}
+
+\begin{table}[H]
+\centering
+\renewcommand{\arraystretch}{1.3}
+\small
+\begin{tabular}{|p{4cm}|p{10cm}|}
+\hline
+\rowcolor{membrepurple!80}
+\multicolumn{2}{|c|}{\textbf{Fiche de test -- Modèle}} \\
+\hline
+\textbf{Identifiant du test} & À compléter \\ \hline
+\textbf{Titre du test} & À compléter \\ \hline
+\textbf{Persona concerné} & À compléter \\ \hline
+\textbf{Interface testée} & Mobile apprenant / Interface administrateur \\ \hline
+\textbf{Objectif du test} & À compléter \\ \hline
+\textbf{Préconditions} & À compléter \\ \hline
+\textbf{Données de test} & À compléter \\ \hline
+\textbf{Résultat attendu} & À compléter \\ \hline
+\textbf{Résultat obtenu} & À compléter après exécution du test \\ \hline
+\textbf{Statut} & Non testé / Validé / Partiellement validé / Non validé \\ \hline
+\textbf{Commentaires / anomalies} & À compléter \\ \hline
+\end{tabular}
+\caption{Modèle de fiche de test fonctionnel}
+\end{table}
+
+\section{Fiches de tests -- Application mobile apprenant}
+
+\subsection{Test M01 -- Réaliser le quiz quotidien}
+
+\begin{table}[H]
+\centering
+\renewcommand{\arraystretch}{1.3}
+\small
+\begin{tabular}{|p{4cm}|p{10cm}|}
+\hline
+\rowcolor{BleuPetrole!25}
+\multicolumn{2}{|c|}{\textbf{Fiche de test M01 -- Quiz quotidien}} \\
+\hline
+\textbf{Identifiant du test} & M01 \\ \hline
+\textbf{Titre du test} & Réaliser le quiz quotidien \\ \hline
+\textbf{Persona concerné} & Nicolas, négociateur en immobilier commercial \\ \hline
+\textbf{Interface testée} & Application mobile apprenant \\ \hline
+\textbf{Objectif du test} & Vérifier qu'un apprenant peut lancer un quiz quotidien, répondre à une question chronométrée et consulter son résultat. \\ \hline
+\textbf{Préconditions} & 
+\begin{itemize}
+    \item L'utilisateur possède un compte actif.
+    \item L'utilisateur est connecté à l'application.
+    \item Au moins une question est disponible dans la base de données.
+\end{itemize}
+\\ \hline
+\textbf{Données de test} & 
+Compte apprenant : à compléter. \newline
+Question test : à compléter. \\ \hline
+\textbf{Étapes de test} &
+\begin{enumerate}
+    \item Ouvrir l'application mobile.
+    \item Se connecter avec un compte apprenant valide.
+    \item Accéder à l'écran d'accueil.
+    \item Lancer le quiz du jour.
+    \item Répondre à la question proposée avant la fin du timer.
+    \item Valider la réponse.
+    \item Consulter le résultat affiché.
+\end{enumerate}
+\\ \hline
+\textbf{Résultat attendu} & 
+Le quiz se lance correctement. Le timer est visible. La réponse est prise en compte. Le score et le feedback sont affichés à l'utilisateur. \\ \hline
+\textbf{Résultat obtenu} & À compléter après exécution du test. \\ \hline
+\textbf{Statut} & Non testé / Validé / Partiellement validé / Non validé \\ \hline
+\textbf{Commentaires / anomalies} & À compléter. \\ \hline
+\end{tabular}
+\caption{Fiche de test M01 -- Quiz quotidien}
+\end{table}
+
+\subsection{Test M02 -- Consulter une recommandation après une difficulté}
+
+\begin{table}[H]
+\centering
+\renewcommand{\arraystretch}{1.3}
+\small
+\begin{tabular}{|p{4cm}|p{10cm}|}
+\hline
+\rowcolor{BleuPetrole!25}
+\multicolumn{2}{|c|}{\textbf{Fiche de test M02 -- Recommandation personnalisée}} \\
+\hline
+\textbf{Identifiant du test} & M02 \\ \hline
+\textbf{Titre du test} & Consulter une recommandation après une difficulté \\ \hline
+\textbf{Persona concerné} & Sarah, jeune professionnelle en prise de poste \\ \hline
+\textbf{Interface testée} & Application mobile apprenant \\ \hline
+\textbf{Objectif du test} & Vérifier que l'application propose une recommandation simple lorsqu'un utilisateur rencontre une difficulté sur une thématique. \\ \hline
+\textbf{Préconditions} &
+\begin{itemize}
+    \item L'utilisateur est connecté.
+    \item L'utilisateur a réalisé au moins un quiz.
+    \item Une erreur ou une difficulté est identifiable sur une thématique.
+\end{itemize}
+\\ \hline
+\textbf{Données de test} & 
+Compte apprenant : à compléter. \newline
+Thématique testée : à compléter. \\ \hline
+\textbf{Étapes de test} &
+\begin{enumerate}
+    \item Ouvrir l'application.
+    \item Accéder à l'écran de progression ou de résultats.
+    \item Identifier une thématique avec un score faible.
+    \item Consulter la recommandation proposée.
+    \item Ouvrir le contenu conseillé, par exemple une vidéo ou un quiz ciblé.
+\end{enumerate}
+\\ \hline
+\textbf{Résultat attendu} & 
+L'application affiche une recommandation compréhensible et liée à la difficulté détectée. L'utilisateur peut accéder au contenu conseillé. \\ \hline
+\textbf{Résultat obtenu} & À compléter après exécution du test. \\ \hline
+\textbf{Statut} & Non testé / Validé / Partiellement validé / Non validé \\ \hline
+\textbf{Commentaires / anomalies} & À compléter. \\ \hline
+\end{tabular}
+\caption{Fiche de test M02 -- Recommandation personnalisée}
+\end{table}
+
+\subsection{Test M03 -- Reprendre rapidement l'application après une période d'inactivité}
+
+\begin{table}[H]
+\centering
+\renewcommand{\arraystretch}{1.3}
+\small
+\begin{tabular}{|p{4cm}|p{10cm}|}
+\hline
+\rowcolor{BleuPetrole!25}
+\multicolumn{2}{|c|}{\textbf{Fiche de test M03 -- Reprise rapide}} \\
+\hline
+\textbf{Identifiant du test} & M03 \\ \hline
+\textbf{Titre du test} & Reprendre rapidement l'application après une période d'inactivité \\ \hline
+\textbf{Persona concerné} & Karim, indépendant avec un agenda chargé \\ \hline
+\textbf{Interface testée} & Application mobile apprenant \\ \hline
+\textbf{Objectif du test} & Vérifier qu'un utilisateur irrégulier peut reprendre l'application facilement sans devoir reconfigurer son parcours. \\ \hline
+\textbf{Préconditions} &
+\begin{itemize}
+    \item L'utilisateur possède un compte existant.
+    \item L'utilisateur a déjà réalisé au moins un quiz.
+    \item L'utilisateur n'a pas utilisé l'application depuis plusieurs jours.
+\end{itemize}
+\\ \hline
+\textbf{Données de test} & 
+Compte apprenant : à compléter. \newline
+Dernière connexion simulée : à compléter. \\ \hline
+\textbf{Étapes de test} &
+\begin{enumerate}
+    \item Ouvrir l'application après plusieurs jours d'inactivité.
+    \item Observer l'écran d'accueil.
+    \item Vérifier la présence d'un accès rapide au quiz.
+    \item Lancer une session courte.
+    \item Consulter le résultat et le feedback.
+\end{enumerate}
+\\ \hline
+\textbf{Résultat attendu} & 
+L'utilisateur retrouve rapidement son parcours. L'accès au quiz est visible. La session peut être réalisée sans configuration complexe. \\ \hline
+\textbf{Résultat obtenu} & À compléter après exécution du test. \\ \hline
+\textbf{Statut} & Non testé / Validé / Partiellement validé / Non validé \\ \hline
+\textbf{Commentaires / anomalies} & À compléter. \\ \hline
+\end{tabular}
+\caption{Fiche de test M03 -- Reprise rapide}
+\end{table}
+
+\section{Fiches de tests -- Interface administrateur}
+
+\subsection{Test A01 -- Créer une nouvelle question}
+
+\begin{table}[H]
+\centering
+\renewcommand{\arraystretch}{1.3}
+\small
+\begin{tabular}{|p{4cm}|p{10cm}|}
+\hline
+\rowcolor{orange!20}
+\multicolumn{2}{|c|}{\textbf{Fiche de test A01 -- Création d'une question}} \\
+\hline
+\textbf{Identifiant du test} & A01 \\ \hline
+\textbf{Titre du test} & Créer une nouvelle question depuis l'espace administrateur \\ \hline
+\textbf{Persona concerné} & Claire, administratrice / formatrice côté Le Carré Pro \\ \hline
+\textbf{Interface testée} & Interface administrateur web \\ \hline
+\textbf{Objectif du test} & Vérifier qu'un administrateur peut créer une question de quiz complète et l'enregistrer dans le système. \\ \hline
+\textbf{Préconditions} &
+\begin{itemize}
+    \item L'administrateur possède un compte valide.
+    \item L'administrateur est connecté à l'espace d'administration.
+    \item La section de gestion des questions est accessible.
+\end{itemize}
+\\ \hline
+\textbf{Données de test} & 
+Question : à compléter. \newline
+Réponses proposées : à compléter. \newline
+Bonne réponse : à compléter. \newline
+Explication : à compléter. \\ \hline
+\textbf{Étapes de test} &
+\begin{enumerate}
+    \item Se connecter à l'espace administrateur.
+    \item Accéder à la section de gestion des questions.
+    \item Cliquer sur l'action de création d'une nouvelle question.
+    \item Renseigner le texte de la question.
+    \item Renseigner les réponses possibles.
+    \item Définir la bonne réponse.
+    \item Ajouter une explication.
+    \item Enregistrer la question.
+\end{enumerate}
+\\ \hline
+\textbf{Résultat attendu} & 
+La question est enregistrée sans erreur. Elle apparaît dans la liste des questions et peut être utilisée dans un quiz. \\ \hline
+\textbf{Résultat obtenu} & À compléter après exécution du test. \\ \hline
+\textbf{Statut} & Non testé / Validé / Partiellement validé / Non validé \\ \hline
+\textbf{Commentaires / anomalies} & À compléter. \\ \hline
+\end{tabular}
+\caption{Fiche de test A01 -- Création d'une question}
+\end{table}
+
+
+% ============================================================
+% Fiche de test A01 -- Création d'une question
+% ============================================================
+
+\renewcommand{\arraystretch}{1.3}
+\setlength{\LTleft}{\fill}
+\setlength{\LTright}{\fill}
+
+\begin{longtable}{
+    |>{\raggedright\arraybackslash}p{0.28\textwidth}
+    |>{\raggedright\arraybackslash}p{0.64\textwidth}|
+}
+
+\caption{Fiche de test A01 -- Création d'une question, complétée le 13/07/2026}
+\label{tab:test-a01-creation-question}
+\\
+
+\hline
+\rowcolor{orange!50}
+\multicolumn{2}{|c|}{
+    \textbf{Fiche de test A01 -- Création d'une question}
+}
+\\
+\hline
+
+\endfirsthead
+
+\multicolumn{2}{c}{
+    \small\textit{Fiche de test A01 -- Création d'une question (suite)}
+}
+\\
+\hline
+
+\rowcolor{orange!50}
+\multicolumn{2}{|c|}{
+    \textbf{Fiche de test A01 -- Création d'une question}
+}
+\\
+\hline
+
+\endhead
+
+\hline
+\multicolumn{2}{|r|}{
+    \small\textit{Suite de la fiche page suivante}
+}
+\\
+\hline
+
+\endfoot
+
+\hline
+\endlastfoot
+
+% ------------------------------------------------------------
+% Informations générales
+% ------------------------------------------------------------
+
+\textbf{Identifiant du test}
+&
+A01
+\\
+\hline
+
+\textbf{Titre du test}
+&
+Créer une nouvelle question depuis l'espace administrateur.
+\\
+\hline
+
+\textbf{Persona concerné}
+&
+Claire, administratrice et formatrice pour Le Carré Pro.
+\\
+\hline
+
+\textbf{Interface testée}
+&
+Interface web d'administration.
+\\
+\hline
+
+\textbf{Date d'exécution}
+&
+13 juillet 2026.
+\\
+\hline
+
+\textbf{Objectif du test}
+&
+Vérifier qu'un administrateur peut créer une question de quiz complète,
+renseigner ses différentes propriétés, l'enregistrer dans le système et la
+retrouver dans la liste des questions.
+\\
+\hline
+
+% ------------------------------------------------------------
+% Préconditions
+% ------------------------------------------------------------
+
+\textbf{Préconditions}
+&
+\begin{itemize}[leftmargin=*,nosep]
+    \item L'administrateur possède un compte valide.
+    \item Le compte utilisé dispose des droits d'administration.
+    \item L'administrateur peut accéder à l'espace d'administration.
+    \item La rubrique de gestion des questions est disponible.
+    \item L'application et la base de données sont accessibles.
+\end{itemize}
+\\
+\hline
+
+% ------------------------------------------------------------
+% Données de test
+% ------------------------------------------------------------
+
+\rowcolor{orange!15}
+\multicolumn{2}{|c|}{
+    \textbf{Données utilisées pour le test}
+}
+\\
+\hline
+
+\textbf{Type de bail attendu}
+&
+Bail commercial.
+\\
+\hline
+
+\textbf{Thématique attendue}
+&
+État des lieux.
+\\
+\hline
+
+\textbf{Question}
+&
+Quel est l'objectif principal d'un état des lieux d'entrée ?
+\\
+\hline
+
+\textbf{Réponses proposées}
+&
+\begin{itemize}[leftmargin=*,nosep]
+    \item \textbf{A --} Calculer la valeur de vente du local.
+    \item \textbf{B --} Décrire précisément l'état du local au début de la location.
+    \item \textbf{C --} Déterminer le chiffre d'affaires du locataire.
+    \item \textbf{D --} Fixer automatiquement le montant du loyer.
+\end{itemize}
+\\
+\hline
+
+\textbf{Bonne réponse}
+&
+B -- Décrire précisément l'état du local au début de la location.
+\\
+\hline
+
+\textbf{Explication pédagogique}
+&
+L'état des lieux d'entrée permet de décrire précisément l'état du local et
+de ses équipements au début de la location. Il pourra ensuite être comparé
+avec l'état des lieux de sortie afin d'identifier les éventuelles
+dégradations intervenues pendant la durée du bail.
+\\
+\hline
+
+\textbf{Statut de publication attendu}
+&
+Question active ou publiée, lorsque cette option est disponible dans le
+formulaire.
+\\
+\hline
+
+% ------------------------------------------------------------
+% Étapes du test
+% ------------------------------------------------------------
+
+\rowcolor{orange!15}
+\multicolumn{2}{|c|}{
+    \textbf{Déroulement du test}
+}
+\\
+\hline
+
+\textbf{Étape 1}
+&
+Se connecter à l'espace administrateur avec un compte possédant le rôle
+administrateur.
+\\
+\hline
+
+\textbf{Étape 2}
+&
+Vérifier que la connexion aboutit bien au tableau de bord de
+l'administration.
+\\
+\hline
+
+\textbf{Étape 3}
+&
+Accéder à la rubrique \textit{Questions} ou
+\textit{Gestion des questions}.
+\\
+\hline
+
+\textbf{Étape 4}
+&
+Noter le nombre de questions déjà présentes dans la liste avant la création.
+\\
+\hline
+
+\textbf{Étape 5}
+&
+Cliquer sur le bouton permettant d'ajouter ou de créer une nouvelle
+question.
+\\
+\hline
+
+\textbf{Étape 6}
+&
+Rechercher et sélectionner le type de bail
+\textit{Bail commercial}.
+\\
+\hline
+
+\textbf{Étape 7}
+&
+Rechercher et sélectionner la thématique
+\textit{État des lieux}.
+\\
+\hline
+
+\textbf{Étape 8}
+&
+Saisir la question suivante :
+\textit{« Quel est l'objectif principal d'un état des lieux d'entrée ? »}
+\\
+\hline
+
+\textbf{Étape 9}
+&
+Renseigner les quatre réponses proposées dans les champs correspondants.
+\\
+\hline
+
+\textbf{Étape 10}
+&
+Définir la réponse B comme réponse correcte.
+\\
+\hline
+
+\textbf{Étape 11}
+&
+Ajouter l'explication pédagogique prévue dans les données de test.
+\\
+\hline
+
+\textbf{Étape 12}
+&
+Examiner le champ permettant d'associer une vidéo à la question et vérifier
+la cohérence des vidéos proposées dans la liste déroulante.
+\\
+\hline
+
+\textbf{Étape 13}
+&
+Activer ou publier la question lorsque cette option est proposée.
+\\
+\hline
+
+\textbf{Étape 14}
+&
+Cliquer sur le bouton \textit{Enregistrer}, \textit{Créer} ou
+\textit{Valider}.
+\\
+\hline
+
+\textbf{Étape 15}
+&
+Vérifier qu'un message de confirmation est affiché et qu'aucun message
+d'erreur bloquant n'apparaît.
+\\
+\hline
+
+\textbf{Étape 16}
+&
+Rechercher la nouvelle question dans la liste des questions.
+\\
+\hline
+
+\textbf{Étape 17}
+&
+Ouvrir la fiche de la question et vérifier que le texte, les réponses,
+la bonne réponse, l'explication et les informations de classement ont été
+correctement enregistrés.
+\\
+\hline
+
+\textbf{Étape 18}
+&
+Actualiser la page, puis vérifier que la question est toujours présente.
+\\
+\hline
+
+\textbf{Étape 19}
+&
+Utiliser la fonction de prévisualisation ou lancer un quiz de test afin de
+vérifier l'affichage de la question et de ses réponses.
+\\
+\hline
+
+\textbf{Étape 20}
+&
+Vérifier que la réponse B est reconnue comme correcte et que l'explication
+associée est affichée après la réponse.
+\\
+\hline
+
+\textbf{Étape 21}
+&
+Vérifier le fonctionnement du lien vers la vidéo éventuellement associée.
+\\
+\hline
+
+\textbf{Étape 22}
+&
+Réaliser une ou plusieurs captures d'écran de la question créée et de son
+affichage dans l'interface.
+\\
+\hline
+
+\textbf{Étape 23}
+&
+À la fin du test, supprimer ou désactiver la question afin de ne pas
+conserver une donnée de recette parmi les contenus définitifs.
+\\
+\hline
+
+% ------------------------------------------------------------
+% Résultats
+% ------------------------------------------------------------
+
+\rowcolor{orange!15}
+\multicolumn{2}{|c|}{
+    \textbf{Résultats du test}
+}
+\\
+\hline
+
+\textbf{Résultat attendu}
+&
+\begin{itemize}[leftmargin=*,nosep]
+    \item Le formulaire de création est accessible.
+    \item Les types de baux et les thématiques sont présentés avec des
+    intitulés compréhensibles.
+    \item Le type \textit{Bail commercial} peut être sélectionné.
+    \item La thématique \textit{État des lieux} peut être sélectionnée.
+    \item Les réponses et l'explication peuvent être enregistrées.
+    \item La bonne réponse peut être clairement identifiée.
+    \item Les vidéos disponibles sont correctement proposées dans la liste.
+    \item La question est enregistrée sans erreur.
+    \item La question apparaît dans la liste après validation.
+    \item Les informations sont conservées après actualisation de la page.
+    \item La question peut être utilisée et prévisualisée dans un quiz.
+\end{itemize}
+\\
+\hline
+
+\textbf{Résultat obtenu}
+&
+\begin{itemize}[leftmargin=*,nosep]
+    \item Le formulaire de création d'une question est accessible depuis
+    l'espace administrateur.
+
+    \item La question a pu être renseignée et enregistrée dans
+    l'application.
+
+    \item Le type de bail \textit{Bail commercial} n'était pas disponible
+    dans la liste proposée. La valeur \textit{Partie au contrat} a donc été
+    utilisée pour poursuivre le test.
+
+    \item La thématique \textit{État des lieux} n'était pas disponible.
+    La valeur \textit{Professionnelle} a donc été sélectionnée à la place.
+
+    \item Plusieurs intitulés affichés dans les menus correspondent
+    directement aux noms techniques utilisés dans la base de données.
+    Certains contiennent notamment des caractères de soulignement
+    (\texttt{\_}).
+
+    \item Le menu déroulant d'association d'une vidéo indiquait qu'aucune
+    vidéo n'était disponible.
+
+    \item Après l'enregistrement de la question, un lien vers une vidéo
+    associée était pourtant affiché et ce lien fonctionnait correctement.
+
+    \item La question créée était toujours présente après sa validation.
+
+    \item La session administrateur est restée active après la fermeture
+    de l'application et le redémarrage de l'ordinateur.
+\end{itemize}
+\\
+\hline
+
+\textbf{Statut}
+&
+\textbf{Partiellement validé}
+\\
+\hline
+
+% ------------------------------------------------------------
+% Anomalies constatées
+% ------------------------------------------------------------
+
+\rowcolor{orange!15}
+\multicolumn{2}{|c|}{
+    \textbf{Commentaires et anomalies constatées}
+}
+\\
+\hline
+
+\textbf{Anomalie A01-01}\newline
+\textbf{Persistance de la session}
+&
+La session administrateur reste active après la fermeture du navigateur et
+le redémarrage de l'ordinateur.
+
+Aucune option visible ne permet à l'utilisateur d'indiquer s'il souhaite ou
+non rester connecté.
+
+Il conviendrait de vérifier la durée de validité du jeton
+d'authentification, son stockage et son expiration. Une case
+\textit{« Se souvenir de moi »} pourrait être ajoutée afin de laisser ce
+choix à l'utilisateur. Le bouton de déconnexion doit également invalider
+correctement la session.
+\\
+\hline
+
+\textbf{Anomalie A01-02}\newline
+\textbf{Intitulés techniques}
+&
+Plusieurs valeurs affichées dans les menus semblent provenir directement
+des noms enregistrés dans la base de données.
+Les caractères de soulignement et les intitulés techniques doivent être
+remplacés par des libellés lisibles et compréhensibles pour
+l'administrateur.
+
+Par exemple, une valeur telle que
+\texttt{bail\_commercial} devrait être affichée sous la forme
+\textit{Bail commercial}.
+\\
+\hline
+
+\textbf{Anomalie A01-03}\newline
+\textbf{Catégories manquantes}
+&
+Les valeurs attendues \textit{Bail commercial} et
+\textit{État des lieux} ne sont pas disponibles dans les listes proposées.
+
+Cette absence oblige l'administrateur à sélectionner des catégories qui ne
+correspondent pas réellement au contenu de la question. Cela peut fausser
+le classement, la recherche et l'utilisation ultérieure de la question
+dans les quiz.
+
+Il est nécessaire de vérifier le contenu des tables de référence et les
+valeurs chargées dans les menus déroulants.
+\\
+\hline
+
+\textbf{Anomalie A01-04}\newline
+\textbf{Association des vidéos}
+&
+Le menu déroulant indique qu'aucune vidéo n'est disponible, alors qu'un lien
+vers une vidéo fonctionnelle apparaît après l'enregistrement de la question.
+Le comportement du champ est donc incohérent avec les données réellement
+enregistrées.
+
+Il convient de vérifier :
+\begin{itemize}[leftmargin=*,nosep]
+    \item la requête utilisée pour charger la liste des vidéos ;
+    \item la valeur sélectionnée par défaut ;
+    \item l'identifiant de la vidéo enregistré avec la question ;
+    \item le rafraîchissement du menu après la création ou la modification
+    d'une vidéo ;
+    \item l'utilité et le comportement attendu de ce champ.
+\end{itemize}
+\\
+\hline
+
+\textbf{Conclusion du test}
+&
+La fonction principale de création d'une question est opérationnelle :
+le formulaire est accessible et la question peut être enregistrée.
+
+Le test reste toutefois partiellement validé en raison de plusieurs
+incohérences concernant les catégories proposées, les libellés affichés,
+la gestion de l'association vidéo et la persistance de la session
+administrateur.
+\\
+\hline
+
+\end{longtable}
+
+
+
+\subsection{Test A02 -- Associer une vidéo à une question ou une thématique}
+
+\begin{table}[H]
+\centering
+\renewcommand{\arraystretch}{1.3}
+\small
+\begin{tabular}{|p{4cm}|p{10cm}|}
+\hline
+\rowcolor{orange!20}
+\multicolumn{2}{|c|}{\textbf{Fiche de test A02 -- Association d'une vidéo}} \\
+\hline
+\textbf{Identifiant du test} & A02 \\ \hline
+\textbf{Titre du test} & Associer une vidéo pédagogique à une question ou une thématique \\ \hline
+\textbf{Persona concerné} & Claire, administratrice / formatrice côté Le Carré Pro \\ \hline
+\textbf{Interface testée} & Interface administrateur web \\ \hline
+\textbf{Objectif du test} & Vérifier qu'un administrateur peut rattacher une vidéo pédagogique à un contenu existant. \\ \hline
+\textbf{Préconditions} &
+\begin{itemize}
+    \item L'administrateur est connecté.
+    \item Une question ou une thématique existe déjà.
+    \item Une vidéo est disponible ou peut être ajoutée.
+\end{itemize}
+\\ \hline
+\textbf{Données de test} & 
+Titre de la vidéo : à compléter. \newline
+URL ou fichier vidéo : à compléter. \newline
+Question ou thématique associée : à compléter. \\ \hline
+\textbf{Étapes de test} &
+\begin{enumerate}
+    \item Accéder à l'espace administrateur.
+    \item Ouvrir la section de gestion des vidéos.
+    \item Ajouter ou sélectionner une vidéo.
+    \item Choisir la question ou la thématique associée.
+    \item Enregistrer l'association.
+    \item Vérifier l'affichage côté apprenant.
+\end{enumerate}
+\\ \hline
+\textbf{Résultat attendu} & 
+La vidéo est correctement associée au contenu choisi. Elle devient accessible depuis le parcours apprenant attendu. \\ \hline
+\textbf{Résultat obtenu} & À compléter après exécution du test. \\ \hline
+\textbf{Statut} & Non testé / Validé / Partiellement validé / Non validé \\ \hline
+\textbf{Commentaires / anomalies} & À compléter. \\ \hline
+\end{tabular}
+\caption{Fiche de test A02 -- Association d'une vidéo}
+\end{table}
+
+% ============================================================
+% Test A02 -- Association d'une vidéo
+% ============================================================
+
+%\subsection{Test A02 -- Associer une vidéo à une question ou une thématique}
+
+\begingroup
+\small
+\renewcommand{\arraystretch}{1.3}
+\setlength{\LTleft}{\fill}
+\setlength{\LTright}{\fill}
+
+\begin{longtable}{
+    |>{\raggedright\arraybackslash}p{0.28\textwidth}
+    |>{\raggedright\arraybackslash}p{0.64\textwidth}|
+}
+
+\caption{Fiche de test A02 -- Association d'une vidéo, complétée le 13/07/2026}
+\label{tab:test-a02-association-video}
+\\
+
+\hline
+\rowcolor{orange!50}
+\multicolumn{2}{|c|}{
+    \textbf{Fiche de test A02 -- Association d'une vidéo}
+}
+\\
+\hline
+
+\endfirsthead
+
+\multicolumn{2}{c}{
+    \small\textit{Fiche de test A02 -- Association d'une vidéo (suite)}
+}
+\\
+\hline
+
+\rowcolor{orange!50}
+\multicolumn{2}{|c|}{
+    \textbf{Fiche de test A02 -- Association d'une vidéo}
+}
+\\
+\hline
+
+\endhead
+
+\hline
+\multicolumn{2}{|r|}{
+    \small\textit{Suite de la fiche page suivante}
+}
+\\
+\hline
+
+\endfoot
+
+\hline
+\endlastfoot
+
+% ------------------------------------------------------------
+% Informations générales
+% ------------------------------------------------------------
+
+\textbf{Identifiant du test}
+&
+A02
+\\
+\hline
+
+\textbf{Titre du test}
+&
+Associer une vidéo pédagogique à une question ou à une thématique.
+\\
+\hline
+
+\textbf{Type de test}
+&
+Test fonctionnel de l'interface d'administration et test de liaison entre
+les vidéos et les questions.
+\\
+\hline
+
+\textbf{Persona concerné}
+&
+Claire, administratrice et formatrice pour Le Carré Pro.
+\\
+\hline
+
+\textbf{Interface testée}
+&
+\begin{itemize}[leftmargin=*,nosep]
+    \item Interface web d'administration ;
+    \item rubrique de gestion des vidéos ;
+    \item rubrique de gestion des questions ;
+    \item interface apprenant permettant de consulter la vidéo.
+\end{itemize}
+\\
+\hline
+
+\textbf{Test lié}
+&
+Test A01 -- Création d'une question.
+
+Ce test permet également de contrôler à nouveau l'anomalie
+\textbf{A01-04 -- Association des vidéos}.
+\\
+\hline
+
+\textbf{Date d'exécution}
+&
+À compléter lors de l'exécution du test.
+\\
+\hline
+
+\textbf{Exécutant}
+&
+À compléter.
+\\
+\hline
+
+\textbf{Environnement}
+&
+À compléter : environnement de développement, de recette ou de production.
+\\
+\hline
+
+\textbf{Objectif du test}
+&
+Vérifier qu'un administrateur peut ajouter ou sélectionner une vidéo
+pédagogique, l'associer à une question ou à une thématique existante,
+enregistrer cette association et retrouver la vidéo depuis le parcours
+apprenant correspondant.
+\\
+\hline
+
+% ------------------------------------------------------------
+% Préconditions
+% ------------------------------------------------------------
+
+\rowcolor{orange!50}
+\multicolumn{2}{|c|}{
+    \textbf{Préconditions}
+}
+\\
+\hline
+
+\textbf{Préconditions générales}
+&
+\begin{itemize}[leftmargin=*,nosep]
+    \item L'application est disponible.
+    \item La base de données est accessible.
+    \item L'administrateur possède un compte valide.
+    \item Le compte utilisé dispose des droits d'administration.
+    \item L'administrateur est connecté à l'espace d'administration.
+    \item La rubrique de gestion des vidéos est accessible.
+    \item La rubrique de gestion des questions est accessible.
+    \item Une connexion Internet est disponible pour accéder à YouTube.
+\end{itemize}
+\\
+\hline
+
+\textbf{Contenu nécessaire}
+&
+\begin{itemize}[leftmargin=*,nosep]
+    \item Une question existe déjà dans l'application.
+    \item La question créée pendant le test A01 peut être utilisée.
+    \item Une thématique permettant de classer la vidéo existe.
+    \item Le formulaire permet de saisir une URL vidéo ou de sélectionner
+    une vidéo déjà enregistrée.
+\end{itemize}
+\\
+\hline
+
+% ------------------------------------------------------------
+% Données de test
+% ------------------------------------------------------------
+
+\rowcolor{orange!50}
+\multicolumn{2}{|c|}{
+    \textbf{Données utilisées pour le test}
+}
+\\
+\hline
+
+\textbf{Référence interne}
+&
+TEST-A02-VIDEO-ETAT-LIEUX
+\\
+\hline
+
+\textbf{Titre saisi}
+&
+État des lieux -- Les pièges à éviter.
+\\
+\hline
+
+\textbf{Type de ressource}
+&
+Vidéo externe hébergée sur YouTube.
+\\
+\hline
+
+\textbf{URL de la vidéo}
+&
+\url{https://www.youtube.com/watch?v=6xofrG5uZgY&t=24s}
+\\
+\hline
+
+\textbf{Description proposée}
+&
+Vidéo pédagogique présentant plusieurs conseils et points de vigilance pour
+réaliser un état des lieux et éviter les erreurs susceptibles d'avoir des
+conséquences sur la restitution du dépôt de garantie.
+\\
+\hline
+
+\textbf{Question à associer}
+&
+Quel est l'objectif principal d'un état des lieux d'entrée ?
+\\
+\hline
+
+\textbf{Réponse correcte associée}
+&
+Décrire précisément l'état du local au début de la location.
+\\
+\hline
+
+\textbf{Type de bail attendu}
+&
+Bail commercial, lorsque cette valeur est disponible.
+\\
+\hline
+
+\textbf{Thématique attendue}
+&
+État des lieux, lorsque cette valeur est disponible.
+\\
+\hline
+
+\textbf{Valeurs de remplacement}
+&
+Lorsque les valeurs attendues ne sont toujours pas disponibles, utiliser
+les mêmes valeurs que pendant le test A01 afin de poursuivre le test :
+
+\begin{itemize}[leftmargin=*,nosep]
+    \item catégorie ou type : \textit{Partie au contrat} ;
+    \item thématique : \textit{Professionnelle}.
+\end{itemize}
+
+Cette substitution doit être signalée dans le résultat obtenu.
+\\
+\hline
+
+\textbf{Statut de publication}
+&
+Vidéo active ou publiée, lorsque ce champ est disponible.
+\\
+\hline
+
+% ------------------------------------------------------------
+% Déroulement
+% ------------------------------------------------------------
+
+\rowcolor{orange!50}
+\multicolumn{2}{|c|}{
+    \textbf{Déroulement du test}
+}
+\\
+\hline
+
+\textbf{Étape 1}
+&
+Se connecter à l'espace administrateur avec un compte possédant les droits
+nécessaires.
+\\
+\hline
+
+\textbf{Étape 2}
+&
+Accéder à la rubrique \textit{Vidéos}, \textit{Gestion des vidéos} ou à la
+rubrique équivalente.
+\\
+\hline
+
+\textbf{Étape 3}
+&
+Noter le nombre de vidéos déjà présentes avant l'ajout de la vidéo de test.
+\\
+\hline
+
+\textbf{Étape 4}
+&
+Rechercher la vidéo de test dans la liste afin de vérifier qu'elle n'existe
+pas déjà.
+\\
+\hline
+
+\textbf{Étape 5}
+&
+Cliquer sur le bouton permettant d'ajouter ou de créer une nouvelle vidéo.
+\\
+\hline
+
+\textbf{Étape 6}
+&
+Saisir le titre suivant :
+
+\textit{« État des lieux -- Les pièges à éviter »}.
+\\
+\hline
+
+\textbf{Étape 7}
+&
+Saisir l'URL YouTube indiquée dans les données de test.
+\\
+\hline
+
+\textbf{Étape 8}
+&
+Saisir la description pédagogique prévue dans les données de test, lorsque
+le formulaire contient un champ de description.
+\\
+\hline
+
+\textbf{Étape 9}
+&
+Sélectionner le type de bail \textit{Bail commercial} lorsque cette valeur
+est proposée.
+\\
+\hline
+
+\textbf{Étape 10}
+&
+Sélectionner la thématique \textit{État des lieux} lorsque cette valeur est
+proposée.
+\\
+\hline
+
+\textbf{Étape 11}
+&
+Activer ou publier la vidéo lorsque cette option est disponible.
+\\
+\hline
+
+\textbf{Étape 12}
+&
+Enregistrer la vidéo.
+\\
+\hline
+
+\textbf{Étape 13}
+&
+Vérifier qu'un message de confirmation apparaît et qu'aucune erreur
+bloquante n'est affichée.
+\\
+\hline
+
+\textbf{Étape 14}
+&
+Rechercher la vidéo dans la liste des vidéos à l'aide de son titre ou de sa
+référence interne.
+\\
+\hline
+
+\textbf{Étape 15}
+&
+Ouvrir la fiche de la vidéo et vérifier que le titre, l'URL, la description,
+la thématique et le statut ont été correctement enregistrés.
+\\
+\hline
+
+\textbf{Étape 16}
+&
+Cliquer sur le lien ou sur le bouton de prévisualisation de la vidéo.
+\\
+\hline
+
+\textbf{Étape 17}
+&
+Vérifier que le lien ouvre la vidéo attendue et qu'il ne conduit pas vers
+une page inexistante ou vers une autre vidéo.
+\\
+\hline
+
+\textbf{Étape 18}
+&
+Vérifier, lorsque le lecteur intégré le permet, que la lecture commence à
+l'instant prévu par l'URL, soit environ 24 secondes après le début.
+\\
+\hline
+
+% ------------------------------------------------------------
+% Association depuis la question
+% ------------------------------------------------------------
+
+\rowcolor{orange!50}
+\multicolumn{2}{|c|}{
+    \textbf{Association de la vidéo à une question}
+}
+\\
+\hline
+
+\textbf{Étape 19}
+&
+Accéder à la rubrique de gestion des questions.
+\\
+\hline
+
+\textbf{Étape 20}
+&
+Rechercher la question suivante :
+
+\textit{« Quel est l'objectif principal d'un état des lieux d'entrée ? »}
+\\
+\hline
+
+\textbf{Étape 21}
+&
+Ouvrir la question en mode consultation ou modification.
+\\
+\hline
+
+\textbf{Étape 22}
+&
+Localiser le champ permettant d'associer une vidéo à la question.
+\\
+\hline
+
+\textbf{Étape 23}
+&
+Ouvrir la liste déroulante des vidéos disponibles.
+\\
+\hline
+
+\textbf{Étape 24}
+&
+Vérifier que la vidéo
+\textit{« État des lieux -- Les pièges à éviter »}
+apparaît dans la liste.
+
+Cette étape permet de vérifier la correction de l'anomalie A01-04.
+\\
+\hline
+
+\textbf{Étape 25}
+&
+Sélectionner la vidéo dans la liste.
+\\
+\hline
+
+\textbf{Étape 26}
+&
+Enregistrer la modification de la question.
+\\
+\hline
+
+\textbf{Étape 27}
+&
+Vérifier qu'un message confirme l'enregistrement de l'association.
+\\
+\hline
+
+\textbf{Étape 28}
+&
+Fermer la fiche de la question, puis l'ouvrir à nouveau.
+\\
+\hline
+
+\textbf{Étape 29}
+&
+Vérifier que la vidéo précédemment sélectionnée est toujours associée à la
+question.
+\\
+\hline
+
+\textbf{Étape 30}
+&
+Actualiser complètement la page et vérifier une nouvelle fois que
+l'association est conservée.
+\\
+\hline
+
+\textbf{Étape 31}
+&
+Se déconnecter, se reconnecter à l'espace administrateur, puis vérifier que
+l'association est toujours enregistrée.
+\\
+\hline
+
+% ------------------------------------------------------------
+% Association depuis la vidéo
+% ------------------------------------------------------------
+
+\rowcolor{orange!50}
+\multicolumn{2}{|c|}{
+    \textbf{Vérification depuis la fiche de la vidéo}
+}
+\\
+\hline
+
+\textbf{Étape 32}
+&
+Retourner dans la rubrique de gestion des vidéos.
+\\
+\hline
+
+\textbf{Étape 33}
+&
+Ouvrir la fiche de la vidéo ajoutée pendant le test.
+\\
+\hline
+
+\textbf{Étape 34}
+&
+Vérifier si la fiche indique la question ou la thématique à laquelle la
+vidéo est associée.
+\\
+\hline
+
+\textbf{Étape 35}
+&
+Lorsque l'interface permet d'associer directement une question depuis la
+fiche de la vidéo, vérifier que la question sélectionnée est identique à
+celle indiquée dans la fiche de la question.
+\\
+\hline
+
+\textbf{Étape 36}
+&
+Vérifier qu'il n'existe pas d'incohérence entre l'association affichée dans
+la rubrique des vidéos et celle affichée dans la rubrique des questions.
+\\
+\hline
+
+% ------------------------------------------------------------
+% Vérification apprenant
+% ------------------------------------------------------------
+
+\rowcolor{orange!50}
+\multicolumn{2}{|c|}{
+    \textbf{Vérification côté apprenant}
+}
+\\
+\hline
+
+\textbf{Étape 37}
+&
+Ouvrir l'application avec un compte apprenant autorisé à accéder au contenu
+testé.
+\\
+\hline
+
+\textbf{Étape 38}
+&
+Accéder au quiz, à la question ou à la thématique utilisée pendant le test.
+\\
+\hline
+
+\textbf{Étape 39}
+&
+Répondre à la question afin d'atteindre l'écran de correction ou de
+résultat.
+\\
+\hline
+
+\textbf{Étape 40}
+&
+Vérifier que la vidéo associée est visible à l'emplacement prévu dans le
+parcours apprenant.
+\\
+\hline
+
+\textbf{Étape 41}
+&
+Vérifier que le titre affiché est compréhensible et qu'il ne contient pas
+de nom technique issu directement de la base de données.
+\\
+\hline
+
+\textbf{Étape 42}
+&
+Cliquer sur la vidéo ou sur le lien permettant de la consulter.
+\\
+\hline
+
+\textbf{Étape 43}
+&
+Vérifier que la bonne vidéo est ouverte et que la lecture est possible.
+\\
+\hline
+
+\textbf{Étape 44}
+&
+Revenir dans l'application et vérifier que le retour au quiz ou au parcours
+apprenant fonctionne correctement.
+\\
+\hline
+
+\textbf{Étape 45}
+&
+Vérifier que la vidéo n'est pas affichée sur une question ou une thématique
+à laquelle elle n'a pas été associée.
+\\
+\hline
+
+% ------------------------------------------------------------
+% Test de modification et de suppression
+% ------------------------------------------------------------
+
+\rowcolor{orange!50}
+\multicolumn{2}{|c|}{
+    \textbf{Modification et suppression de l'association}
+}
+\\
+\hline
+
+\textbf{Étape 46}
+&
+Retourner dans l'interface administrateur et ouvrir la question utilisée
+pendant le test.
+\\
+\hline
+
+\textbf{Étape 47}
+&
+Retirer temporairement l'association avec la vidéo, lorsque l'interface le
+permet.
+\\
+\hline
+
+\textbf{Étape 48}
+&
+Enregistrer la modification.
+\\
+\hline
+
+\textbf{Étape 49}
+&
+Vérifier côté apprenant que la vidéo n'est plus affichée pour cette
+question.
+\\
+\hline
+
+\textbf{Étape 50}
+&
+Associer de nouveau la vidéo et vérifier que celle-ci réapparaît après
+l'enregistrement.
+\\
+\hline
+
+\textbf{Étape 51}
+&
+À la fin du test, supprimer ou désactiver la vidéo de test et retirer
+l'association lorsque ces données ne doivent pas être conservées.
+\\
+\hline
+
+% ------------------------------------------------------------
+% Éléments de preuve
+% ------------------------------------------------------------
+
+\rowcolor{orange!50}
+\multicolumn{2}{|c|}{
+    \textbf{Éléments de preuve à conserver}
+}
+\\
+\hline
+
+\textbf{Captures attendues}
+&
+\begin{itemize}[leftmargin=*,nosep]
+    \item formulaire de création de la vidéo ;
+    \item message confirmant son enregistrement ;
+    \item vidéo visible dans la liste des vidéos ;
+    \item vidéo visible dans le menu déroulant de la question ;
+    \item association enregistrée dans la fiche de la question ;
+    \item affichage de la vidéo côté apprenant ;
+    \item lecture ou ouverture correcte de la vidéo ;
+    \item éventuel message d'erreur ou comportement incohérent.
+\end{itemize}
+\\
+\hline
+
+% ------------------------------------------------------------
+% Résultat attendu
+% ------------------------------------------------------------
+
+\rowcolor{orange!50}
+\multicolumn{2}{|c|}{
+    \textbf{Résultats du test}
+}
+\\
+\hline
+
+\textbf{Résultat attendu}
+&
+\begin{itemize}[leftmargin=*,nosep]
+    \item L'administrateur peut créer ou enregistrer une vidéo à partir
+    d'une URL YouTube valide.
+
+    \item La vidéo apparaît dans la liste de gestion des vidéos.
+
+    \item Les informations saisies sont conservées après actualisation de
+    la page.
+
+    \item La vidéo apparaît dans le menu de sélection disponible depuis la
+    fiche d'une question.
+
+    \item L'administrateur peut associer la vidéo à la question choisie.
+
+    \item L'association est conservée après fermeture de la fiche,
+    actualisation de la page et reconnexion.
+
+    \item La même association est visible depuis les rubriques
+    \textit{Questions} et \textit{Vidéos}, lorsque les deux interfaces
+    présentent cette information.
+
+    \item La vidéo est affichée uniquement dans le parcours apprenant
+    correspondant à la question ou à la thématique choisie.
+
+    \item Le lien ouvre la vidéo attendue.
+
+    \item Le retrait de l'association supprime correctement la vidéo du
+    contenu apprenant concerné.
+
+    \item Aucun message contradictoire n'indique qu'aucune vidéo n'est
+    disponible lorsque la vidéo existe réellement.
+\end{itemize}
+\\
+\hline
+
+\textbf{Résultat obtenu}
+&
+À compléter après l'exécution du test.
+
+Indiquer notamment :
+\begin{itemize}[leftmargin=*,nosep]
+    \item si la vidéo a pu être créée ;
+    \item si elle apparaît dans la liste des vidéos ;
+    \item si elle apparaît dans la liste déroulante des questions ;
+    \item si l'association est conservée après actualisation ;
+    \item si la vidéo est accessible côté apprenant ;
+    \item si le retrait de l'association fonctionne ;
+    \item si l'anomalie A01-04 est toujours présente.
+\end{itemize}
+\\
+\hline
+
+\textbf{Statut}
+&
+Non testé / Validé / Partiellement validé / Non validé.
+\\
+\hline
+
+\textbf{Critère de validation}
+&
+Le test est considéré comme validé lorsque la vidéo peut être enregistrée,
+sélectionnée, associée, retrouvée après actualisation et consultée depuis
+le parcours apprenant attendu.
+\\
+\hline
+
+\textbf{Critère de validation partielle}
+&
+Le test est considéré comme partiellement validé lorsque l'association est
+enregistrée mais qu'une incohérence non bloquante subsiste, par exemple :
+
+\begin{itemize}[leftmargin=*,nosep]
+    \item intitulé incorrect ;
+    \item vidéo absente d'un des écrans d'administration ;
+    \item prévisualisation indisponible ;
+    \item association visible côté administrateur mais mal présentée côté
+    apprenant ;
+    \item temps de départ de 24 secondes non pris en compte.
+\end{itemize}
+\\
+\hline
+
+\textbf{Critère de non-validation}
+&
+Le test est considéré comme non validé lorsque la vidéo ne peut pas être
+enregistrée, n'apparaît pas dans la liste de sélection, n'est pas réellement
+associée à la question ou reste inaccessible côté apprenant.
+\\
+\hline
+
+% ------------------------------------------------------------
+% Anomalies et observations
+% ------------------------------------------------------------
+
+\rowcolor{orange!50}
+\multicolumn{2}{|c|}{
+    \textbf{Commentaires, observations et anomalies constatées}
+}
+\\
+\hline
+
+\textbf{A02-01 -- Création de la vidéo}
+&
+La création de la vidéo fonctionne correctement. Les informations saisies
+ont été enregistrées dans la base de données sans erreur bloquante.
+\\
+\hline
+
+\textbf{A02-02 -- Liste des vidéos}
+&
+Au moment de l'exécution du test, une seule vidéo de test était présente
+dans l'application : celle créée dans le cadre de ce scénario.
+
+Elle a donc pu être retrouvée facilement dans la liste. Toutefois, ce test
+ne permet pas encore d'évaluer précisément l'efficacité des fonctions de
+recherche, de filtrage ou de classement lorsqu'un nombre plus important de
+vidéos sera disponible.
+\\
+\hline
+
+\textbf{A02-03 -- Cohérence de l'association}
+&
+La vidéo peut être associée à une question et dissociée de celle-ci sans
+difficulté technique.
+
+L'association peut être gérée aussi bien depuis la fiche de la question que
+depuis la fiche de la vidéo. Les modifications réalisées depuis l'une de
+ces interfaces sont correctement répercutées dans l'autre.
+\\
+\hline
+
+\textbf{A02-04 -- Affichage côté apprenant}
+&
+L'affichage de la vidéo côté apprenant n'a pas pu être vérifié au cours de
+ce test, car l'application apprenant n'était pas accessible dans
+l'environnement utilisé.
+
+Cette partie du scénario devra être exécutée ultérieurement depuis
+l'application apprenant afin de vérifier :
+\begin{itemize}[leftmargin=*,nosep]
+    \item la présence de la vidéo dans le parcours attendu ;
+    \item l'affichage de son titre ;
+    \item l'ouverture correcte du lien ;
+    \item la lecture de la vidéo ;
+    \item l'absence de la vidéo sur les questions auxquelles elle n'est pas
+    associée.
+\end{itemize}
+\\
+\hline
+
+\textbf{A02-05 -- Persistance}
+&
+L'association est correctement conservée après l'actualisation de la page.
+
+La même vidéo reste associée à la question après le rechargement de
+l'interface, ce qui confirme la persistance de l'enregistrement dans la
+base de données.
+\\
+\hline
+
+\textbf{A02-06 -- Association et dissociation}
+&
+La vidéo peut être associée ou dissociée d'une question depuis deux points
+d'entrée :
+\begin{itemize}[leftmargin=*,nosep]
+    \item depuis la fiche de la question ;
+    \item depuis la fiche de la vidéo.
+\end{itemize}
+
+La fonctionnalité est opérationnelle dans les deux cas. La gestion depuis
+la fiche de la vidéo paraît néanmoins plus simple à comprendre et à
+utiliser que celle proposée depuis la fiche de la question.
+\\
+\hline
+
+\textbf{A02-07 -- Compréhension de l'interface}
+&
+Le comportement considéré initialement comme une anomalie lors du test A01
+correspond en réalité à un fonctionnement peu intuitif de l'interface.
+
+L'association entre une vidéo et une question est bien possible, mais le
+parcours utilisateur, les intitulés ou le comportement du menu déroulant ne
+permettent pas de comprendre immédiatement la manière dont cette
+association doit être réalisée.
+
+Il ne s'agit donc pas d'une anomalie fonctionnelle bloquante, mais d'un
+problème d'ergonomie. Une amélioration de l'interface serait souhaitable,
+par exemple en :
+\begin{itemize}[leftmargin=*,nosep]
+    \item ajoutant un libellé plus explicite au champ d'association ;
+    \item affichant clairement la vidéo actuellement associée ;
+    \item distinguant l'absence d'association de l'absence de vidéos
+    disponibles ;
+    \item ajoutant un message d'aide ou une indication sur le fonctionnement
+    du menu ;
+    \item harmonisant le parcours entre la fiche d'une question et celle
+    d'une vidéo.
+\end{itemize}
+\\
+\hline
+
+\textbf{Conclusion du test}
+&
+La création d'une vidéo ainsi que son association et sa dissociation avec
+une question sont fonctionnelles. Les données sont correctement
+enregistrées et conservées après actualisation de la page.
+
+Le test ne peut toutefois pas être entièrement validé, car l'affichage et
+la lecture de la vidéo côté apprenant n'ont pas pu être vérifiés.
+
+Par ailleurs, le mécanisme d'association manque de clarté et peut faire
+penser, lors de la première utilisation, que la fonctionnalité ne fonctionne
+pas. Une amélioration ergonomique est recommandée afin de rendre le parcours
+plus explicite.
+\\
+\hline
+
+\textbf{Statut proposé}
+&
+\textbf{Partiellement validé}
+
+La partie administrateur est validée, mais la vérification côté apprenant
+reste à effectuer.
+\\
+
+
+\end{longtable}
+
+\endgroup
+
+\subsection{Test A03 -- Consulter les statistiques d'engagement}
+
+\begin{table}[H]
+\centering
+\renewcommand{\arraystretch}{1.3}
+\small
+\begin{tabular}{|p{4cm}|p{10cm}|}
+\hline
+\rowcolor{orange!20}
+\multicolumn{2}{|c|}{\textbf{Fiche de test A03 -- Consultation des statistiques}} \\
+\hline
+\textbf{Identifiant du test} & A03 \\ \hline
+\textbf{Titre du test} & Consulter les statistiques d'engagement des apprenants \\ \hline
+\textbf{Persona concerné} & Claire, administratrice / formatrice côté Le Carré Pro \\ \hline
+\textbf{Interface testée} & Interface administrateur web \\ \hline
+\textbf{Objectif du test} & Vérifier que l'administrateur peut consulter des indicateurs utiles au suivi pédagogique et à l'amélioration des contenus. \\ \hline
+\textbf{Préconditions} &
+\begin{itemize}
+    \item L'administrateur est connecté.
+    \item Des utilisateurs ont réalisé des quiz.
+    \item Des résultats sont disponibles dans la base de données.
+\end{itemize}
+\\ \hline
+\textbf{Données de test} & 
+Période d'analyse : à compléter. \newline
+Utilisateurs ou groupe test : à compléter. \\ \hline
+\textbf{Étapes de test} &
+\begin{enumerate}
+    \item Accéder à l'espace administrateur.
+    \item Ouvrir le tableau de bord ou la section statistiques.
+    \item Consulter les indicateurs disponibles.
+    \item Vérifier l'affichage du nombre de quiz réalisés.
+    \item Vérifier l'affichage du taux de réussite.
+    \item Vérifier l'identification des questions ou thématiques difficiles.
+\end{enumerate}
+\\ \hline
+\textbf{Résultat attendu} & 
+Les statistiques sont accessibles, lisibles et cohérentes avec les données de test. L'administrateur peut identifier les tendances principales. \\ \hline
+\textbf{Résultat obtenu} & À compléter après exécution du test. \\ \hline
+\textbf{Statut} & Non testé / Validé / Partiellement validé / Non validé \\ \hline
+\textbf{Commentaires / anomalies} & À compléter. \\ \hline
+\end{tabular}
+\caption{Fiche de test A03 -- Consultation des statistiques}
+\end{table}
+
+% ============================================================
+% Test A03 -- Consultation des statistiques
+% ============================================================
+
+%\subsection{Test A03 -- Consulter les statistiques d'engagement - test du 13/07/2026}
+
+\begingroup
+\small
+\renewcommand{\arraystretch}{1.3}
+\setlength{\LTleft}{\fill}
+\setlength{\LTright}{\fill}
+
+\begin{longtable}{
+    |>{\raggedright\arraybackslash}p{0.28\textwidth}
+    |>{\raggedright\arraybackslash}p{0.64\textwidth}|
+}
+
+\caption{Fiche de test A03 -- Consultation des statistiques, complétée le 13/07/2026}
+\label{tab:test-a03-statistiques}
+\\
+
+\hline
+\rowcolor{orange!50}
+\multicolumn{2}{|c|}{
+    \textbf{Fiche de test A03 -- Consultation des statistiques}
+}
+\\
+\hline
+
+\endfirsthead
+
+\multicolumn{2}{c}{
+    \small\textit{Fiche de test A03 -- Consultation des statistiques (suite)}
+}
+\\
+\hline
+
+\rowcolor{orange!50}
+\multicolumn{2}{|c|}{
+    \textbf{Fiche de test A03 -- Consultation des statistiques}
+}
+\\
+\hline
+
+\endhead
+
+\hline
+\multicolumn{2}{|r|}{
+    \small\textit{Suite de la fiche page suivante}
+}
+\\
+\hline
+
+\endfoot
+
+\hline
+\endlastfoot
+
+% ------------------------------------------------------------
+% Informations générales
+% ------------------------------------------------------------
+
+\textbf{Identifiant du test}
+&
+A03
+\\
+\hline
+
+\textbf{Titre du test}
+&
+Consulter les statistiques d'engagement des apprenants.
+\\
+\hline
+
+\textbf{Type de test}
+&
+Test fonctionnel, test de cohérence des données et test d'ergonomie.
+\\
+\hline
+
+\textbf{Persona concerné}
+&
+Claire, administratrice et formatrice pour Le Carré Pro.
+\\
+\hline
+
+\textbf{Interface testée}
+&
+Interface web d'administration, rubrique
+\textit{Monitoring des statistiques}.
+\\
+\hline
+
+\textbf{Date d'exécution}
+&
+À compléter.
+\\
+\hline
+
+\textbf{Exécutant}
+&
+À compléter.
+\\
+\hline
+
+\textbf{Objectif du test}
+&
+Vérifier que l'administrateur peut consulter des indicateurs utiles au suivi
+pédagogique, contrôler leur cohérence et identifier les questions présentant
+un faible taux de réussite.
+
+Le test doit également vérifier le comportement de l'interface lorsque
+certaines questions ou vidéos ne disposent encore d'aucune donnée
+d'utilisation.
+\\
+\hline
+
+% ------------------------------------------------------------
+% Préconditions
+% ------------------------------------------------------------
+
+\rowcolor{orange!50}
+\multicolumn{2}{|c|}{
+    \textbf{Préconditions}
+}
+\\
+\hline
+
+\textbf{Préconditions générales}
+&
+\begin{itemize}[leftmargin=*,nosep]
+    \item L'application et la base de données sont accessibles.
+    \item L'administrateur possède un compte valide.
+    \item Le compte utilisé dispose des droits d'administration.
+    \item L'administrateur est connecté à l'espace d'administration.
+    \item La rubrique de statistiques est accessible.
+    \item Plusieurs réponses à des questions sont déjà enregistrées.
+\end{itemize}
+\\
+\hline
+
+\textbf{Limites du jeu de données}
+&
+Le volume de données disponible au moment du test reste limité.
+
+Les résultats permettent de vérifier le fonctionnement et la cohérence
+générale de l'interface, mais ils ne sont pas suffisants pour réaliser une
+analyse pédagogique représentative de l'ensemble des futurs apprenants.
+\\
+\hline
+
+% ------------------------------------------------------------
+% Données de référence
+% ------------------------------------------------------------
+
+\rowcolor{orange!50}
+\multicolumn{2}{|c|}{
+    \textbf{Données observées avant le test}
+}
+\\
+\hline
+
+\textbf{Nombre total affiché}
+&
+197 questions jouées ou occurrences de réponses enregistrées.
+\\
+\hline
+
+\textbf{Bonnes réponses}
+&
+41 bonnes réponses.
+\\
+\hline
+
+\textbf{Taux de réussite global}
+&
+21\,\%.
+\\
+\hline
+
+\textbf{Temps moyen global}
+&
+1,5 seconde par réponse.
+\\
+\hline
+
+\textbf{Vues de vidéos}
+&
+0 vue.
+\\
+\hline
+
+\textbf{Taux de complétion vidéo}
+&
+0\,\%.
+\\
+\hline
+
+\textbf{Questions présentes dans la liste statistique}
+&
+146 questions disposant apparemment d'au moins une donnée d'utilisation.
+\\
+\hline
+
+\textbf{Question de contrôle}
+&
+Question \#466 :
+
+\textit{« Parmi ces exemples, lequel justifie typiquement une convention
+d'occupation précaire ? »}
+\\
+\hline
+
+\textbf{Données de contrôle de la question \#466}
+&
+\begin{itemize}[leftmargin=*,nosep]
+    \item catégorie : \textit{Fondamentaux} ;
+    \item type de bail : \textit{Précaire} ;
+    \item niveau : niveau 1 ;
+    \item parties jouées : 5 ;
+    \item bonnes réponses : 1 ;
+    \item mauvaises réponses : 4 ;
+    \item taux de réussite : 20\,\% ;
+    \item temps cumulé : 5,8 secondes ;
+    \item temps moyen : 1,2 seconde ;
+    \item dernière partie : 8 juin 2026 à 15 h 00.
+\end{itemize}
+\\
+\hline
+
+\textbf{Question sans statistique}
+&
+La question créée lors du test A01 ne figure pas dans la liste, car elle
+n'a encore jamais été jouée.
+\\
+\hline
+
+% ------------------------------------------------------------
+% Déroulement
+% ------------------------------------------------------------
+
+\rowcolor{orange!50}
+\multicolumn{2}{|c|}{
+    \textbf{Déroulement du test}
+}
+\\
+\hline
+
+\textbf{Étape 1}
+&
+Se connecter à l'espace administrateur avec un compte disposant des droits
+nécessaires.
+\\
+\hline
+
+\textbf{Étape 2}
+&
+Accéder à la rubrique \textit{Monitoring des statistiques}.
+\\
+\hline
+
+\textbf{Étape 3}
+&
+Vérifier que la page se charge sans erreur et que les indicateurs globaux
+sont visibles.
+\\
+\hline
+
+\textbf{Étape 4}
+&
+Relever les valeurs affichées pour :
+\begin{itemize}[leftmargin=*,nosep]
+    \item le nombre de questions jouées ;
+    \item le nombre de bonnes réponses ;
+    \item le taux de réussite global ;
+    \item le temps moyen par réponse ;
+    \item le nombre de vues de vidéos ;
+    \item le taux de complétion des vidéos.
+\end{itemize}
+\\
+\hline
+
+\textbf{Étape 5}
+&
+Vérifier la cohérence du taux de réussite global à partir des données
+affichées.
+
+Le calcul attendu est :
+
+\[
+\frac{41}{197} \times 100 \approx 20{,}8\,\%
+\]
+
+La valeur affichée peut donc être arrondie à 21\,\%.
+\\
+\hline
+
+\textbf{Étape 6}
+&
+Vérifier que la liste des statistiques par question est affichée.
+\\
+\hline
+
+\textbf{Étape 7}
+&
+Vérifier la présence des colonnes suivantes :
+\begin{itemize}[leftmargin=*,nosep]
+    \item identifiant ;
+    \item question ;
+    \item type de bail ;
+    \item nombre de parties jouées ;
+    \item taux de réussite ;
+    \item temps moyen de réponse ;
+    \item accès au détail.
+\end{itemize}
+\\
+\hline
+
+\textbf{Étape 8}
+&
+Utiliser le champ de recherche pour retrouver la question \#466 à partir
+de son identifiant ou d'une partie de son énoncé.
+\\
+\hline
+
+\textbf{Étape 9}
+&
+Vérifier que le résultat correspondant est correctement affiché.
+\\
+\hline
+
+\textbf{Étape 10}
+&
+Tester successivement les filtres disponibles :
+\begin{itemize}[leftmargin=*,nosep]
+    \item catégorie ;
+    \item type de bail ;
+    \item statut.
+\end{itemize}
+\\
+\hline
+
+\textbf{Étape 11}
+&
+Combiner plusieurs filtres et vérifier que la liste est correctement mise
+à jour.
+\\
+\hline
+
+\textbf{Étape 12}
+&
+Réinitialiser les filtres et vérifier que la liste complète réapparaît.
+\\
+\hline
+
+\textbf{Étape 13}
+&
+Effectuer une recherche ne correspondant à aucune question et vérifier
+qu'un message explicite indique l'absence de résultat.
+\\
+\hline
+
+\textbf{Étape 14}
+&
+Cliquer sur le bouton \textit{Inspecter} de la question \#466.
+\\
+\hline
+
+\textbf{Étape 15}
+&
+Vérifier que la fiche de détail affiche correctement :
+\begin{itemize}[leftmargin=*,nosep]
+    \item l'énoncé ;
+    \item la catégorie ;
+    \item le type de bail ;
+    \item le niveau ;
+    \item la date de dernière partie ;
+    \item les parties jouées ;
+    \item les bonnes et mauvaises réponses ;
+    \item le taux de réussite ;
+    \item le temps cumulé ;
+    \item le temps moyen par réponse.
+\end{itemize}
+\\
+\hline
+
+\textbf{Étape 16}
+&
+Vérifier la cohérence du taux de réussite de la question \#466 :
+
+\[
+\frac{1}{5} \times 100 = 20\,\%
+\]
+\\
+\hline
+
+\textbf{Étape 17}
+&
+Vérifier la cohérence du temps moyen de réponse :
+
+\[
+\frac{5{,}8}{5} = 1{,}16\ \text{seconde}
+\]
+
+La valeur peut être arrondie à 1,2 seconde.
+\\
+\hline
+
+\textbf{Étape 18}
+&
+Fermer la fiche de détail et vérifier que l'utilisateur revient à la liste
+sans perdre sa recherche ou ses filtres, lorsque ce comportement est prévu.
+\\
+\hline
+
+\textbf{Étape 19}
+&
+Rechercher la question créée pendant le test A01.
+\\
+\hline
+
+\textbf{Étape 20}
+&
+Constater si la question apparaît dans la liste alors qu'elle n'a jamais
+été jouée.
+\\
+\hline
+
+\textbf{Étape 21}
+&
+Lorsque l'application apprenant est disponible, jouer une fois la question
+créée pendant le test A01.
+\\
+\hline
+
+\textbf{Étape 22}
+&
+Actualiser la page des statistiques et vérifier que la question apparaît
+après sa première utilisation.
+\\
+\hline
+
+\textbf{Étape 23}
+&
+Ouvrir l'onglet \textit{Vidéos}.
+\\
+\hline
+
+\textbf{Étape 24}
+&
+Vérifier que l'interface affiche un état vide compréhensible lorsqu'aucune
+vidéo n'a encore été visionnée.
+\\
+\hline
+
+\textbf{Étape 25}
+&
+Actualiser complètement la page et vérifier que les statistiques restent
+accessibles et identiques.
+\\
+\hline
+
+\textbf{Étape 26}
+&
+Conserver des captures d'écran du tableau de bord, de la liste filtrée et
+de la fiche détaillée de la question \#466.
+\\
+\hline
+
+% ------------------------------------------------------------
+% Résultat attendu
+% ------------------------------------------------------------
+
+\rowcolor{orange!50}
+\multicolumn{2}{|c|}{
+    \textbf{Résultats du test}
+}
+\\
+\hline
+
+\textbf{Résultat attendu}
+&
+\begin{itemize}[leftmargin=*,nosep]
+    \item La rubrique de statistiques est accessible sans erreur.
+    \item Les indicateurs globaux sont lisibles.
+    \item Les calculs affichés sont cohérents avec les données enregistrées.
+    \item La liste des questions peut être recherchée et filtrée.
+    \item Le détail d'une question est accessible.
+    \item Les statistiques détaillées sont cohérentes avec les valeurs de
+    la liste.
+    \item Les questions sans activité restent identifiables avec des valeurs
+    nulles, ou un filtre permet de les afficher.
+    \item L'absence de données vidéo est présentée avec un message clair.
+    \item Les données sont conservées après actualisation de la page.
+\end{itemize}
+\\
+\hline
+
+\textbf{Résultat obtenu}
+&
+\begin{itemize}[leftmargin=*,nosep]
+    \item La page de monitoring est accessible et les principaux indicateurs
+    sont affichés.
+
+    \item Le tableau de bord indique 197 occurrences de questions jouées,
+    41 bonnes réponses, un taux de réussite global de 21\,\% et un temps
+    moyen de 1,5 seconde par réponse.
+
+    \item Le calcul du taux de réussite global est cohérent avec les données
+    affichées.
+
+    \item La liste statistique contient 146 questions disposant de données
+    d'utilisation.
+
+    \item La fiche de détail de la question \#466 est accessible.
+
+    \item Les valeurs détaillées de cette question sont cohérentes :
+    5 parties jouées, 1 bonne réponse, 4 mauvaises réponses et un taux de
+    réussite de 20\,\%.
+
+    \item Le temps cumulé de 5,8 secondes correspond à un temps moyen arrondi
+    à 1,2 seconde.
+
+    \item Aucune vue de vidéo et aucune lecture complète ne sont actuellement
+    enregistrées.
+
+    \item La question créée lors du test A01 n'apparaît pas dans les
+    statistiques, car elle n'a jamais été jouée.
+
+    \item Les tests de filtrage, de recherche sans résultat et d'affichage
+    côté vidéo restent à compléter selon les manipulations réalisées.
+\end{itemize}
+\\
+\hline
+
+\textbf{Statut proposé}
+&
+\textbf{Partiellement validé}
+\\
+\hline
+
+\textbf{Justification du statut}
+&
+Les principales statistiques sont accessibles et les calculs vérifiés sont
+cohérents.
+
+Le test reste partiellement validé en raison du faible volume de données,
+de l'absence de statistiques vidéo et de l'impossibilité d'identifier
+directement les questions qui n'ont jamais été jouées.
+\\
+\hline
+
+% ------------------------------------------------------------
+% Observations et anomalies
+% ------------------------------------------------------------
+
+\rowcolor{orange!50}
+\multicolumn{2}{|c|}{
+    \textbf{Commentaires, observations et anomalies constatées}
+}
+\\
+\hline
+
+\textbf{A03-01 -- Cohérence des indicateurs globaux}
+&
+Le taux de réussite global affiché est cohérent avec le nombre de bonnes
+réponses et le nombre total d'occurrences enregistrées.
+
+Les 41 bonnes réponses sur 197 occurrences représentent environ 20,8\,\%,
+soit 21\,\% après arrondi.
+\\
+\hline
+
+\textbf{A03-02 -- Cohérence du détail d'une question}
+&
+Les données de la question \#466 sont cohérentes.
+
+Une bonne réponse sur cinq parties jouées correspond bien à un taux de
+réussite de 20\,\%. Le temps cumulé de 5,8 secondes correspond également à
+un temps moyen arrondi à 1,2 seconde.
+\\
+\hline
+
+\textbf{A03-03 -- Ambiguïté du libellé « Questions jouées »}
+&
+Le tableau de bord affiche 197 \textit{questions jouées}, tandis que la
+liste contient 146 questions distinctes.
+
+Le compteur de 197 semble donc correspondre au nombre total d'occurrences
+ou de réponses enregistrées, et non au nombre de questions distinctes.
+
+Un libellé tel que \textit{« Réponses enregistrées »},
+\textit{« Tentatives »} ou \textit{« Occurrences jouées »} serait plus
+précis.
+\\
+\hline
+
+\textbf{A03-04 -- Questions jamais jouées invisibles}
+&
+Les questions qui n'ont encore jamais été jouées ne figurent pas dans la
+liste statistique.
+
+La question créée lors du test A01 est donc absente, bien qu'elle existe
+dans la base de données et qu'elle soit disponible dans l'interface de
+gestion des questions.
+
+Ce comportement empêche l'administrateur d'identifier facilement les
+contenus qui ne sont jamais proposés ou jamais utilisés.
+
+Il serait préférable :
+\begin{itemize}[leftmargin=*,nosep]
+    \item d'afficher toutes les questions avec la valeur
+    \textit{0 partie jouée} ;
+    \item ou d'ajouter un filtre
+    \textit{« Inclure les questions jamais jouées »} ;
+    \item ou de créer un indicateur recensant les contenus sans activité.
+\end{itemize}
+\\
+\hline
+
+\textbf{A03-05 -- Volume de données limité}
+&
+Le nombre actuel de parties ne permet pas encore de tirer des conclusions
+pédagogiques fiables.
+
+Par exemple, une question réussie une fois sur une seule tentative
+obtiendrait un taux de réussite de 100\,\%, sans que ce résultat soit
+représentatif.
+
+Le nombre de tentatives doit donc toujours être affiché à côté du taux de
+réussite.
+\\
+\hline
+
+\textbf{A03-06 -- Absence de période d'analyse}
+&
+Aucun filtre de période n'est visible sur l'écran testé.
+
+L'administrateur ne peut donc pas distinguer les résultats de la semaine,
+du mois, d'une promotion ou de l'ensemble de la durée d'utilisation.
+
+L'ajout d'un sélecteur de dates permettrait de suivre l'évolution de
+l'engagement dans le temps.
+\\
+\hline
+
+\textbf{A03-07 -- Absence de segmentation des apprenants}
+&
+Les statistiques affichées sont globales.
+
+Aucun filtre visible ne permet de sélectionner un utilisateur, une
+promotion, un groupe ou un type d'abonnement. Cette fonctionnalité serait
+utile pour réaliser un suivi pédagogique plus précis.
+\\
+\hline
+
+\textbf{A03-08 -- Statistiques vidéo non exploitables}
+&
+Aucune vue de vidéo n'est actuellement enregistrée. Les indicateurs de vues
+et de complétion restent donc à zéro.
+
+L'interface devrait afficher un message explicite indiquant qu'aucune donnée
+n'est encore disponible, plutôt que de laisser uniquement apparaître des
+valeurs nulles.
+\\
+\hline
+
+\textbf{Conclusion du test}
+&
+La consultation des statistiques fonctionne et les calculs contrôlés sont
+cohérents avec les données affichées.
+
+L'interface permet déjà d'identifier certaines questions présentant un
+faible taux de réussite. Elle reste cependant limitée pour une véritable
+analyse pédagogique, notamment en raison de l'absence des questions jamais
+jouées, du manque de filtres temporels et de segmentation, ainsi que du
+faible volume actuel de données.
+
+La fonctionnalité est donc opérationnelle, mais plusieurs améliorations
+permettraient de rendre les statistiques plus complètes et plus utiles pour
+l'administrateur.
+\\
+\hline
+
+\end{longtable}
+
+\endgroup

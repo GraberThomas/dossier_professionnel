@@ -1,0 +1,320 @@
+% ==========================================================
+\chapter{Indicateurs de suivi du projet}
+\label{annexe:kpi-projet}
+% ==========================================================
+
+Cette annexe présente les indicateurs clés de performance, ou KPI, retenus pour le suivi du projet \emph{5 Secondes Chrono}. 
+Ces indicateurs permettent d'évaluer l'avancement du projet, la qualité technique de la solution, ainsi que la valeur d'usage attendue pour les apprenants et pour Le Carré Pro.
+
+Les KPI sont regroupés en quatre catégories :
+\begin{itemize}\setlength{\itemsep}{2pt}
+    \item les KPI de pilotage projet ;
+    \item les KPI de valeur et d'usage ;
+    \item les KPI de performance technique ;
+    \item les KPI de performance sous charge contrôlée.
+\end{itemize}
+
+Dans le cadre du projet académique, tous les indicateurs n'ont pas pu être mesurés avec le même niveau de précision. 
+Les KPI de pilotage projet ont été les plus exploitables, car ils reposent sur les jalons, les exigences, les tickets Jira et les livrables. 
+Les KPI techniques ont pu être observés de manière qualitative lors des tests internes et des démonstrations. 
+En revanche, les KPI de valeur, d'usage et de charge nécessitent une utilisation réelle de l'application par des apprenants sur une période suffisante.
+
+Ainsi, certains indicateurs sont considérés comme des indicateurs de suivi cible. 
+Ils constituent une base pour une future phase de recette, de mise en production ou de reprise du projet.
+
+% ==========================================================
+\section{KPI de pilotage projet}
+% ==========================================================
+
+Les KPI de pilotage projet permettent de suivre la maîtrise du planning, la couverture du périmètre et la capacité de l'équipe à livrer une version démontrable du produit.
+
+\begin{longtable}{|p{4cm}|p{3cm}|p{4cm}|p{3cm}|}
+\hline
+\rowcolor{etnaBlue!15}
+\textbf{Indicateur} & \textbf{Objectif cible} & \textbf{Rôle dans le projet} & \textbf{Résultat observé} \\
+\hline
+\endfirsthead
+
+\hline
+\rowcolor{etnaBlue!15}
+\textbf{Indicateur} & \textbf{Objectif cible} & \textbf{Rôle dans le projet} & \textbf{Résultat observé} \\
+\hline
+\endhead
+
+Respect des jalons 
+& $\geq 90\%$ 
+& Vérifier la maîtrise du calendrier et des échéances principales. 
+& Globalement respecté, avec des glissements et un niveau de finition variable selon les jalons. \\
+\hline
+
+Bugs critiques 
+& 0 
+& Garantir une version démontrable sans blocage majeur. 
+& Aucun bug bloquant majeur identifié pour la démonstration finale, mais des tests complémentaires restent nécessaires. \\
+\hline
+
+Couverture fonctionnelle du MVP 
+& 100\% des fonctions critiques 
+& Vérifier que le cœur du produit est couvert : quiz, résultat, progression, administration minimale. 
+& MVP globalement couvert sur les fonctions essentielles, avec certaines fonctions avancées reportées. \\
+\hline
+
+Dette technique maîtrisée 
+& $\leq 15\%$ 
+& Limiter les développements provisoires ou difficiles à maintenir. 
+& Dette technique présente, notamment sur la sécurisation finale, les tests automatisés et l'industrialisation. \\
+\hline
+
+Documentation disponible 
+& Documentation projet et technique livrée 
+& Faciliter la compréhension, la reprise et la maintenance du projet. 
+& Documentation projet disponible ; documentation technique à compléter pour une reprise complète. \\
+\hline
+
+\caption{KPI de pilotage projet}
+\label{tab:kpi-pilotage-projet}
+\end{longtable}
+
+% ==========================================================
+\section{KPI de valeur et d'usage}
+% ==========================================================
+
+Les KPI de valeur et d'usage permettent d'évaluer l'intérêt pédagogique de l'application et son appropriation par les utilisateurs. 
+Ils sont particulièrement importants pour vérifier si l'application répond à son objectif principal : rendre l'apprentissage juridique plus régulier, plus court et plus engageant.
+
+\begin{longtable}{|p{4.2cm}|p{3cm}|p{4.2cm}|p{3cm}|}
+\hline
+\rowcolor{accentGreen!15}
+\textbf{Indicateur} & \textbf{Objectif cible} & \textbf{Interprétation attendue} & \textbf{Résultat observé} \\
+\hline
+\endfirsthead
+
+\hline
+\rowcolor{accentGreen!15}
+\textbf{Indicateur} & \textbf{Objectif cible} & \textbf{Interprétation attendue} & \textbf{Résultat observé} \\
+\hline
+\endhead
+
+Taux d'engagement hebdomadaire 
+& $\geq 60\%$ 
+& Mesurer la capacité de l'application à faire revenir les utilisateurs régulièrement. 
+& Non mesurable sans mise à disposition réelle auprès d'apprenants. \\
+\hline
+
+Nombre de quiz réalisés par utilisateur 
+& 3 à 5 par semaine 
+& Vérifier que le format court favorise une pratique régulière. 
+& Non mesurable dans le cadre du projet académique ; indicateur à suivre lors d'une future recette. \\
+\hline
+
+Taux de réussite moyen 
+& 60 à 80\% 
+& Évaluer si les contenus sont adaptés au niveau des apprenants. 
+& Non mesurable sur un panel réel ; calcul prévu à partir des résultats de quiz. \\
+\hline
+
+Progression des apprenants 
+& $\geq 70\%$ 
+& Observer l'amélioration des résultats au fil des sessions. 
+& Non mesurable sans historique d'usage suffisant. \\
+\hline
+
+Consultation des vidéos associées 
+& À définir 
+& Mesurer l'utilisation des contenus pédagogiques après le quiz. 
+& Indicateur prévu pour évaluer l'intérêt des vidéos après les réponses. \\
+\hline
+
+Satisfaction utilisateur 
+& $\geq 4/5$ 
+& Évaluer la perception générale de l'expérience apprenant. 
+& Non mesurable sans phase de test utilisateur complète. \\
+\hline
+
+\caption{KPI de valeur et d'usage}
+\label{tab:kpi-valeur-usage}
+\end{longtable}
+
+\begin{tcolorbox}[
+  colback=green!5,
+  colframe=green!50!black,
+  title={\textbf{Lecture pédagogique des KPI}},
+  boxrule=0.7pt,
+  enhanced,
+  sharp corners,
+  breakable
+]
+Les KPI de valeur ne doivent pas être lus isolément. 
+Par exemple, un taux de réussite élevé peut indiquer une bonne progression, mais aussi des questions trop simples si l'engagement reste faible. 
+À l'inverse, un taux de réussite moyen associé à un engagement fort peut traduire une dynamique d'apprentissage positive.
+\end{tcolorbox}
+
+% ==========================================================
+\section{KPI de performance technique}
+% ==========================================================
+
+Les KPI de performance technique permettent de vérifier que l'application est suffisamment fluide, stable et exploitable pour une première version.
+
+\begin{longtable}{|p{5cm}|p{3cm}|p{4cm}|p{2.5cm}|}
+\hline
+\rowcolor{orange!20}
+\textbf{Indicateur} & \textbf{Objectif cible} & \textbf{Rôle} & \textbf{Résultat observé} \\
+\hline
+\endfirsthead
+
+\hline
+\rowcolor{orange!20}
+\textbf{Indicateur} & \textbf{Objectif cible} & \textbf{Rôle} & \textbf{Résultat observé} \\
+\hline
+\endhead
+
+Temps de chargement initial de l'application 
+& $< 3$ secondes 
+& Garantir une entrée rapide dans l'application. 
+& Observé qualitativement comme acceptable en démonstration ; mesure automatisée à prévoir. \\
+\hline
+
+Temps de réponse des écrans critiques 
+& $< 2$ secondes 
+& Préserver la fluidité du quiz, des résultats et de la progression. 
+& Parcours démontrable sans lenteur bloquante ; tests de performance à compléter. \\
+\hline
+
+Temps de réponse moyen de l'API 
+& $< 500$ ms 
+& Vérifier la rapidité des échanges entre frontend et backend. 
+& Non mesuré de manière systématique ; indicateur à instrumenter avec logs ou monitoring. \\
+\hline
+
+Taux d'erreurs applicatives 
+& $< 1\%$ 
+& Suivre la stabilité globale de la solution. 
+& Non mesuré automatiquement ; les erreurs ont été traitées lors des tests internes. \\
+\hline
+
+Disponibilité de l'application 
+& $\geq 99\%$ 
+& Évaluer la fiabilité du service dans un contexte d'exploitation. 
+& Non applicable hors production réelle. \\
+\hline
+\caption{KPI de performance technique}
+\label{tab:kpi-performance-technique}
+\end{longtable}
+
+% ==========================================================
+\section{KPI de performance sous charge contrôlée}
+% ==========================================================
+
+Dans le cadre académique du projet, les tests de charge ne visent pas à garantir une montée en charge industrielle. 
+Ils permettent surtout de vérifier que la solution reste stable dans un contexte d'usage pilote ou de démonstration.
+
+\begin{longtable}{|p{5cm}|p{3cm}|p{4cm}|p{2.5cm}|}
+\hline
+\rowcolor{purple!15}
+\textbf{Indicateur} & \textbf{Objectif cible} & \textbf{Rôle} & \textbf{Résultat observé} \\
+\hline
+\endfirsthead
+
+\hline
+\rowcolor{purple!15}
+\textbf{Indicateur} & \textbf{Objectif cible} & \textbf{Rôle} & \textbf{Résultat observé} \\
+\hline
+\endhead
+
+Nombre d'utilisateurs simultanés supportés 
+& $\geq 50$ 
+& Vérifier la tenue de l'application en usage simultané limité. 
+& Non testé dans le cadre académique ; objectif à conserver pour une future phase de recette technique. \\
+\hline
+
+Dégradation des temps de réponse sous charge 
+& $< +30\%$ 
+& Observer l'impact de la charge sur la fluidité. 
+& Non mesuré ; nécessite un environnement de test dédié. \\
+\hline
+
+Stabilité de l'application sous charge 
+& Aucun crash 
+& Vérifier la robustesse minimale du système. 
+& Non validé sous charge réelle ; tests à prévoir avant mise en production. \\
+\hline
+
+\caption{KPI de performance sous charge contrôlée}
+\label{tab:kpi-charge}
+\end{longtable}
+
+% ==========================================================
+\section{Synthèse de suivi des KPI}
+% ==========================================================
+
+Le tableau suivant permet de faire une synthèse globale de l'état des KPI en fin de projet.
+
+\begin{table}[H]
+\centering
+\renewcommand{\arraystretch}{1.25}
+\small
+\begin{tabular}{|p{4cm}|p{3cm}|p{3cm}|p{4cm}|}
+\hline
+\rowcolor{gray!20}
+\textbf{Famille de KPI} & \textbf{Mesurable pendant le projet} & \textbf{Statut global} & \textbf{Commentaire} \\
+\hline
+
+Pilotage projet 
+& Oui 
+& Exploitable 
+& Les jalons, exigences, tickets Jira et livrables ont permis un suivi global du projet. \\
+\hline
+
+Valeur et usage 
+& Partiellement 
+& À mesurer en recette 
+& Ces KPI nécessitent un panel d'apprenants et une période d'utilisation réelle. \\
+\hline
+
+Performance technique 
+& Partiellement 
+& Observé qualitativement 
+& Les parcours ont été testés en démonstration, mais sans instrumentation complète. \\
+\hline
+
+Charge contrôlée 
+& Non 
+& À prévoir 
+& Les tests de charge nécessitent un environnement dédié et une campagne spécifique. \\
+\hline
+
+\end{tabular}
+\caption{Synthèse globale du suivi des KPI}
+\label{tab:synthese-kpi}
+\end{table}
+
+% ==========================================================
+\section{Bilan d'utilisation des KPI}
+% ==========================================================
+
+Les KPI ont été définis comme des repères de pilotage et non comme de simples objectifs chiffrés. 
+Ils permettent de relier l'avancement du projet à des critères concrets : couverture du MVP, qualité technique, stabilité, engagement utilisateur et valeur pédagogique.
+
+Dans le cadre du projet académique, tous les KPI n'ont pas pu être mesurés avec le même niveau de précision. 
+Les indicateurs de pilotage projet sont les plus exploitables, car ils reposent sur des éléments disponibles : exigences, jalons, tickets Jira, livrables et état du MVP. 
+Les indicateurs techniques ont principalement été observés lors des tests internes et des démonstrations, mais ils nécessiteraient une instrumentation plus complète pour une exploitation réelle.
+
+Les KPI de valeur et d'usage restent principalement prospectifs. 
+Ils ne peuvent être interprétés correctement qu'après une phase d'utilisation par des apprenants réels. 
+Ils sont néanmoins essentiels pour la suite du projet, car ils permettront de vérifier si l'application remplit réellement sa promesse : favoriser un apprentissage juridique court, régulier et engageant.
+
+Enfin, les KPI de charge contrôlée doivent être considérés comme des critères de préparation à une future mise en production. 
+Ils permettront d'évaluer la robustesse de l'application dans un contexte d'usage simultané, mais n'ont pas vocation à être validés uniquement dans le cadre d'une démonstration académique.
+
+\begin{tcolorbox}[
+  colback=blue!5,
+  colframe=blue!70!black,
+  title={\textbf{Lecture globale des KPI}},
+  boxrule=0.7pt,
+  enhanced,
+  sharp corners,
+  breakable
+]
+Les KPI définis dans cette annexe constituent une base de pilotage pour la suite du projet. 
+Ils montrent ce qui a pu être suivi pendant le cadre académique, mais aussi ce qui devra être mesuré lors d'une future recette utilisateur, d'une phase pilote ou d'une mise en production.
+\end{tcolorbox}

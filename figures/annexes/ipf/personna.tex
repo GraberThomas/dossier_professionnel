@@ -1,0 +1,144 @@
+\chapter{Personae et parcours utilisateurs}\label{annexe:persona}
+
+
+
+\subsection{Présentation des personae}
+
+Les personae représentent des profils types d’utilisateurs du projet \emph{5 Secondes Chrono}.
+Ils permettent d’orienter les choix fonctionnels, l’ergonomie et les priorités du produit
+en s’appuyant sur des besoins réalistes.
+
+Chaque persona comprend :
+\begin{itemize}
+    \item un nom (fictif) et une tranche d’âge ;
+    \item un contexte d’utilisation ;
+    \item des motivations et objectifs ;
+    \item des frustrations (points de douleur) ;
+    \item une citation synthétisant son état d’esprit.
+\end{itemize}
+
+\subsection{Personae retenus pour \emph{5 Secondes Chrono}}
+
+\begin{table}[h!]
+\centering
+\renewcommand{\arraystretch}{1.2}
+\small
+\begin{tabular}{|p{2.6cm}|p{3.2cm}|p{4.9cm}|p{4.9cm}|}
+\hline
+\rowcolor{etnaBlue!15}
+\textbf{Persona} & \textbf{Profil / Contexte} & \textbf{Motivations / Objectifs} & \textbf{Frustrations} \\ \hline
+
+\textbf{Nicolas (32 ans)} &
+Négociateur en immobilier commercial. Utilise l’app le matin ou entre deux RDV. &
+Monter en compétences rapidement ; réviser des notions clés ; progresser sans y passer 1h. &
+Manque de temps ; contenus trop denses ; outils non adaptés au mobile ; peur de ``perdre son niveau''. \\ \hline
+
+\textbf{Sarah (27 ans)} &
+Jeune professionnelle en prise de poste. Utilise l’app le soir en micro-sessions. &
+Se sentir à l’aise sur les bases juridiques ; apprendre de manière structurée ; avoir un feedback motivant. &
+Stress d’erreur ; manque d’accompagnement ; difficulté à savoir quoi réviser ; besoin d’encouragements. \\ \hline
+
+\textbf{Karim (41 ans)} &
+Indépendant, agenda chargé. Utilise l’app de façon irrégulière. &
+Réviser ponctuellement ; accéder rapidement à une explication (vidéo) ; gagner en confiance. &
+Oublie de revenir ; n’aime pas les interfaces complexes ; abandon si la valeur n’est pas immédiate. \\ \hline
+
+\textbf{Claire (35 ans)} &
+Administratrice / formateur côté \emph{Le Carré Pro}. Gère contenus et suivi. &
+Ajouter/mettre à jour les questions/vidéos ; suivre la progression ; s’assurer de la qualité pédagogique. &
+Processus de gestion fastidieux ; manque de visibilité sur l’engagement ; crainte d’erreurs de contenu. \\ \hline
+
+\end{tabular}
+\caption{Personae principaux du projet \emph{5 Secondes Chrono}}
+\end{table}
+
+\subsection{Parcours utilisateurs}
+
+Les parcours utilisateurs décrivent les étapes suivies par un persona pour atteindre un objectif.
+Ils permettent d’identifier les points de friction, les besoins d’assistance et les priorités
+d’interface.
+
+Le projet \emph{5 Secondes Chrono} suit un parcours apprenant type :
+\emph{Accueil $\rightarrow$ Quiz du jour $\rightarrow$ Résultats $\rightarrow$ Progression $\rightarrow$ Recommandations}.
+Ce flux correspond au parcours macro défini pour l’application. \par
+\noindent\textit{(Référence : séquence fonctionnelle globale du projet)} \textbf{---} \emph{Accueil / Quiz / Résultats / Progression / Reco}. \hfill
+
+\subsection{Parcours utilisateur 1 — Réaliser le quiz quotidien (Nicolas)}
+
+\begin{table}[h!]
+\centering
+\renewcommand{\arraystretch}{1.15}
+\small
+\begin{tabular}{|p{3.2cm}|p{10.4cm}|}
+\hline
+\rowcolor{black!10}
+\textbf{Étape} & \textbf{Action / Résultat attendu} \\ \hline
+Point d’entrée & Nicolas ouvre l’application depuis son téléphone (session courte). \\ \hline
+Quiz du jour & Il lance le quiz quotidien et répond aux questions avec le timer. \\ \hline
+Résultats & Il consulte son score et les explications associées (dont vidéo si disponible). \\ \hline
+Progression & Il visualise son niveau / sa progression (thèmes maîtrisés vs à revoir). \\ \hline
+Recommandations & Il reçoit une recommandation simple (notion à revoir / contenu conseillé). \\ \hline
+Fin & Il quitte l’application en ayant le sentiment d’avoir progressé en moins de 2 minutes. \\ \hline
+\end{tabular}
+\caption{Parcours utilisateur — Quiz quotidien}
+\end{table}
+
+\subsection{Parcours utilisateur 2 — Se remettre à niveau grâce aux recommandations (Sarah)}
+
+\begin{table}[h!]
+\centering
+\renewcommand{\arraystretch}{1.15}
+\small
+\begin{tabular}{|p{3.2cm}|p{10.4cm}|}
+\hline
+\rowcolor{black!10}
+\textbf{Étape} & \textbf{Action / Résultat attendu} \\ \hline
+Point d’entrée & Sarah ouvre l’app après une journée de travail, objectif : réviser ``utile''. \\ \hline
+Progression & Elle consulte ses statistiques et repère une thématique en difficulté. \\ \hline
+Recommandations & L’app suggère un quiz ciblé / une vidéo liée à ses erreurs fréquentes. \\ \hline
+Contenu & Elle regarde une vidéo courte ou lit une explication avant de relancer un quiz. \\ \hline
+Résultats & Elle vérifie l’amélioration de son score sur le thème concerné. \\ \hline
+Fin & Elle ressort rassurée, avec une action claire pour la prochaine session. \\ \hline
+\end{tabular}
+\caption{Parcours utilisateur — Remédiation par recommandations}
+\end{table}
+
+\subsection{Parcours utilisateur 3 — Usage irrégulier mais efficace (Karim)}
+
+\begin{table}[h!]
+\centering
+\renewcommand{\arraystretch}{1.15}
+\small
+\begin{tabular}{|p{3.2cm}|p{10.4cm}|}
+\hline
+\rowcolor{black!10}
+\textbf{Étape} & \textbf{Action / Résultat attendu} \\ \hline
+Point d’entrée & Karim relance l’app après plusieurs jours sans usage. \\ \hline
+Accueil & L’app propose un accès direct au quiz et un rappel rapide de sa progression. \\ \hline
+Quiz du jour & Il réalise une session courte, sans configuration complexe. \\ \hline
+Résultats & Il comprend immédiatement ce qu’il a raté et pourquoi (explication claire). \\ \hline
+Fin & Il obtient une valeur immédiate et est incité à revenir (gamification légère). \\ \hline
+\end{tabular}
+\caption{Parcours utilisateur — Reprise rapide}
+\end{table}
+
+\subsection{Parcours utilisateur 4 — Gestion des contenus (Claire, administratrice)}
+
+\begin{table}[h!]
+\centering
+\renewcommand{\arraystretch}{1.15}
+\small
+\begin{tabular}{|p{3.2cm}|p{10.4cm}|}
+\hline
+\rowcolor{black!10}
+\textbf{Étape} & \textbf{Action / Résultat attendu} \\ \hline
+Point d’entrée & Claire se connecte à l’espace administrateur (web). \\ \hline
+Gestion contenus & Elle ajoute/édite une question et associe une vidéo à une thématique. \\ \hline
+Contrôle qualité & Elle vérifie la cohérence et la formulation (validation interne). \\ \hline
+Publication & Les contenus deviennent disponibles selon les règles d’accès (abonnement). \\ \hline
+Suivi & Elle consulte des statistiques (engagement, difficultés fréquentes). \\ \hline
+Fin & Elle ajuste le contenu pédagogique selon les retours et les données observées. \\ \hline
+\end{tabular}
+\caption{Parcours utilisateur — Administration des contenus}
+\end{table}
+
