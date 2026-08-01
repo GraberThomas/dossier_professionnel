@@ -13,7 +13,8 @@
 \usepackage{array}
 \usepackage{longtable}
 \usepackage{booktabs}
-\usepackage{xcolor}
+\usepackage[table]{xcolor}
+\usepackage[most]{tcolorbox}
 \usepackage{listings}
 \usepackage[hidelinks]{hyperref}
 \usepackage{csquotes}
@@ -29,6 +30,48 @@
 % \gls rend également le terme cliquable vers sa définition et enregistre
 % la page courante dans l'index du glossaire.
 \newcommand{\terme}[1]{\gls{#1}\textsuperscript{*}}
+
+% Styles nécessaires aux tableaux complets placés dans les annexes IPF.
+\newcolumntype{P}[1]{>{\raggedright\arraybackslash}p{#1}}
+\definecolor{etnaBlue}{RGB}{24,73,120}
+\definecolor{accentGreen}{RGB}{54,138,95}
+\definecolor{membrepurple}{RGB}{110,70,150}
+\definecolor{BleuPetrole}{RGB}{20,95,110}
+\definecolor{reqHeader}{RGB}{44,62,80}
+\definecolor{reqUrgent}{RGB}{192,57,43}
+\definecolor{reqObligatoire}{RGB}{230,126,34}
+\definecolor{reqSouhaitable}{RGB}{41,128,185}
+\definecolor{reqOptionnelle}{RGB}{127,140,141}
+\definecolor{statusFait}{RGB}{39,174,96}
+\definecolor{statusEnCours}{RGB}{241,196,15}
+\definecolor{statusNonFait}{RGB}{192,57,43}
+\definecolor{sectorColor0}{RGB}{52,152,219}
+\definecolor{sectorColor1}{RGB}{41,128,185}
+\definecolor{sectorColor2}{RGB}{142,68,173}
+\definecolor{sectorColor3}{RGB}{22,160,133}
+\definecolor{sectorColor4}{RGB}{211,84,0}
+\definecolor{sectorColor5}{RGB}{44,62,80}
+\definecolor{sectorColor6}{RGB}{192,57,43}
+\colorlet{themeColor0}{blue}
+\colorlet{themeColor1}{cyan}
+\colorlet{themeColor2}{orange}
+\colorlet{themeColor3}{red}
+\colorlet{themeColor4}{purple}
+\colorlet{themeColor5}{teal}
+\colorlet{themeColor6}{green}
+\colorlet{themeColor7}{violet}
+\colorlet{themeColor8}{blue}
+\colorlet{themeColor9}{orange}
+\colorlet{themeColor10}{magenta}
+\colorlet{themeColor11}{cyan}
+\colorlet{themeColor12}{teal}
+\colorlet{themeColor13}{green}
+\colorlet{themeColor14}{blue}
+\colorlet{themeColor15}{purple}
+\colorlet{themeColor16}{cyan}
+\colorlet{themeColor17}{orange}
+\colorlet{themeColor18}{violet}
+\newcommand{\reqtag}[3]{\colorbox{#1}{\textcolor{#2}{\strut\scriptsize\textbf{#3}}}}
 
 \definecolor{codebackground}{RGB}{248,248,248}
 \definecolor{codekeyword}{RGB}{0,70,140}
@@ -147,6 +190,7 @@
 \begingroup
 \input{sections/lynx-figures.tex}
 \input{sections/10-projet-lynx-immo.tex}
+\input{sections/10-renvois-annexes-ipf.tex}
 \endgroup
 \chapter{Synthèse finale}
 \label{chap:synthese}
@@ -161,5 +205,6 @@
 \printbibliography
 \appendix
 \input{sections/12-annexes.tex}
+\input{sections/12-annexes-ipf.tex}
 \input{sections/12-annexe-data-ia.tex}
 \end{document}
