@@ -37,13 +37,13 @@ Pour le build, j'utilise PyInstaller afin de produire deux formes de distributio
 
 \begin{figure}[H]
 \centering
-\fbox{\parbox{0.88\textwidth}{\centering
-\textbf{Push Git} $\rightarrow$ \textbf{GitLab CI} $\rightarrow$ \textbf{Pytest} $\rightarrow$ \textbf{PyInstaller}\\[0.12cm]
-$\hspace{5.6cm}\searrow$ \texttt{piv2glz.exe}\\[-0.02cm]
-$\hspace{5.6cm}\searrow$ \texttt{piv2glz\_dir.zip} $\rightarrow$ \textbf{artefacts GitLab}
-}}
+\includegraphics[width=0.92\textwidth]{figures/piv2glz/piv2glz_pipeline.png}
 \caption{Validation et construction automatisées de piv2glz}
 \label{fig:piv2glz-ci}
 \end{figure}
 
 Ce fonctionnement m'a surtout permis de changer la manière de valider les évolutions de ce petit outil. Je n'avais plus à reconstruire manuellement un exécutable puis à rejouer quelques conversions avant chaque livraison : les comportements déjà couverts étaient vérifiés de manière reproductible avant la génération des binaires. La pipeline reste volontairement simple. Elle ne mesure pas encore la couverture du code et n'intègre ni analyse statique ni contrôles de sécurité dédiés ; ce sont les principales améliorations que j'ajouterais si l'outil devait continuer à évoluer ou être distribué plus largement.
+
+\section{Conclusion}
+
+Malgré son périmètre réduit, \texttt{piv2glz} constitue une réalisation utile pour illustrer une démarche complète de fiabilisation : développement de l'outil, automatisation des tests, construction conditionnée par leur réussite et publication des livrables. Ce projet m'a surtout permis de mettre en pratique, sur un cas professionnel concret, des principes d'intégration continue plus difficiles à appliquer directement aux chaînes historiques du SHOM. Il montre ainsi qu'un petit utilitaire peut devenir plus sûr et plus simple à faire évoluer dès lors que sa validation et sa distribution sont intégrées au processus de développement.
