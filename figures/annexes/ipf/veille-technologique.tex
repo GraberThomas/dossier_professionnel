@@ -1,0 +1,44 @@
+\chapter{Compte rendu de veille technologique --- Lynx Immo}
+\label{ann:ipf-veille-technologique}
+
+\section*{Objet et périmètre}
+
+Cette veille a servi à comparer les solutions susceptibles de répondre aux besoins du produit Lynx Immo : application mobile Android/iOS, backend et base de données, espace d'administration, abonnements et fonctions de coaching. Le document initial de cadrage a été repris pour distinguer le panorama des solutions de la décision effectivement retenue.
+
+\section*{Méthode}
+
+Les recherches ont été conduites à partir de documentations officielles et de sources anglophones. Pour chaque sujet, la fiche de veille conserve la date de consultation, le signal observé, son incidence potentielle sur le projet, la décision prise et le point à réexaminer. La veille est réactivée lors d'un choix structurant, d'une évolution majeure, d'une rupture de compatibilité, d'un changement tarifaire ou d'un risque de sécurité.
+
+\begin{longtable}{p{3.0cm} p{3.2cm} p{4.5cm} p{4.2cm}}
+\caption{Compte rendu synthétique de la veille Lynx Immo}\label{tab:ann-lynx-veille}\\
+\toprule
+\textbf{Domaine} & \textbf{Sources principales} & \textbf{Analyse en français} & \textbf{Décision / suivi} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Domaine} & \textbf{Sources principales} & \textbf{Analyse en français} & \textbf{Décision / suivi} \\
+\midrule
+\endhead
+Mobile & Flutter, React Native, Kotlin Multiplatform, Capacitor & Flutter et React Native permettent tous deux de mutualiser une part importante du développement. Flutter répondait mieux au besoin d'interface gamifiée et au choix de compétence de l'équipe. La nouvelle architecture React Native restait un signal à surveiller, sans constituer à elle seule un motif de migration. & Flutter retenu. Revue des notes de version avant montée de version majeure. \\
+Backend et données & Supabase, PostgreSQL, Django & Django offrait une forte productivité et une administration générée. Supabase réduisait davantage la charge d'exploitation et regroupait Auth, PostgreSQL, RLS, fonctions SQL et Edge Functions. Le report du coaching avancé a diminué l'importance d'un backend Python dédié. & Supabase/PostgreSQL retenu. RLS versionnée et testée ; réévaluation si les traitements métier ou la charge justifient un service dédié. \\
+Administration & Django Admin, React & Django Admin convient principalement à une gestion interne centrée sur les modèles. Les parcours demandés par le client nécessitaient une interface plus personnalisée et orientée processus. & React/Vite/TypeScript retenu. \\
+Abonnements & RevenueCat & Les achats mobiles imposent de gérer plusieurs plateformes, les renouvellements et les changements d'état. Les webhooks permettent de synchroniser ces événements avec le backend. & RevenueCat retenu ; contrôle de la cohérence entre événements et état enregistré en base. \\
+Intelligence artificielle & Scikit-learn, API génératives & Le premier cadrage envisageait classification et génération de messages. L'absence de données d'usage suffisantes ne permettait pas de justifier un modèle prédictif fiable dans le temps du projet. & Fonction avancée reportée ; structuration des données préparée pour une expérimentation ultérieure. \\
+\bottomrule
+\end{longtable}
+
+\section*{Sources anglophones consultées}
+
+\begin{itemize}
+  \item Flutter, \textit{Flutter release notes} et \textit{Guide to app architecture} \cite{flutter-releases,flutter-architecture} ;
+  \item Meta, \textit{About the New Architecture} \cite{react-native-new-architecture} ;
+  \item JetBrains, \textit{Kotlin Multiplatform documentation} \cite{kotlin-multiplatform} ;
+  \item Ionic, \textit{Capacitor documentation} \cite{capacitor-docs} ;
+  \item Supabase, \textit{Row Level Security} et \textit{Edge Functions} \cite{supabase-rls,supabase-edge-functions} ;
+  \item Django Software Foundation, \textit{The Django admin site} \cite{django-admin} ;
+  \item RevenueCat, \textit{Webhooks} \cite{revenuecat-webhooks}.
+\end{itemize}
+
+\section*{Bilan}
+
+La principale évolution par rapport au document initial réside dans la traçabilité de la décision. La veille ne produit plus seulement une liste d'avantages et d'inconvénients : elle explicite les hypothèses, les critères, les sources, le choix retenu et les conditions qui conduiraient à le réexaminer.
