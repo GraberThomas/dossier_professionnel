@@ -1,0 +1,63 @@
+\section{Transformer la veille en outil de décision}
+\label{sec:lynx-veille}
+
+La veille technologique a d'abord pris la forme d'un document de comparaison produit pendant le cadrage. Il passait en revue les principales familles de solutions nécessaires au projet : technologies mobiles, backend, base de données, intelligence artificielle, hébergement vidéo et interface d'administration. Ce premier travail était utile pour ouvrir le champ des possibles. Il mettait notamment en regard Flutter, React Native, Ionic/Capacitor et Kotlin Multiplatform pour le mobile, puis Django, Node.js, Symfony/Laravel et les plateformes de backend as a service (BaaS) pour le backend.
+
+Sa faiblesse apparaissait cependant dès que le projet commençait à évoluer. Le document proposait une \og stack idéale \fg{} composée de React Native, Django, PostgreSQL, Scikit-learn, d'une API générative et de Cloudinary. La solution finalement construite repose pourtant sur Flutter, React, Supabase/PostgreSQL et RevenueCat. Cet écart ne signifie pas que le premier document était inutile ; il montre surtout qu'une comparaison ponctuelle ne constitue pas encore un système de veille. Elle photographie un état du marché, mais ne précise ni quand la décision doit être rejouée, ni quelles sources font autorité, ni comment un changement du besoin modifie le poids des critères.
+
+\subsection{Passer d'un panorama à une démarche reproductible}
+
+J'ai donc repris cette veille en la reliant aux décisions réellement rencontrées pendant le projet. Le dispositif retenu repose sur une veille déclenchée par les jalons et les risques plutôt que sur une collecte générale d'actualités. Une recherche est ouverte lorsqu'une décision d'architecture doit être prise, lorsqu'un service tiers devient structurant, lorsqu'une évolution majeure ou une rupture de compatibilité est annoncée, ou lorsqu'un changement de périmètre remet en cause les hypothèses précédentes.
+
+Les sources prioritaires sont les documentations officielles, les notes de version, les guides de migration et les pages de sécurité des éditeurs. Cette hiérarchie limite le risque de reprendre une comparaison commerciale ou un article déjà dépassé. Elle permet également de travailler directement à partir de sources anglophones : notes de version Flutter, documentation de la nouvelle architecture React Native, documentation Kotlin Multiplatform, Capacitor, Supabase, Django et RevenueCat \cite{flutter-releases,flutter-architecture,react-native-new-architecture,kotlin-multiplatform,capacitor-docs,supabase-rls,supabase-edge-functions,django-admin,revenuecat-webhooks}.
+
+\begin{table}[H]
+\centering
+\small
+\begin{tabular}{p{3.7cm} p{10.2cm}}
+\toprule
+\textbf{Élément du système} & \textbf{Application dans Lynx Immo} \\
+\midrule
+Périmètre & Mobile multiplateforme, backend et données, administration, sécurité des accès, abonnements et capacité de reprise. \\
+Sources & Documentation officielle et notes de version en priorité ; sources secondaires uniquement pour repérer un sujet à vérifier. \\
+Déclencheurs & Choix d'architecture, ajout d'un service tiers, changement de besoin, annonce de rupture, évolution tarifaire ou risque de sécurité. \\
+Critères & Adéquation au besoin, compétences disponibles, maintenabilité, sécurité, coût d'exploitation, maturité de l'écosystème et réversibilité. \\
+Traçabilité & Pour chaque signal : source, date de consultation, résumé en français, impact possible, décision et point à surveiller. \\
+Sortie attendue & Une décision, une expérimentation limitée, un maintien du choix existant ou l'inscription d'un risque dans le backlog. \\
+\bottomrule
+\end{tabular}
+\caption{Système de veille appliqué aux décisions techniques de Lynx Immo}
+\label{tab:lynx-systeme-veille}
+\end{table}
+
+La pratique réelle n'a pas été une revue hebdomadaire parfaitement régulière pendant neuf mois. Elle a été plus proche d'une veille par points de décision : choix du mobile, définition du socle backend, sécurisation des accès, intégration des abonnements et préparation de la reprise. La formalisation présentée ici rend cette pratique explicite et réutilisable. Le compte rendu consolidé, les sources anglophones et les décisions associées sont reproduits en annexe~\ref{ann:ipf-veille-technologique}.
+
+\subsection{Rejouer la décision lorsque les hypothèses changent}
+
+Le cas du backend montre le mieux l'intérêt de cette démarche. Le premier panorama privilégiait Django parce qu'il associait un backend Python, une interface d'administration générée et une proximité avec les bibliothèques de machine learning. Il considérait au contraire Supabase comme risqué pour un module d'intelligence artificielle avancé. Cette conclusion était cohérente avec l'hypothèse d'un coach prédictif placé au centre du produit.
+
+Le projet a ensuite montré que cette hypothèse ne pouvait pas être traitée comme une priorité immédiate. Le coaching avancé nécessitait des données d'usage qui n'existaient pas encore, alors que l'inscription, le quiz, la progression, les rôles, les contenus et les abonnements devaient fonctionner dès le \terme{mvp}. Le poids des critères a donc changé. La rapidité de mise en place, l'authentification commune, PostgreSQL, les politiques \terme{rls} et la possibilité de développer des fonctions ciblées sont devenus plus importants que l'exécution locale d'un modèle Python. La documentation Supabase précise que les tables exposées doivent être protégées par \terme{rls} et que les Edge Functions peuvent porter des traitements serveur ou des intégrations avec des services tiers \cite{supabase-rls,supabase-edge-functions}. Dans ce nouveau contexte, Supabase n'était plus une solution \og risquée pour l'IA \fg{}, mais un compromis cohérent pour le produit réellement livrable.
+
+Le même raisonnement a été appliqué à l'administration. Django Admin restait intéressant pour produire rapidement une interface centrée sur les modèles. Sa propre documentation indique toutefois qu'il est destiné en priorité à un outil de gestion interne centré sur les données et qu'une interface plus orientée processus justifie des vues dédiées \cite{django-admin}. Les parcours attendus par Le Carré Pro --- tableau de bord, suivi des abonnés, gestion des contenus, packs, encaissements et statistiques --- dépassaient une simple édition de tables. Le choix d'une administration React demandait davantage de développement, mais répondait mieux au niveau de personnalisation attendu.
+
+Pour le mobile, le premier document présentait React Native comme le choix de synthèse en raison de l'écosystème JavaScript, tout en identifiant Flutter comme la solution la plus favorable à une interface fluide et fortement personnalisée. La décision finale a retenu Flutter. La veille ne cherchait pas à désigner abstraitement le meilleur framework du marché : elle comparait leur trajectoire et leur adéquation au projet. Les notes de version et guides d'architecture Flutter fournissent un suivi explicite des versions stables, des changements incompatibles et des recommandations de structuration, tandis que React Native poursuivait une transition importante vers sa nouvelle architecture \cite{flutter-releases,flutter-architecture,react-native-new-architecture}. Cette évolution devait être comprise, même si elle ne suffisait pas à elle seule pour départager les deux solutions.
+
+\begin{table}[H]
+\centering
+\small
+\begin{tabular}{p{3.0cm} p{4.1cm} p{4.3cm} p{3.0cm}}
+\toprule
+\textbf{Décision} & \textbf{Hypothèse initiale} & \textbf{Évolution observée} & \textbf{Choix retenu} \\
+\midrule
+Application mobile & React Native favorisé dans la synthèse ; Flutter reconnu pour la fluidité et la personnalisation. & Besoin centré sur une expérience mobile gamifiée et une base unique Android/iOS. & Flutter. \\
+Backend & Django favorisé pour l'administration et la proximité avec Python/IA. & Coaching avancé reporté ; priorité à Auth, PostgreSQL, règles d'accès et rapidité de livraison. & Supabase/PostgreSQL. \\
+Administration & Django Admin ou React Admin envisagés. & Parcours métier plus riches qu'une simple gestion de modèles. & React/Vite/TypeScript. \\
+Intelligence artificielle & Scikit-learn et un modèle génératif envisagés tôt. & Données réelles insuffisantes pour une prédiction crédible dans le temps du projet. & Socle de données préparé, fonction avancée reportée. \\
+Abonnements & Gestion à construire dans le backend. & Cycle de vie mobile complexe et événements de souscription à synchroniser. & RevenueCat et webhooks. \\
+\bottomrule
+\end{tabular}
+\caption{Évolution des hypothèses techniques au fil du projet}
+\label{tab:lynx-veille-decisions}
+\end{table}
+
+Cette démarche apporte une preuve plus solide pour la compétence C1.2 que le seul tableau initial. Elle montre l'analyse de l'évolution des solutions, la comparaison d'assemblages techniques, l'utilisation de sources anglophones et surtout la transformation de cette veille en décisions adaptées au besoin. Elle met également en évidence une limite importante : une technologie ne doit pas être choisie parce qu'elle apparaît dans une stack théorique, mais parce que les hypothèses qui justifient son adoption restent vraies au moment de la décision.
