@@ -4,6 +4,20 @@
 \newcounter{sonefigureplaceholder}
 \setcounter{sonefigureplaceholder}{0}
 
+% Le deuxième sous-titre du chapitre correspond à la phase d'appropriation du
+% domaine. Le court passage suivant y est inséré directement afin de valoriser
+% naturellement la lecture des normes anglophones sans créer une section isolée.
+\newcounter{sonechaptersubsection}
+\setcounter{sonechaptersubsection}{0}
+\let\soneoriginalsubsection\subsection
+\renewcommand{\subsection}[1]{%
+  \stepcounter{sonechaptersubsection}%
+  \soneoriginalsubsection{#1}%
+  \ifnum\value{sonechaptersubsection}=2
+    Cette appropriation a demandé la lecture de documents normatifs longs, denses et entièrement rédigés en anglais, en particulier les spécifications \terme{s100} et \terme{s123} \cite{iho-s100,iho-s123}. Il ne suffisait pas d'en comprendre le vocabulaire : j'ai dû en extraire les concepts, les comparer entre plusieurs versions puis les traduire en tableaux de correspondance, en choix de modélisation et en code.
+  \fi
+}
+
 \renewcommand{\fbox}[1]{%
   \stepcounter{sonefigureplaceholder}%
   \ifcase\value{sonefigureplaceholder}%
