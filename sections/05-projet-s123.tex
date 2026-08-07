@@ -2,7 +2,9 @@
 
 Le projet \terme{s123} constituait le sujet initial de mon alternance au Shom. Il m'a été présenté sous la forme d'un objectif volontairement large : concevoir une « base de données \terme{s123} » capable d'accueillir les renseignements relatifs aux radiosignaux aujourd'hui répartis dans plusieurs ouvrages et sources de données.
 
-Ce sujet s'inscrivait dans la transition du secteur hydrographique vers l'écosystème \terme{s100} de l'Organisation hydrographique internationale (OHI). Les cartes électroniques de navigation, historiquement produites selon S-57, doivent évoluer vers S-101. \terme{s100} fournit également un cadre commun à d'autres produits, dont \terme{s123} pour les services radio maritimes. Mon travail ne portait donc pas sur les cartes elles-mêmes, mais sur la structuration des renseignements radio dans ce nouvel écosystème.
+Ce sujet s'inscrivait dans la transition du secteur hydrographique vers l'écosystème \terme{s100} de l'Organisation hydrographique internationale (OHI). \terme{s100} définit un cadre commun à des spécifications de produits de données destinés aux utilisateurs finaux : chaque produit S-1xx décrit un type de données, sa structure et les règles nécessaires à son échange et à son exploitation. Les cartes électroniques de navigation, historiquement produites selon S-57, doivent ainsi évoluer vers S-101 ; \terme{s123} définit pour sa part le produit consacré aux services radio maritimes. Mon travail ne portait donc pas sur les cartes elles-mêmes, mais sur la structuration des renseignements radio dans ce nouvel écosystème.
+
+Le besoin répondait également à une limite de l'existant : une part importante de l'information radio est aujourd'hui peu structurée et portée directement par les ouvrages destinés à la lecture humaine. L'objectif à plus long terme est de disposer d'une donnée structurée selon le standard international \terme{s123}, afin de pouvoir la contrôler, la réutiliser et produire des jeux de données conformes sans dépendre uniquement de la mise en forme éditoriale des ouvrages.
 
 Le projet a connu plusieurs étapes de conception. J'ai d'abord étudié une transposition directe de \terme{s123} dans une base relationnelle, puis expérimenté différentes manières de parcourir et transformer les catalogues XML. Ces travaux m'ont progressivement conduit vers une architecture plus générique, organisée autour du Feature Catalogue \terme{s100}. Le \terme{poc} final associe un modèle relationnel générique, un parseur XML fondé sur les \terme{xsd}, des seeders spécialisés pour le peuplement de PostgreSQL et une \terme{api} \terme{rest} de consultation développée avec FastAPI.
 
@@ -297,7 +299,7 @@ L'\terme{api} reste orientée vers la lecture du catalogue. Les endpoints de cr�
 
 Le modèle ne dépend pas des objets propres aux services radio : il représente les concepts communs d'un Feature Catalogue \terme{s100}. Le même parseur et les mêmes seeders peuvent donc traiter d'autres catalogues compatibles avec les \terme{xsd} pris en charge.
 
-Le script de travail contient plusieurs catalogues, notamment S-101, S-104, S-111, \terme{s123}, S-124 et S-129. Dans l'état final conservé dans mon dossier de travail, le script est configuré pour charger un catalogue S-101 avec le même parseur, le même modèle Python et les mêmes seeders que ceux utilisés pour \terme{s123}. Cette vérification est importante : elle montre que la généricité ne reste pas seulement théorique.
+Le script de travail contient plusieurs catalogues, notamment S-101, S-104, S-111, \terme{s123}, S-124 et S-129. Dans l'état final conservé dans mon dossier de travail, le script est configuré pour charger un catalogue S-101 avec le même parseur, le même modèle Python et les mêmes seeders que ceux utilisés pour \terme{s123}. Cette vérification montre que la généricité ne reste pas seulement théorique sur le plan technique ; elle ne constitue toutefois pas une validation métier de S-101 par un spécialiste de ce produit, mais uniquement un essai de compatibilité du mécanisme de chargement avec son Feature Catalogue.
 
 \begin{figure}[H]
 \centering
@@ -332,7 +334,7 @@ Les tests restent principalement exploratoires. La transaction protège contre u
 Parsing du catalogue \terme{s123} & Création d'un objet \texttt{S100FcFeatureCatalogue} complet à partir du XML. & Fonctionnel \\
 Insertion du catalogue & Création des attributs, rôles, associations et types dans PostgreSQL. & Fonctionnel \\
 Gestion des dépendances & Insertion des super-types avant leurs descendants et détection des cycles. & Fonctionnel \\
-Chargement d'autres S-1xx & Réutilisation du même parser et des mêmes seeders sur d'autres Feature Catalogues. & Testé de manière exploratoire \\
+Chargement d'autres S-1xx & Réutilisation du même parser et des mêmes seeders sur d'autres Feature Catalogues ; vérification technique, sans validation métier des produits concernés. & Testé de manière exploratoire \\
 Coexistence multi-catalogues & Chargement simultané avec isolation des produits et versions. & À consolider \\
 \terme{api} \terme{rest} & Consultation des attributs, types, associations, rôles, valeurs et recherche globale. & Fonctionnel dans le \terme{poc} \\
 Validation d'instances & Contrôle d'objets métier par rapport aux règles du catalogue. & Perspective \\
@@ -373,7 +375,7 @@ Ce projet m'a placé face à une demande ambitieuse, formulée avant la stabilis
 
 La première modélisation directe à 73 tables, bien qu'abandonnée, a joué un rôle important : elle a objectivé les limites d'une transposition stricte du format d'échange. Le passage à 18 tables traduit surtout un changement de niveau d'abstraction. Le \terme{poc} final ne stocke plus une photographie rigide de \terme{s123} ; il représente les concepts nécessaires à la description d'un Feature Catalogue \terme{s100}.
 
-Je suis particulièrement satisfait de cette orientation, car le parseur, le modèle Python généré, les seeders, le modèle relationnel, les vues de consultation et l'\terme{api} sont construits autour de cette structure commune plutôt que d'une liste figée d'objets radio. Le chargement exploratoire d'un catalogue S-101 avec la même chaîne constitue pour moi une validation concrète de ce choix.
+Je suis particulièrement satisfait de cette orientation, car le parseur, le modèle Python généré, les seeders, le modèle relationnel, les vues de consultation et l'\terme{api} sont construits autour de cette structure commune plutôt que d'une liste figée d'objets radio. Le chargement exploratoire d'un catalogue S-101 avec la même chaîne constitue pour moi un indice concret de la généricité technique du choix, sans valoir validation fonctionnelle de S-101.
 
 Le travail sur le patron Visiteur reste également un apport important, mais d'une autre nature. Il correspond à une expérimentation de conception visant à ajouter des comportements autour d'un modèle généré sans modifier celui-ci. Son absence du chemin d'exécution final montre aussi qu'un patron n'a d'intérêt que s'il répond réellement à la responsabilité considérée : pour la persistance relationnelle, les seeders spécialisés étaient plus adaptés.
 

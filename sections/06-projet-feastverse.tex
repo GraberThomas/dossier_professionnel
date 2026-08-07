@@ -2,7 +2,7 @@
 
 FeastVerse est un projet universitaire réalisé dans le cadre d'un enseignement consacré au développement d'\terme{api} avec Java Spring Boot. Le sujet imposait essentiellement l'utilisation de Spring Boot et la mise en place d'une authentification \terme{jwt} ; le domaine fonctionnel restait libre.
 
-J'ai choisi d'utiliser cette liberté pour aller nettement au-delà d'un exercice limité à quelques opérations \terme{crud} protégées par un jeton. J'ai imaginé FeastVerse comme le back-end d'une plateforme de recettes intégrant des problématiques proches d'une application réelle : gestion d'utilisateurs et de rôles, propriété et visibilité des ressources, commentaires, likes, signalements et modération, recherche multicritère, pagination, upload d'images, documentation détaillée et déploiement dans un environnement distant.
+J'ai choisi d'utiliser cette liberté pour aller nettement au-delà d'un exercice limité à quelques opérations \terme{crud} protégées par un jeton. J'ai imaginé FeastVerse comme le back-end d'une plateforme de recettes de cuisine intégrant des problématiques proches d'une application réelle : gestion d'utilisateurs et de rôles, propriété et visibilité des ressources, commentaires, likes, signalements et modération, recherche multicritère, pagination, upload d'images, documentation détaillée et déploiement dans un environnement distant.
 
 Cette ambition a progressivement transformé le sujet pédagogique initial en un projet plus large de conception d'\terme{api}. FeastVerse est mobilisé dans ce dossier comme preuve principale de développement back-end applicatif : il me permet de présenter une solution conçue de bout en bout, de son architecture logicielle jusqu'à sa documentation et sa mise à disposition automatique sur Railway.
 
@@ -31,7 +31,7 @@ C3.6 & Documentation technique avec Swagger/OpenAPI et production d'un site MkDo
 
 Le besoin minimal laissait une grande liberté : développer une \terme{api} Spring Boot sur un sujet libre et intégrer une authentification \terme{jwt}. J'aurais donc pu me limiter à quelques entités, des opérations \terme{crud} et un système d'authentification simple.
 
-J'ai volontairement élargi ce périmètre. Le domaine des recettes me permettait de créer des relations métier suffisamment riches pour travailler la sécurité, la recherche, la propriété des ressources et les interactions entre utilisateurs. Le projet a ainsi intégré les utilisateurs et leurs rôles, les ingrédients et leurs types, les recettes et leurs étapes, les commentaires, les likes, les signalements ainsi que plusieurs ressources de référence.
+J'ai volontairement élargi ce périmètre. Le domaine des recettes de cuisine me permettait de créer des relations métier suffisamment riches pour travailler la sécurité, la recherche, la propriété des ressources et les interactions entre utilisateurs. Le projet a ainsi intégré les utilisateurs et leurs rôles, les ingrédients et leurs types, les recettes et leurs étapes, les commentaires, les likes, les signalements ainsi que plusieurs ressources de référence.
 
 Le périmètre développé comprend également plus de 700 ingrédients de démonstration, trois rôles distincts --- utilisateur, modérateur et administrateur --- ainsi que des mécanismes de pagination, tri et filtrage sur les principales ressources. Les utilisateurs peuvent interagir avec les contenus, tandis que les modérateurs et administrateurs disposent de droits spécifiques sur les signalements et certaines suppressions.
 
