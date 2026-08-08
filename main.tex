@@ -168,6 +168,7 @@
 \begingroup
 \input{sections/feastverse-figures.tex}
 \input{sections/06-projet-feastverse.tex}
+\input{sections/06-securite-owasp.tex}
 \endgroup
 \chapter{Brise-glace}
 \label{chap:brise-glace}
@@ -191,8 +192,13 @@
 \chapter{IPF 2026 Lynx Immo}
 \label{chap:lynx}
 \begingroup
+% Dans ce chapitre, les appels \cite sont des références parenthétiques.
+% Cette redéfinition locale évite le rendu auteur-année sans parenthèses.
+\let\cite\parencite
 \input{sections/lynx-figures.tex}
 \input{sections/10-projet-lynx-immo.tex}
+\input{sections/10c-lynx-c4-cible.tex}
+\input{sections/10d-lynx-rgpd.tex}
 \input{sections/10-numerique-responsable-lynx.tex}
 \input{sections/10-renvois-annexes-ipf.tex}
 \endgroup
