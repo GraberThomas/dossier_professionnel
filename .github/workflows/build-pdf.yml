@@ -29,8 +29,16 @@ jobs:
 
       - name: Compile PDF with bibliography and glossary
         run: |
+          # Première passe : création des auxiliaires, citations et entrées du glossaire.
           pdflatex -interaction=nonstopmode -halt-on-error main.tex
           biber main || true
+          makeglossaries main
+
+          # Stabilisation de la table des matières, de la bibliographie et de la pagination.
+          pdflatex -interaction=nonstopmode -halt-on-error main.tex
+
+          # Le premier rendu peut déplacer des pages : on reconstruit donc le glossaire
+          # à partir des numéros désormais stabilisés avant les dernières passes.
           makeglossaries main
           pdflatex -interaction=nonstopmode -halt-on-error main.tex
           pdflatex -interaction=nonstopmode -halt-on-error main.tex
