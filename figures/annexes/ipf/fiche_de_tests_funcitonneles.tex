@@ -20,15 +20,41 @@ Les statuts utilisés sont les suivants :
 
 \section{Modèle de fiche de test}
 
-\begin{table}[H]
-\centering
-\renewcommand{\arraystretch}{1.3}
+\begingroup
 \small
-\begin{tabular}{|p{4cm}|p{10cm}|}
+\renewcommand{\arraystretch}{1.3}
+\setlength{\LTleft}{\fill}
+\setlength{\LTright}{\fill}
+
+\begin{longtable}{|p{4cm}|p{10cm}|}
+
+\caption{Modèle de fiche de test fonctionnel}
+\\
+
 \hline
 \rowcolor{membrepurple!80}
 \multicolumn{2}{|c|}{\textbf{Fiche de test -- Modèle}} \\
 \hline
+
+\endfirsthead
+
+\multicolumn{2}{c}{\small\textit{Fiche de test -- Modèle (suite)}} \\
+\hline
+\rowcolor{membrepurple!80}
+\multicolumn{2}{|c|}{\textbf{Fiche de test -- Modèle}} \\
+\hline
+
+\endhead
+
+\hline
+\multicolumn{2}{|r|}{\small\textit{Suite de la fiche page suivante}} \\
+\hline
+
+\endfoot
+
+\hline
+\endlastfoot
+
 \textbf{Identifiant du test} & À compléter \\ \hline
 \textbf{Titre du test} & À compléter \\ \hline
 \textbf{Persona concerné} & À compléter \\ \hline
@@ -39,24 +65,49 @@ Les statuts utilisés sont les suivants :
 \textbf{Résultat attendu} & À compléter \\ \hline
 \textbf{Résultat obtenu} & À compléter après exécution du test \\ \hline
 \textbf{Statut} & Non testé / Validé / Partiellement validé / Non validé \\ \hline
-\textbf{Commentaires / anomalies} & À compléter \\ \hline
-\end{tabular}
-\caption{Modèle de fiche de test fonctionnel}
-\end{table}
+\textbf{Commentaires / anomalies} & À compléter \\
+\end{longtable}
+\endgroup
 
 \section{Fiches de tests -- Application mobile apprenant}
 
 \subsection{Test M01 -- Réaliser le quiz quotidien}
 
-\begin{table}[H]
-\centering
-\renewcommand{\arraystretch}{1.3}
+\begingroup
 \small
-\begin{tabular}{|p{4cm}|p{10cm}|}
+\renewcommand{\arraystretch}{1.3}
+\setlength{\LTleft}{\fill}
+\setlength{\LTright}{\fill}
+
+\begin{longtable}{|p{4cm}|p{10cm}|}
+
+\caption{Fiche de test M01 -- Quiz quotidien}
+\\
+
 \hline
 \rowcolor{BleuPetrole!25}
 \multicolumn{2}{|c|}{\textbf{Fiche de test M01 -- Quiz quotidien}} \\
 \hline
+
+\endfirsthead
+
+\multicolumn{2}{c}{\small\textit{Fiche de test M01 -- Quiz quotidien (suite)}} \\
+\hline
+\rowcolor{BleuPetrole!25}
+\multicolumn{2}{|c|}{\textbf{Fiche de test M01 -- Quiz quotidien}} \\
+\hline
+
+\endhead
+
+\hline
+\multicolumn{2}{|r|}{\small\textit{Suite de la fiche page suivante}} \\
+\hline
+
+\endfoot
+
+\hline
+\endlastfoot
+
 \textbf{Identifiant du test} & M01 \\ \hline
 \textbf{Titre du test} & Réaliser le quiz quotidien \\ \hline
 \textbf{Persona concerné} & Nicolas, négociateur en immobilier commercial \\ \hline
@@ -87,22 +138,47 @@ Question test : à compléter. \\ \hline
 Le quiz se lance correctement. Le timer est visible. La réponse est prise en compte. Le score et le feedback sont affichés à l'utilisateur. \\ \hline
 \textbf{Résultat obtenu} & À compléter après exécution du test. \\ \hline
 \textbf{Statut} & Non testé / Validé / Partiellement validé / Non validé \\ \hline
-\textbf{Commentaires / anomalies} & À compléter. \\ \hline
-\end{tabular}
-\caption{Fiche de test M01 -- Quiz quotidien}
-\end{table}
+\textbf{Commentaires / anomalies} & À compléter. \\
+\end{longtable}
+\endgroup
 
 \subsection{Test M02 -- Consulter une recommandation après une difficulté}
 
-\begin{table}[H]
-\centering
-\renewcommand{\arraystretch}{1.3}
+\begingroup
 \small
-\begin{tabular}{|p{4cm}|p{10cm}|}
+\renewcommand{\arraystretch}{1.3}
+\setlength{\LTleft}{\fill}
+\setlength{\LTright}{\fill}
+
+\begin{longtable}{|p{4cm}|p{10cm}|}
+
+\caption{Fiche de test M02 -- Recommandation personnalisée}
+\\
+
 \hline
 \rowcolor{BleuPetrole!25}
 \multicolumn{2}{|c|}{\textbf{Fiche de test M02 -- Recommandation personnalisée}} \\
 \hline
+
+\endfirsthead
+
+\multicolumn{2}{c}{\small\textit{Fiche de test M02 -- Recommandation personnalisée (suite)}} \\
+\hline
+\rowcolor{BleuPetrole!25}
+\multicolumn{2}{|c|}{\textbf{Fiche de test M02 -- Recommandation personnalisée}} \\
+\hline
+
+\endhead
+
+\hline
+\multicolumn{2}{|r|}{\small\textit{Suite de la fiche page suivante}} \\
+\hline
+
+\endfoot
+
+\hline
+\endlastfoot
+
 \textbf{Identifiant du test} & M02 \\ \hline
 \textbf{Titre du test} & Consulter une recommandation après une difficulté \\ \hline
 \textbf{Persona concerné} & Sarah, jeune professionnelle en prise de poste \\ \hline
@@ -131,22 +207,47 @@ Thématique testée : à compléter. \\ \hline
 L'application affiche une recommandation compréhensible et liée à la difficulté détectée. L'utilisateur peut accéder au contenu conseillé. \\ \hline
 \textbf{Résultat obtenu} & À compléter après exécution du test. \\ \hline
 \textbf{Statut} & Non testé / Validé / Partiellement validé / Non validé \\ \hline
-\textbf{Commentaires / anomalies} & À compléter. \\ \hline
-\end{tabular}
-\caption{Fiche de test M02 -- Recommandation personnalisée}
-\end{table}
+\textbf{Commentaires / anomalies} & À compléter. \\
+\end{longtable}
+\endgroup
 
 \subsection{Test M03 -- Reprendre rapidement l'application après une période d'inactivité}
 
-\begin{table}[H]
-\centering
-\renewcommand{\arraystretch}{1.3}
+\begingroup
 \small
-\begin{tabular}{|p{4cm}|p{10cm}|}
+\renewcommand{\arraystretch}{1.3}
+\setlength{\LTleft}{\fill}
+\setlength{\LTright}{\fill}
+
+\begin{longtable}{|p{4cm}|p{10cm}|}
+
+\caption{Fiche de test M03 -- Reprise rapide}
+\\
+
 \hline
 \rowcolor{BleuPetrole!25}
 \multicolumn{2}{|c|}{\textbf{Fiche de test M03 -- Reprise rapide}} \\
 \hline
+
+\endfirsthead
+
+\multicolumn{2}{c}{\small\textit{Fiche de test M03 -- Reprise rapide (suite)}} \\
+\hline
+\rowcolor{BleuPetrole!25}
+\multicolumn{2}{|c|}{\textbf{Fiche de test M03 -- Reprise rapide}} \\
+\hline
+
+\endhead
+
+\hline
+\multicolumn{2}{|r|}{\small\textit{Suite de la fiche page suivante}} \\
+\hline
+
+\endfoot
+
+\hline
+\endlastfoot
+
 \textbf{Identifiant du test} & M03 \\ \hline
 \textbf{Titre du test} & Reprendre rapidement l'application après une période d'inactivité \\ \hline
 \textbf{Persona concerné} & Karim, indépendant avec un agenda chargé \\ \hline
@@ -175,24 +276,49 @@ Dernière connexion simulée : à compléter. \\ \hline
 L'utilisateur retrouve rapidement son parcours. L'accès au quiz est visible. La session peut être réalisée sans configuration complexe. \\ \hline
 \textbf{Résultat obtenu} & À compléter après exécution du test. \\ \hline
 \textbf{Statut} & Non testé / Validé / Partiellement validé / Non validé \\ \hline
-\textbf{Commentaires / anomalies} & À compléter. \\ \hline
-\end{tabular}
-\caption{Fiche de test M03 -- Reprise rapide}
-\end{table}
+\textbf{Commentaires / anomalies} & À compléter. \\
+\end{longtable}
+\endgroup
 
 \section{Fiches de tests -- Interface administrateur}
 
 \subsection{Test A01 -- Créer une nouvelle question}
 
-\begin{table}[H]
-\centering
-\renewcommand{\arraystretch}{1.3}
+\begingroup
 \small
-\begin{tabular}{|p{4cm}|p{10cm}|}
+\renewcommand{\arraystretch}{1.3}
+\setlength{\LTleft}{\fill}
+\setlength{\LTright}{\fill}
+
+\begin{longtable}{|p{4cm}|p{10cm}|}
+
+\caption{Fiche de test A01 -- Création d'une question}
+\\
+
 \hline
 \rowcolor{orange!20}
 \multicolumn{2}{|c|}{\textbf{Fiche de test A01 -- Création d'une question}} \\
 \hline
+
+\endfirsthead
+
+\multicolumn{2}{c}{\small\textit{Fiche de test A01 -- Création d'une question (suite)}} \\
+\hline
+\rowcolor{orange!20}
+\multicolumn{2}{|c|}{\textbf{Fiche de test A01 -- Création d'une question}} \\
+\hline
+
+\endhead
+
+\hline
+\multicolumn{2}{|r|}{\small\textit{Suite de la fiche page suivante}} \\
+\hline
+
+\endfoot
+
+\hline
+\endlastfoot
+
 \textbf{Identifiant du test} & A01 \\ \hline
 \textbf{Titre du test} & Créer une nouvelle question depuis l'espace administrateur \\ \hline
 \textbf{Persona concerné} & Claire, administratrice / formatrice côté Le Carré Pro \\ \hline
@@ -226,10 +352,9 @@ Explication : à compléter. \\ \hline
 La question est enregistrée sans erreur. Elle apparaît dans la liste des questions et peut être utilisée dans un quiz. \\ \hline
 \textbf{Résultat obtenu} & À compléter après exécution du test. \\ \hline
 \textbf{Statut} & Non testé / Validé / Partiellement validé / Non validé \\ \hline
-\textbf{Commentaires / anomalies} & À compléter. \\ \hline
-\end{tabular}
-\caption{Fiche de test A01 -- Création d'une question}
-\end{table}
+\textbf{Commentaires / anomalies} & À compléter. \\
+\end{longtable}
+\endgroup
 
 
 % ============================================================
@@ -739,15 +864,41 @@ administrateur.
 
 \subsection{Test A02 -- Associer une vidéo à une question ou une thématique}
 
-\begin{table}[H]
-\centering
-\renewcommand{\arraystretch}{1.3}
+\begingroup
 \small
-\begin{tabular}{|p{4cm}|p{10cm}|}
+\renewcommand{\arraystretch}{1.3}
+\setlength{\LTleft}{\fill}
+\setlength{\LTright}{\fill}
+
+\begin{longtable}{|p{4cm}|p{10cm}|}
+
+\caption{Fiche de test A02 -- Association d'une vidéo}
+\\
+
 \hline
 \rowcolor{orange!20}
 \multicolumn{2}{|c|}{\textbf{Fiche de test A02 -- Association d'une vidéo}} \\
 \hline
+
+\endfirsthead
+
+\multicolumn{2}{c}{\small\textit{Fiche de test A02 -- Association d'une vidéo (suite)}} \\
+\hline
+\rowcolor{orange!20}
+\multicolumn{2}{|c|}{\textbf{Fiche de test A02 -- Association d'une vidéo}} \\
+\hline
+
+\endhead
+
+\hline
+\multicolumn{2}{|r|}{\small\textit{Suite de la fiche page suivante}} \\
+\hline
+
+\endfoot
+
+\hline
+\endlastfoot
+
 \textbf{Identifiant du test} & A02 \\ \hline
 \textbf{Titre du test} & Associer une vidéo pédagogique à une question ou une thématique \\ \hline
 \textbf{Persona concerné} & Claire, administratrice / formatrice côté Le Carré Pro \\ \hline
@@ -778,10 +929,9 @@ Question ou thématique associée : à compléter. \\ \hline
 La vidéo est correctement associée au contenu choisi. Elle devient accessible depuis le parcours apprenant attendu. \\ \hline
 \textbf{Résultat obtenu} & À compléter après exécution du test. \\ \hline
 \textbf{Statut} & Non testé / Validé / Partiellement validé / Non validé \\ \hline
-\textbf{Commentaires / anomalies} & À compléter. \\ \hline
-\end{tabular}
-\caption{Fiche de test A02 -- Association d'une vidéo}
-\end{table}
+\textbf{Commentaires / anomalies} & À compléter. \\
+\end{longtable}
+\endgroup
 
 % ============================================================
 % Test A02 -- Association d'une vidéo
@@ -1711,15 +1861,41 @@ reste à effectuer.
 
 \subsection{Test A03 -- Consulter les statistiques d'engagement}
 
-\begin{table}[H]
-\centering
-\renewcommand{\arraystretch}{1.3}
+\begingroup
 \small
-\begin{tabular}{|p{4cm}|p{10cm}|}
+\renewcommand{\arraystretch}{1.3}
+\setlength{\LTleft}{\fill}
+\setlength{\LTright}{\fill}
+
+\begin{longtable}{|p{4cm}|p{10cm}|}
+
+\caption{Fiche de test A03 -- Consultation des statistiques}
+\\
+
 \hline
 \rowcolor{orange!20}
 \multicolumn{2}{|c|}{\textbf{Fiche de test A03 -- Consultation des statistiques}} \\
 \hline
+
+\endfirsthead
+
+\multicolumn{2}{c}{\small\textit{Fiche de test A03 -- Consultation des statistiques (suite)}} \\
+\hline
+\rowcolor{orange!20}
+\multicolumn{2}{|c|}{\textbf{Fiche de test A03 -- Consultation des statistiques}} \\
+\hline
+
+\endhead
+
+\hline
+\multicolumn{2}{|r|}{\small\textit{Suite de la fiche page suivante}} \\
+\hline
+
+\endfoot
+
+\hline
+\endlastfoot
+
 \textbf{Identifiant du test} & A03 \\ \hline
 \textbf{Titre du test} & Consulter les statistiques d'engagement des apprenants \\ \hline
 \textbf{Persona concerné} & Claire, administratrice / formatrice côté Le Carré Pro \\ \hline
@@ -1749,10 +1925,9 @@ Utilisateurs ou groupe test : à compléter. \\ \hline
 Les statistiques sont accessibles, lisibles et cohérentes avec les données de test. L'administrateur peut identifier les tendances principales. \\ \hline
 \textbf{Résultat obtenu} & À compléter après exécution du test. \\ \hline
 \textbf{Statut} & Non testé / Validé / Partiellement validé / Non validé \\ \hline
-\textbf{Commentaires / anomalies} & À compléter. \\ \hline
-\end{tabular}
-\caption{Fiche de test A03 -- Consultation des statistiques}
-\end{table}
+\textbf{Commentaires / anomalies} & À compléter. \\
+\end{longtable}
+\endgroup
 
 % ============================================================
 % Test A03 -- Consultation des statistiques
