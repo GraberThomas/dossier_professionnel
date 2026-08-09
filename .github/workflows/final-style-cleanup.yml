@@ -1,0 +1,71 @@
+name: Final style cleanup
+
+on:
+  push:
+    branches:
+      - fix/derniere-passe-style
+
+permissions:
+  contents: write
+
+jobs:
+  cleanup:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: fix/derniere-passe-style
+
+      - name: Remove remaining em-dash constructions
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          replacements = {
+              Path('sections/04-projet-fcu-ediacara.tex'): [
+                  (
+                      r"ne possède pas de fichier \texttt{.lis} --- fichier déclaratif décrivant notamment les éléments composant la carte --- et n'a pas de cartouches",
+                      r"ne possède pas de fichier \texttt{.lis} (fichier déclaratif décrivant notamment les éléments composant la carte) et n'a pas de cartouches",
+                  ),
+                  (
+                      r"avec une première proposition d'architecture dédiée au dépôt et à la livraison des cartes \terme{fcu} --- nommée ArchFCU dans la suite du chapitre --- puis adaptation à la solution opérationnelle finalement retenue.",
+                      r"avec une première proposition d'architecture dédiée au dépôt et à la livraison des cartes \terme{fcu}, nommée ArchFCU dans la suite du chapitre, puis adaptation à la solution opérationnelle finalement retenue.",
+                  ),
+              ],
+              Path('sections/06-projet-feastverse.tex'): [
+                  (
+                      r"trois rôles distincts --- utilisateur, modérateur et administrateur --- ainsi que des mécanismes de pagination, tri et filtrage",
+                      r"trois rôles distincts (utilisateur, modérateur et administrateur), ainsi que des mécanismes de pagination, tri et filtrage",
+                  ),
+              ],
+          }
+
+          for path, pairs in replacements.items():
+              text = path.read_text(encoding='utf-8')
+              for old, new in pairs:
+                  if old not in text:
+                      raise SystemExit(f'Expected text not found in {path}: {old}')
+                  text = text.replace(old, new)
+              path.write_text(text, encoding='utf-8')
+
+          leftovers = []
+          for path in Path('.').rglob('*.tex'):
+              for lineno, line in enumerate(path.read_text(encoding='utf-8').splitlines(), 1):
+                  if '---' in line:
+                      leftovers.append(f'{path}:{lineno}: {line.strip()}')
+
+          if leftovers:
+              raise SystemExit('Remaining em-dash sequences:\n' + '\n'.join(leftovers))
+          PY
+
+      - name: Commit cleanup and remove temporary workflow
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git rm .github/workflows/final-style-cleanup.yml
+          git add sections
+          git commit -m "Retire les derniers cadratins du dossier"
+          git push origin HEAD:fix/derniere-passe-style
