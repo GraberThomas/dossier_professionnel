@@ -63,14 +63,18 @@ Le tableau suivant reprend les exigences non fonctionnelles relatives notamment 
 
 \input{figures/annexes/ipf/registre-risque.tex}
 
-% Les sections R.3 et R.4 commencent par des tableaux [H] suffisamment hauts
-% pour provoquer une page vide lorsque LaTeX tente de les placer après la
-% section précédente. On force ici leur démarrage sur une nouvelle page,
-% sans modifier la structure ni le contenu des fiches de tests.
+% Les tableaux [H] de R.2 et R.3.3 laissent un espacement vertical de fin de
+% flottant (\intextsep). Lorsque le tableau termine exactement une page, cet
+% espacement peut se retrouver seul sur la page suivante ; le gros bloc
+% section + sous-section + tableau est alors reporté encore une page plus loin,
+% ce qui produit une page visuellement blanche. On supprime uniquement cet
+% espacement résiduel avant R.3 et R.4, sans forcer de saut de page.
 \begingroup
 \let\ipforiginalsection\section
 \renewcommand{\section}[1]{%
-  \ifnum\value{section}>1\clearpage\fi
+  \ifnum\value{section}>1
+    \ifdim\lastskip>0pt\vskip-\lastskip\fi
+  \fi
   \ipforiginalsection{#1}%
 }
 \input{figures/annexes/ipf/fiche_de_tests_funcitonneles.tex}
