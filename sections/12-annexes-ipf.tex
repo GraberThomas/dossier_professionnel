@@ -63,7 +63,18 @@ Le tableau suivant reprend les exigences non fonctionnelles relatives notamment 
 
 \input{figures/annexes/ipf/registre-risque.tex}
 
+% Les sections R.3 et R.4 commencent par des tableaux [H] suffisamment hauts
+% pour provoquer une page vide lorsque LaTeX tente de les placer après la
+% section précédente. On force ici leur démarrage sur une nouvelle page,
+% sans modifier la structure ni le contenu des fiches de tests.
+\begingroup
+\let\ipforiginalsection\section
+\renewcommand{\section}[1]{%
+  \ifnum\value{section}>1\clearpage\fi
+  \ipforiginalsection{#1}%
+}
 \input{figures/annexes/ipf/fiche_de_tests_funcitonneles.tex}
+\endgroup
 \label{ann:ipf-tests-fonctionnels}
 
 \input{figures/annexes/ipf/entreprient-fin-projet.tex}
