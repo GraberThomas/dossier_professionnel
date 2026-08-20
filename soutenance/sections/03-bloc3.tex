@@ -1,0 +1,201 @@
+% =============================================================================
+% BLOC 3 — 20 minutes, dont 3 à 5 minutes en anglais à la fin
+% =============================================================================
+\section{Bloc 3 — Mise en production et évolution}
+\sectiondivider{Bloc 3}{Piloter la mise en production et l'évolution}{piv2glz $\rightarrow$ Ediacara $\rightarrow$ Homelab : trois niveaux d'industrialisation complémentaires}
+
+\begin{frame}{Bloc 3 — Du code à l'exploitation}
+\context{B3}{C3.1 $\rightarrow$ C3.6}
+\begin{center}
+\begin{tikzpicture}[node distance=0.55cm, every node/.style={font=\small}]
+  \node[draw=Line,rounded corners,fill=SoftBlue,minimum width=2.2cm,minimum height=0.9cm] (code) {Code};
+  \node[draw=Line,rounded corners,fill=SoftGreen,minimum width=2.2cm,minimum height=0.9cm,right=of code] (test) {Validation};
+  \node[draw=Line,rounded corners,fill=SoftOrange,minimum width=2.2cm,minimum height=0.9cm,right=of test] (build) {Build};
+  \node[draw=Line,rounded corners,fill=SoftPurple,minimum width=2.2cm,minimum height=0.9cm,right=of build] (deploy) {Déploiement};
+  \node[draw=Line,rounded corners,fill=SoftRed,minimum width=2.2cm,minimum height=0.9cm,right=of deploy] (observe) {Observation};
+  \draw[->,thick,Blue] (code)--(test); \draw[->,thick,Blue] (test)--(build); \draw[->,thick,Blue] (build)--(deploy); \draw[->,thick,Blue] (deploy)--(observe);
+\end{tikzpicture}
+\end{center}
+\vspace{0.5em}
+\begin{columns}[T]
+\begin{column}{0.32\linewidth}\begin{block}{piv2glz}\small C3.1 CI\\C3.2 tests itératifs\end{block}\end{column}
+\begin{column}{0.32\linewidth}\begin{block}{FCU / Ediacara}\small C3.3 surveillance\\C3.6 documentation\end{block}\end{column}
+\begin{column}{0.32\linewidth}\begin{block}{Homelab}\small C3.4 déploiement continu\\C3.5 observabilité\end{block}\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}{C3.1 + C3.2 — Une pipeline simple, mais réellement reproductible}
+\context{B3}{C3.1 · C3.2 · piv2glz}
+\begin{columns}[T]
+\begin{column}{0.44\linewidth}
+\begin{tightitems}
+  \item GitLab CI démarre dans un environnement Python propre.
+  \item Les tests Pytest couvrent fonctions, erreurs et scénarios CLI de bout en bout.
+  \item Le stage \texttt{build} n'est exécuté que si le stage \texttt{test} réussit.
+  \item PyInstaller produit un exécutable autonome et une distribution \textit{onedir} compressée.
+  \item Les artefacts sont récupérables directement depuis la pipeline.
+\end{tightitems}
+\vspace{0.25em}\small\strong{Effet :} une modification n'est plus validée par quelques conversions manuelles avant livraison.
+\end{column}
+\begin{column}{0.52\linewidth}
+\centering
+\repofigure[0.45\textheight]{figures/piv2glz/piv2glz_pipeline.png}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}{C3.3 — La mise en production n'a pas marqué la fin d'Ediacara}
+\context{B3}{C3.3 · FCU / Ediacara}
+\begin{columns}[T]
+\begin{column}{0.46\linewidth}
+\begin{tightitems}
+  \item Mise en production réalisée fin 2025 après plusieurs semaines de recette sur RE7.
+  \item Six cartes FCU prises en charge par le nouveau flux au moment du dossier.
+  \item Consultation quotidienne de l'état des jobs Jenkins.
+  \item Analyse des logs et des retours des consommateurs.
+  \item Correction des anomalies révélées en conditions réelles.
+\end{tightitems}
+\vspace{0.2em}\scriptsize\muted{Limite : la surveillance reste encore largement humaine ; pas d'alerting centralisé comme livrable du projet.}
+\end{column}
+\begin{column}{0.50\linewidth}
+\centering
+\repofigure[0.43\textheight]{figures/fcu/flux_livraison_fcu.png}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}{Un incident révélateur : le champ PDF /UserUnit}
+\context{B3}{C3.3 · Diagnostic post-production}
+\begin{block}{Symptôme}
+Certains PDF générés étaient interprétés avec des dimensions plusieurs fois supérieures à la taille attendue malgré une conversion à 300 DPI apparemment correcte.
+\end{block}
+\begin{columns}[T]
+\begin{column}{0.47\linewidth}
+\begin{tightitems}
+  \item Inspection du PDF : présence d'un \texttt{/UserUnit} proche de 300/72.
+  \item Lecture de l'ancien code Eiffel : il neutralisait explicitement cette valeur.
+  \item Cette règle n'était documentée nulle part ailleurs.
+\end{tightitems}
+\end{column}
+\begin{column}{0.49\linewidth}
+\begin{block}{Correctif et leçon}
+J'ai ajouté un correctif Python après la conversion.\\[0.4em]
+\textbf{Une migration legacy ne consiste pas seulement à reproduire la fonction principale : elle doit retrouver les années de règles implicites accumulées.}
+\end{block}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}{C3.6 — Documenter pour comprendre, puis pour transmettre}
+\context{B3}{C3.6 · FCU / Ediacara}
+\begin{columns}[T]
+\begin{column}{0.42\linewidth}
+\begin{tightitems}
+  \item Documentation MkDocs des chaînes et des jobs.
+  \item Diagramme global des flux, fichiers et accès réseau.
+  \item Matrice de reconstruction production / RE7.
+  \item Procédure détaillée de mise en production.
+  \item Document d'architecture ArchFCU conservant les arbitrages initiaux.
+\end{tightitems}
+\begin{block}{Usage réel}
+Le diagramme est imprimé dans le bureau de mon tuteur et sert à localiser l'origine d'un problème.
+\end{block}
+\end{column}
+\begin{column}{0.54\linewidth}
+\centering
+\repofigure[0.25\textheight]{figures/fcu/doc_mkdocs_chaine.PNG}\\[0.25em]
+\repofigure[0.25\textheight]{figures/fcu/doc_mkdocs_job.PNG}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}{Compétence transversale — Numérique responsable : optimiser sans sur-vendre}
+\context{B3}{Numérique responsable}
+\begin{columns}[T]
+\begin{column}{0.48\linewidth}
+\begin{block}{Ediacara}
+\begin{tightitems}
+  \item Comparaison avant copie de raster volumineux.
+  \item Réduction des écritures réseau inutiles.
+  \item Tampons locaux avant synchronisation contrôlée.
+\end{tightitems}
+\end{block}
+\end{column}
+\begin{column}{0.48\linewidth}
+\begin{block}{Homelab}
+\begin{tightitems}
+  \item Réemploi d'un ancien ordinateur portable.
+  \item Services dimensionnés à l'usage réel.
+  \item Stack d'observabilité volontairement compacte.
+  \item Rétention limitée plutôt qu'accumulation indéfinie.
+\end{tightitems}
+\end{block}
+\end{column}
+\end{columns}
+\begin{block}{Positionnement honnête}
+Ces choix améliorent l'efficience des ressources, mais \textbf{je n'ai pas réalisé de bilan énergétique ni d'analyse de cycle de vie complète}.
+\end{block}
+\end{frame}
+
+% ----------------------------------------------------------------------------
+% ENGLISH PART — target 4 min
+% ----------------------------------------------------------------------------
+\begin{frame}{C3.4 — Moving from manual Helm releases to GitOps}
+\selectlanguage{english}
+\context{B3 · ENGLISH}{C3.4 · Homelab}
+\begin{columns}[T]
+\begin{column}{0.44\linewidth}
+\begin{tightitems}
+  \item My homelab is a personal experimentation environment, not a professional production system.
+  \item I initially deployed Kubernetes workloads manually with Helm.
+  \item I then introduced Argo CD so that Git becomes the source of truth for the desired state.
+  \item A change committed to the repository can be detected and reconciled automatically by Argo CD.
+\end{tightitems}
+\vspace{0.2em}\small\strong{Main benefit:} deployment becomes a \textbf{repeatable state reconciliation process} instead of manual commands.
+\end{column}
+\begin{column}{0.52\linewidth}
+\centering
+\repofigure[0.43\textheight]{figures/homelab/fig_8_3_deux_strategies_deploiement.drawio.png}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}{C3.5 — Observability closes the deployment loop}
+\context{B3 · ENGLISH}{C3.5 · Homelab}
+\begin{columns}[T]
+\begin{column}{0.45\linewidth}
+\begin{tightitems}
+  \item Prometheus collects metrics.
+  \item Grafana provides dashboards and visualization.
+  \item Loki stores logs and Alloy collects them from services.
+  \item Kubernetes and Argo CD expose deployment and health information.
+  \item The objective is not only to deploy faster, but to \textbf{understand the effect of a change after deployment}.
+\end{tightitems}
+\end{column}
+\begin{column}{0.51\linewidth}
+\centering
+\repofigure[0.49\textheight]{figures/homelab/fig_8_1_architecture_homelab.png}
+\end{column}
+\end{columns}
+\begin{block}{Limit}
+The environment is intentionally small and personal. It strengthens my understanding of modern DevOps practices, but it does not replace the professional evidence provided by Ediacara.
+\end{block}
+\selectlanguage{french}
+\end{frame}
+
+\begin{frame}{Bloc 3 — Synthèse des preuves}
+\context{B3}{Synthèse}
+\small
+\begin{tabularx}{\linewidth}{>{\bfseries}p{1.35cm}p{4.2cm}X}
+\toprule
+Comp. & Projet principal & Preuve retenue \\
+\midrule
+C3.1 & piv2glz & Pipeline GitLab CI. \\
+C3.2 & piv2glz & Tests unitaires, erreurs et intégration CLI. \\
+C3.3 & FCU / Ediacara & Surveillance réelle après mise en production. \\
+C3.4 & Homelab & Déploiement GitOps avec Argo CD. \\
+C3.5 & Homelab & Métriques, logs et observabilité. \\
+C3.6 & FCU / Ediacara & Documentation technique et procédure de MEP. \\
+\bottomrule
+\end{tabularx}
+\end{frame}
