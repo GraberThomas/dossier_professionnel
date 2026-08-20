@@ -1,0 +1,90 @@
+% =============================================================================
+% INTRODUCTION — 5 minutes maximum
+% =============================================================================
+\section{Introduction}
+
+% ~20 s
+\begin{frame}[plain]
+  \begin{tikzpicture}[remember picture,overlay]
+    \fill[Navy] (current page.south west) rectangle (current page.north east);
+    \fill[Blue] (current page.south west) rectangle ([yshift=0.055\paperheight]current page.south east);
+  \end{tikzpicture}
+  \vfill
+  \begin{center}
+    {\color{white}\Huge\bfseries Validation des blocs de compétences}\\[0.6em]
+    {\color{white!88}\Large Expert en Architecture et Développement Logiciel}\\[1.5em]
+    {\color{white}\large Thomas Graber}\\[0.3em]
+    {\color{white!75}Learn IT · Brest Open Campus — Alternance au SHOM}
+  \end{center}
+  \vfill
+\end{frame}
+
+% ~50 s
+\begin{frame}{Mon parcours et mon contexte professionnel}
+\context{INTRO}{Contexte}
+\begin{columns}[T]
+\begin{column}{0.50\linewidth}
+\begin{block}{Parcours}
+\begin{tightitems}
+  \item Licence informatique : systèmes, algorithmique, bases de données et développement.
+  \item Mastère développement, programmation et Data/IA.
+  \item Évolution progressive vers le \strong{back-end}, l'\strong{architecture logicielle} et la \strong{donnée}.
+\end{tightitems}
+\end{block}
+\end{column}
+\begin{column}{0.46\linewidth}
+\begin{block}{Alternance au SHOM}
+\begin{tightitems}
+  \item Depuis septembre 2024, développement de services web et d'outils internes.
+  \item Environnement sécurisé, métier et fortement contraint.
+  \item Passage du pôle SYSPROD au pôle DATA.
+  \item Travail sur l'analyse d'existant, le développement, la production et la documentation.
+\end{tightitems}
+\end{block}
+\end{column}
+\end{columns}
+\end{frame}
+
+% ~1 min 15
+\begin{frame}{Huit projets, huit rôles complémentaires}
+\context{INTRO}{Portefeuille}
+\scriptsize
+\begin{tabularx}{\linewidth}{>{\bfseries}p{3.05cm}p{2.05cm}X}
+\toprule
+Projet & Contexte & Rôle principal dans le dossier et l'oral \\
+\midrule
+FCU / Ediacara & Professionnel & Évolution d'une chaîne de production legacy, validation, exploitation et documentation. \\
+S-123 & Professionnel & Architecture métier, méta-modèle S-100, XML/XSD, PostgreSQL et FastAPI. \\
+FeastVerse & Académique & Back-end Spring Boot sécurisé, tests, documentation et déploiement. \\
+Brise-glace & Académique & Front-end React/TypeScript, temps réel et intégration Supabase. \\
+Prédiction des coûts d'assurance & Académique & Préparation des données, modèles prédictifs, explicabilité et passage à l'échelle. \\
+Homelab & Personnel & GitOps, Kubernetes, CI/CD et observabilité. \\
+piv2glz & Professionnel & Tests automatisés, intégration continue et construction de livrables Windows. \\
+Lynx Immo & Académique / client réel & Faisabilité, planification, KPI, risques et pilotage d'équipe. \\
+\bottomrule
+\end{tabularx}
+\end{frame}
+
+% ~1 min 30
+\begin{frame}{Une soutenance structurée par blocs, pas par projets}
+\context{INTRO}{Carte de lecture}
+\scriptsize
+\begin{tabularx}{\linewidth}{>{\bfseries}p{2.95cm}ccccX}
+\toprule
+Projet & B1 & B2 & B3 & B4 & Angle principal à l'oral \\
+\midrule
+FCU / Ediacara & \checkmarkblue & \textbullet & \checkmarkblue & \textbullet & C1.3, C3.3, C3.6 \\
+S-123 & \textbullet & \checkmarkblue &  &  & C2.1 \\
+FeastVerse &  & \checkmarkblue & \textbullet &  & C2.4 \\
+Brise-glace &  & \checkmarkblue &  &  & C2.3 \\
+Prédiction assurance &  & \checkmarkblue &  &  & C2.5 \\
+Homelab & \textbullet &  & \checkmarkblue &  & C3.4, C3.5 \\
+piv2glz &  & \checkmarkblue & \checkmarkblue &  & C2.2, C3.1, C3.2 \\
+Lynx Immo & \checkmarkblue &  &  & \checkmarkblue & C1.1--C1.2, C1.4--C1.7, C4.1--C4.6 \\
+\bottomrule
+\end{tabularx}
+\vspace{0.55em}
+\begin{block}{Principe de lecture}
+Le dossier écrit raconte les projets. \textbf{La soutenance mobilise ces projets comme preuves des compétences du référentiel.}
+\end{block}
+\end{frame}
