@@ -22,9 +22,6 @@
 \DeclareUnicodeCharacter{25CF}{\textbullet}
 \DeclareUnicodeCharacter{2192}{$\rightarrow$}
 
-% -----------------------------------------------------------------------------
-% Palette et thème
-% -----------------------------------------------------------------------------
 \definecolor{Navy}{HTML}{0B2B5B}
 \definecolor{Blue}{HTML}{2563EB}
 \definecolor{SoftBlue}{HTML}{E8F0FF}
@@ -49,7 +46,6 @@
 \setbeamertemplate{blocks}[rounded][shadow=false]
 \setbeamersize{text margin left=0.75cm,text margin right=0.75cm}
 
-% Pied de page discret : section + numéro de slide.
 \setbeamertemplate{footline}{%
   \leavevmode%
   \hbox{%
@@ -62,33 +58,16 @@
   }%
 }
 
-% -----------------------------------------------------------------------------
-% Macros
-% -----------------------------------------------------------------------------
 \newcommand{\context}[2]{\hfill{\scriptsize\color{Muted}\textbf{#1}\,·\,#2}}
 \newcommand{\project}[1]{{\color{Navy}\textbf{#1}}}
 \newcommand{\checkmarkblue}{\textcolor{Blue}{\ding{51}}}
 \newcommand{\muted}[1]{{\color{Muted}#1}}
 \newcommand{\strong}[1]{{\color{Navy}\textbf{#1}}}
-
 \newenvironment{tightitems}{\begin{itemize}\setlength\itemsep{0.28em}\setlength\parskip{0pt}}{\end{itemize}}
-
-% Insère une figure du dépôt si elle existe. Le fallback permet de compiler
-% le fichier même lorsque le dossier soutenance est copié seul.
 \newcommand{\repofigure}[2][0.62\textheight]{%
-  \IfFileExists{#2}{%
-    \includegraphics[width=\linewidth,height=#1,keepaspectratio]{#2}%
-  }{%
-    \IfFileExists{../#2}{%
-      \includegraphics[width=\linewidth,height=#1,keepaspectratio]{../#2}%
-    }{%
-      \fbox{\begin{minipage}[c][#1][c]{0.92\linewidth}\centering\scriptsize\color{Muted}
-        Figure attendue :\\[0.25em]\texttt{\detokenize{#2}}
-      \end{minipage}}%
-    }%
-  }%
-}
-
+  \IfFileExists{#2}{\includegraphics[width=\linewidth,height=#1,keepaspectratio]{#2}}{%
+    \IfFileExists{../#2}{\includegraphics[width=\linewidth,height=#1,keepaspectratio]{../#2}}{%
+      \fbox{\begin{minipage}[c][#1][c]{0.92\linewidth}\centering\scriptsize\color{Muted}Figure attendue :\\[0.25em]\texttt{\detokenize{#2}}\end{minipage}}}}}
 \newcommand{\sectiondivider}[3]{%
 \begin{frame}[plain]
   \begin{tikzpicture}[remember picture,overlay]
@@ -102,13 +81,8 @@
     \hspace{0.75cm}{\color{white!80}\normalsize #3}
   \end{flushleft}
   \vfill
-\end{frame}%
-}
-
-\newcommand{\competencygrid}[1]{%
-\begin{center}
-\small\textbf{Compétences couvertes :} #1
-\end{center}}
+\end{frame}}
+\newcommand{\competencygrid}[1]{\begin{center}\small\textbf{Compétences couvertes :} #1\end{center}}
 
 \title[RNCP EADL — Soutenance]{Validation des blocs de compétences}
 \subtitle{Titre RNCP niveau 7 — Expert en Architecture et Développement Logiciel}
@@ -118,17 +92,11 @@
 
 \begin{document}
 \selectlanguage{french}
-
 \input{sections/00-introduction}
 \input{sections/01-bloc1}
-\input{sections/01b-bloc1-zooms}
 \input{sections/02-bloc2}
-\input{sections/02b-bloc2-zooms}
 \input{sections/03-bloc3}
-\input{sections/03b-bloc3-zooms}
 \input{sections/04-bloc4}
-\input{sections/04b-bloc4-zooms}
 \input{sections/05-conclusion}
 \input{sections/90-annexes}
-
 \end{document}
