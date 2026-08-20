@@ -1,0 +1,259 @@
+% =============================================================================
+% BLOC 1 — 20 minutes, dont 3 à 5 minutes en anglais à la fin
+% =============================================================================
+\section{Bloc 1 — Planifier et organiser}
+\sectiondivider{Bloc 1}{Planifier et organiser un projet de développement logiciel}{Fil rouge : Lynx Immo · Ancrage professionnel : FCU / Ediacara}
+
+\begin{frame}{Bloc 1 — De l'opportunité au projet piloté}
+\context{B1}{C1.1 $\rightarrow$ C1.7}
+\begin{columns}[T]
+\begin{column}{0.50\linewidth}
+\begin{block}{Lynx Immo : pilotage structuré}
+\begin{tightitems}
+  \item C1.1 — Faisabilité.
+  \item C1.2 — Veille technologique.
+  \item C1.4 — Feuille de route.
+  \item C1.5 — Mise en place.
+  \item C1.6 — Mesure de la performance.
+  \item C1.7 — Supervision et arbitrages.
+\end{tightitems}
+\end{block}
+\end{column}
+\begin{column}{0.46\linewidth}
+\begin{block}{FCU / Ediacara : décision en contexte réel}
+\begin{tightitems}
+  \item C1.3 — Concevoir une adaptation compatible avec une production historique.
+  \item Arbitrer entre refonte idéale et évolution maîtrisée.
+  \item Tenir compte du risque opérationnel et du legacy.
+\end{tightitems}
+\end{block}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}{Lynx Immo — Définir un produit suffisamment concret pour piloter}
+\context{B1}{Support projet}
+\begin{columns}[T]
+\begin{column}{0.46\linewidth}
+\begin{tightitems}
+  \item Client réel : organisme de formation en immobilier commercial.
+  \item Besoin initial : micro-apprentissage mobile.
+  \item Produit élargi : application apprenant, administration, back-end, abonnements et données d'usage.
+  \item Mon rôle : \strong{chef de projet et référent technique} au sein d'une équipe de cinq étudiants.
+\end{tightitems}
+\end{column}
+\begin{column}{0.50\linewidth}
+\centering
+\repofigure[0.48\textheight]{figures/ipf/priorisation_perimetre.pdf}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}{C1.1 — Vérifier la faisabilité avant de s'engager}
+\context{B1}{C1.1 · Lynx Immo}
+\begin{block}{Question de départ}
+Le produit souhaité est-il réalisable dans le temps, avec l'équipe et les ressources disponibles ?
+\end{block}
+\begin{columns}[T]
+\begin{column}{0.49\linewidth}
+\begin{tightitems}
+  \item Définition d'un \strong{MVP} avant la distribution des tâches.
+  \item Comparaison de scénarios d'architecture et de leurs coûts d'exploitation.
+  \item Analyse des dépendances externes : authentification, paiements, stores et hébergement.
+  \item Identification des risques techniques, humains et financiers.
+\end{tightitems}
+\end{column}
+\begin{column}{0.47\linewidth}
+\begin{block}{Décision}
+Ne pas traiter la faisabilité comme une validation binaire, mais comme un \textbf{outil de cadrage du périmètre}.
+\end{block}
+\vspace{0.5em}
+\small
+\strong{Résultat :} un produit priorisé, des fonctions différées et une architecture compatible avec le contexte réel du projet.
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}{C1.3 — Concevoir dans les contraintes d'une chaîne legacy}
+\context{B1}{C1.3 · FCU / Ediacara}
+\begin{columns}[T]
+\begin{column}{0.45\linewidth}
+\begin{tightitems}
+  \item Le flux historique part de la BDMR ; le FCU n'y passe jamais.
+  \item Les deux flux doivent pourtant atteindre les \strong{mêmes espaces de diffusion}.
+  \item Risque principal : une synchronisation historique peut considérer un produit FCU comme orphelin et le supprimer.
+  \item Les exécutables Eiffel sont partagés avec d'autres briques et ne peuvent pas être refondus sans risque majeur.
+\end{tightitems}
+\end{column}
+\begin{column}{0.51\linewidth}
+\centering
+\repofigure[0.50\textheight]{figures/fcu/coexistence_flux_historique_fcu.png}
+\end{column}
+\end{columns}
+\begin{block}{Décision d'architecture}
+\textbf{Séparer explicitement le flux FCU tout en sécurisant tous les points de contact avec le flux historique.}
+\end{block}
+\end{frame}
+
+\begin{frame}{C1.4 — Transformer un produit large en trajectoire}
+\context{B1}{C1.4 · Lynx Immo}
+\begin{columns}[T]
+\begin{column}{0.40\linewidth}
+\begin{tightitems}
+  \item Feuille de route de novembre à juillet.
+  \item Jalons associés à des livrables et des décisions.
+  \item Matrice d'exigences pour garder le lien avec le besoin client.
+  \item Méthode hybride plutôt qu'un Scrum appliqué mécaniquement.
+\end{tightitems}
+\begin{block}{Usage réel}
+La roadmap a servi à \textbf{arbitrer le périmètre, les priorités et la charge}, pas seulement à afficher des dates.
+\end{block}
+\end{column}
+\begin{column}{0.56\linewidth}
+\centering
+\repofigure[0.52\textheight]{figures/ipf/roadmap_calendrier.pdf}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}{C1.5 — Mettre en place un environnement de travail commun}
+\context{B1}{C1.5 · Lynx Immo}
+\begin{columns}[T]
+\begin{column}{0.48\linewidth}
+\begin{block}{Ce que j'ai mis en place}
+\begin{tightitems}
+  \item Découpage du produit en tâches manipulables.
+  \item Jira pour le suivi opérationnel.
+  \item Documentation des décisions et exigences.
+  \item Répartition par domaines techniques et fonctionnels.
+\end{tightitems}
+\end{block}
+\end{column}
+\begin{column}{0.48\linewidth}
+\begin{block}{Ce que j'ai appris}
+\begin{tightitems}
+  \item La capacité théorique n'est pas la capacité réelle.
+  \item Le temps d'apprentissage fait partie de la charge.
+  \item Une méthode doit s'adapter à l'équipe plutôt que l'inverse.
+\end{tightitems}
+\end{block}
+\end{column}
+\end{columns}
+\vspace{0.5em}
+\centering
+\repofigure[0.30\textheight]{figures/ipf/methode_hybride_5sc.png}
+\end{frame}
+
+\begin{frame}{C1.6 — Mesurer l'avancement sans confondre activité et résultat}
+\context{B1}{C1.6 · Lynx Immo}
+\begin{columns}[T]
+\begin{column}{0.48\linewidth}
+\begin{block}{Quatre familles de KPI}
+\begin{tightitems}
+  \item \strong{Projet} : jalons, tâches, exigences.
+  \item \strong{Valeur / usage} : engagement, continuité d'apprentissage.
+  \item \strong{Technique} : temps de réponse, disponibilité, erreurs.
+  \item \strong{Charge} : comportement sous sollicitation contrôlée.
+\end{tightitems}
+\end{block}
+\end{column}
+\begin{column}{0.48\linewidth}
+\centering
+\repofigure[0.43\textheight]{figures/ipf/vue_synthetique_avancement_jira.png}
+\end{column}
+\end{columns}
+\begin{block}{Principe}
+Un indicateur n'a de valeur que s'il \textbf{déclenche ou éclaire une décision}.
+\end{block}
+\end{frame}
+
+\begin{frame}{C1.7 — Superviser, arbitrer et réajuster}
+\context{B1}{C1.7 · Lynx Immo}
+\begin{columns}[T]
+\begin{column}{0.46\linewidth}
+\begin{tightitems}
+  \item Suivi des écarts entre planning et capacité réelle.
+  \item Registre des risques avec criticité et règle d'escalade.
+  \item Arbitrages avec le client sans perdre la trajectoire du projet.
+  \item Réallocation de tâches et réduction de périmètre lorsqu'un risque devient concret.
+\end{tightitems}
+\begin{block}{Logique de supervision}
+\textbf{Constater $\rightarrow$ analyser $\rightarrow$ décider $\rightarrow$ mesurer l'effet de l'ajustement.}
+\end{block}
+\end{column}
+\begin{column}{0.50\linewidth}
+\centering
+\repofigure[0.50\textheight]{figures/ipf/matrice_risque-5sc.pdf}
+\end{column}
+\end{columns}
+\end{frame}
+
+% ----------------------------------------------------------------------------
+% ENGLISH PART — target 4 min
+% ----------------------------------------------------------------------------
+\begin{frame}{C1.2 — Technology watch as a decision-making system}
+\selectlanguage{english}
+\context{B1 · ENGLISH}{C1.2 · Lynx Immo}
+\begin{block}{Objective}
+The goal was not to collect technology news. It was to build a \textbf{repeatable decision process} for architecture choices.
+\end{block}
+\begin{tightitems}
+  \item Define the scope of the watch and the decisions it must support.
+  \item Prioritize official English-language documentation and primary sources.
+  \item Compare options using explicit criteria: maturity, maintainability, cost, team skills and deployment constraints.
+  \item Define triggers that require the decision to be reviewed when assumptions change.
+\end{tightitems}
+\begin{block}{Transversal competency}
+The written watch report is in French, but it is based on English technical sources and required me to extract, compare and explain technical information.
+\end{block}
+\end{frame}
+
+\begin{frame}{Replaying the decision when assumptions changed}
+\context{B1 · ENGLISH}{C1.2 · Lynx Immo}
+\begin{columns}[T]
+\begin{column}{0.45\linewidth}
+\begin{block}{Initial assumptions}
+\begin{tightitems}
+  \item React Native for the mobile application.
+  \item Django for the back-end.
+  \item More infrastructure to operate ourselves.
+\end{tightitems}
+\end{block}
+\begin{block}{New information}
+The real product scope, team skills, delivery constraints and service needs changed the evaluation.
+\end{block}
+\end{column}
+\begin{column}{0.51\linewidth}
+\begin{block}{Final architecture}
+\begin{tightitems}
+  \item Flutter for the learner application.
+  \item React for the administration interface.
+  \item Supabase / PostgreSQL for the back-end platform.
+  \item RevenueCat for subscription management.
+\end{tightitems}
+\end{block}
+\centering
+\repofigure[0.22\textheight]{figures/ipf/architecture.png}
+\end{column}
+\end{columns}
+\vspace{0.25em}\small\strong{Key lesson:} A good technology watch must help us \textbf{change our mind for documented reasons}.
+\selectlanguage{french}
+\end{frame}
+
+\begin{frame}{Bloc 1 — Synthèse des preuves}
+\context{B1}{Synthèse}
+\small
+\begin{tabularx}{\linewidth}{>{\bfseries}p{1.35cm}p{4.2cm}X}
+\toprule
+Comp. & Projet principal & Preuve retenue \\
+\midrule
+C1.1 & Lynx Immo & Étude de faisabilité et cadrage du MVP. \\
+C1.2 & Lynx Immo & Système de veille et réévaluation des choix. \\
+C1.3 & FCU / Ediacara & Solution d'intégration compatible avec le legacy. \\
+C1.4 & Lynx Immo & Roadmap, jalons et exigences. \\
+C1.5 & Lynx Immo & Environnement de travail et méthode. \\
+C1.6 & Lynx Immo & KPI projet, usage, technique et charge. \\
+C1.7 & Lynx Immo & Risques, arbitrages et réajustements. \\
+\bottomrule
+\end{tabularx}
+\end{frame}
