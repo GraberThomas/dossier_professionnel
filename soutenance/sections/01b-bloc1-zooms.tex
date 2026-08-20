@@ -1,0 +1,93 @@
+% Compléments Bloc 1 — zooms de preuve pour aérer la soutenance
+
+\begin{frame}{C1.1 — Faisabilité : croiser périmètre, coût et risque}
+\context{B1}{C1.1 · Lynx Immo · Zoom preuve}
+\begin{columns}[T]
+\begin{column}{0.48\linewidth}
+\begin{block}{Ce qu'il fallait vérifier}
+\begin{tightitems}
+  \item Cohérence du MVP avec le besoin client.
+  \item Architecture réaliste pour l'équipe disponible.
+  \item Coût d'exploitation après livraison.
+  \item Fonctions à différer pour protéger la trajectoire.
+\end{tightitems}
+\end{block}
+\end{column}
+\begin{column}{0.48\linewidth}
+\begin{block}{Éléments de preuve}
+\begin{tightitems}
+  \item Priorisation du périmètre.
+  \item Comparaison simplifiée des coûts.
+  \item Scénarios d'architecture.
+  \item Arbitrages entre MVP et perspectives.
+\end{tightitems}
+\end{block}
+\end{column}
+\end{columns}
+\begin{block}{Message jury}
+La faisabilité a servi d'outil de décision et de cadrage, pas de simple réponse oui/non.
+\end{block}
+\end{frame}
+
+\begin{frame}{C1.3 — Pourquoi réécrire Ediacara n'était pas la bonne réponse}
+\context{B1}{C1.3 · FCU / Ediacara · Zoom preuve}
+\begin{columns}[T]
+\begin{column}{0.46\linewidth}
+\begin{block}{La tentation initiale}
+Profiter du FCU pour reconstruire l'orchestration avec des technologies modernes.
+\end{block}
+\begin{tightitems}
+  \item Chaîne de production utilisée quotidiennement.
+  \item Composants Eiffel et Scala partagés avec d'autres outils.
+  \item Règles métier implicites dans le legacy.
+  \item Délai et risque incompatibles avec une refonte globale.
+\end{tightitems}
+\end{column}
+\begin{column}{0.50\linewidth}
+\begin{block}{Décision retenue}
+Moderniser la couche Python maîtrisable et construire des frontières sûres autour des composants trop risqués à remplacer.
+\end{block}
+\centering
+\repofigure[0.31\textheight]{figures/fcu/tampon_executables_eiffel.png}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}{C1.6 — Des KPI qui doivent conduire à une décision}
+\context{B1}{C1.6 · Lynx Immo · Zoom preuve}
+\scriptsize
+\begin{tabularx}{\linewidth}{>{\bfseries}p{3.0cm}X X}
+\toprule
+Famille & Ce que je mesure & Décision possible \\
+\midrule
+Projet & tâches, jalons, couverture des exigences & replanner, scinder, déscoper \\
+Valeur / usage & engagement, fréquence, continuité & vérifier la pertinence produit \\
+Technique & réponse, stabilité, dette technique & corriger ou prioriser une amélioration \\
+Charge contrôlée & comportement sous sollicitation & préparer la future mise en production \\
+\bottomrule
+\end{tabularx}
+\vspace{0.7em}
+\begin{block}{Question centrale}
+Qu'est-ce que cette mesure doit me faire changer dans la trajectoire du projet ?
+\end{block}
+\end{frame}
+
+\begin{frame}{C1.7 — Superviser par une boucle d'arbitrage explicite}
+\context{B1}{C1.7 · Lynx Immo · Zoom preuve}
+\begin{center}
+\begin{tikzpicture}[node distance=0.8cm,every node/.style={font=\small,align=center}]
+  \node[draw=Line,rounded corners,fill=SoftBlue,minimum width=2.7cm,minimum height=0.9cm] (obs) {Observer\\l'avancement};
+  \node[draw=Line,rounded corners,fill=SoftOrange,minimum width=2.7cm,minimum height=0.9cm,right=of obs] (cmp) {Comparer\\aux exigences};
+  \node[draw=Line,rounded corners,fill=SoftRed,minimum width=2.7cm,minimum height=0.9cm,right=of cmp] (risk) {Qualifier\\le risque};
+  \node[draw=Line,rounded corners,fill=SoftGreen,minimum width=2.7cm,minimum height=0.9cm,right=of risk] (dec) {Décider\\et réajuster};
+  \draw[->,thick,Blue] (obs)--(cmp); \draw[->,thick,Blue] (cmp)--(risk); \draw[->,thick,Blue] (risk)--(dec);
+\end{tikzpicture}
+\end{center}
+\vspace{0.8em}
+\begin{tightitems}
+  \item Réallouer lorsque la disponibilité change.
+  \item Simplifier une fonctionnalité pour protéger le MVP.
+  \item Intégrer le temps d'apprentissage dans la charge réelle.
+  \item Documenter les conséquences d'un arbitrage plutôt que masquer l'écart au plan.
+\end{tightitems}
+\end{frame}

@@ -4,6 +4,8 @@ on:
   push:
     branches:
       - main
+      - soutenance-beamer
+      - soutenance-beamer-enrichie
     paths:
       - 'soutenance/**'
       - 'figures/**'
@@ -11,6 +13,7 @@ on:
   pull_request:
     branches:
       - main
+      - soutenance-beamer
     paths:
       - 'soutenance/**'
       - 'figures/**'

@@ -1,0 +1,106 @@
+% Compléments Bloc 2 — zooms techniques
+
+\begin{frame}{C2.1 — S-123 : comparer les deux architectures en un regard}
+\context{B2}{C2.1 · S-123 · Zoom preuve}
+\scriptsize
+\begin{tabularx}{\linewidth}{>{\bfseries}p{3.0cm}X X}
+\toprule
+Critère & Modèle direct S-123 & Méta-modèle retenu \\
+\midrule
+Structure & une table par concept métier & concepts génériques du Feature Catalogue \\
+Volumétrie du schéma & 73 tables pour une version partielle & 18 tables principales \\
+Évolution & migrations fréquentes à chaque version & chargement de nouvelles définitions \\
+Réutilisation & fortement lié à S-123 & compatible avec plusieurs S-1xx \\
+Maintenance & risque d'obsolescence rapide & abstraction plus stable \\
+\bottomrule
+\end{tabularx}
+\begin{block}{Leçon d'architecture}
+Une bonne architecture ne copie pas mécaniquement une norme : elle choisit le niveau d'abstraction adapté à son évolution.
+\end{block}
+\end{frame}
+
+\begin{frame}{C2.2 — piv2glz : rendre l'intégrité du code visible}
+\context{B2}{C2.2 · piv2glz · Zoom preuve}
+\begin{columns}[T]
+\begin{column}{0.47\linewidth}
+\begin{block}{Tests}
+\begin{tightitems}
+  \item Fonctions isolées et cas nominaux.
+  \item Erreurs de système de fichiers provoquées avec \texttt{monkeypatch}.
+  \item Scénarios CLI réels avec \texttt{subprocess}.
+  \item Fichiers temporaires via \texttt{tmp\_path}.
+\end{tightitems}
+\end{block}
+\end{column}
+\begin{column}{0.49\linewidth}
+\begin{block}{CI}
+\begin{tightitems}
+  \item Environnement Python propre.
+  \item Pytest exécuté avant la construction.
+  \item PyInstaller seulement après succès.
+  \item Artefacts Windows récupérables depuis GitLab.
+\end{tightitems}
+\end{block}
+\end{column}
+\end{columns}
+\begin{block}{Pourquoi cette preuve est forte}
+Le périmètre est petit, mais le mécanisme qualité est entièrement reproductible et automatisé.
+\end{block}
+\end{frame}
+
+\begin{frame}{C2.3 — Brise-glace : le front-end est piloté par le scénario utilisateur}
+\context{B2}{C2.3 · Brise-glace · Zoom preuve}
+\begin{columns}[T]
+\begin{column}{0.46\linewidth}
+\begin{block}{Contraintes d'interface}
+\begin{tightitems}
+  \item États différents selon la phase de jeu.
+  \item Rôles joueur / maître du jeu.
+  \item Interaction par glisser-déposer.
+  \item Utilisation ordinateur et mobile.
+\end{tightitems}
+\end{block}
+\end{column}
+\begin{column}{0.50\linewidth}
+\begin{block}{Réponse technique}
+\begin{tightitems}
+  \item React + TypeScript.
+  \item État partagé synchronisé en temps réel.
+  \item Supabase pour persistance et événements.
+  \item Validation fonctionnelle par scénarios de partie.
+\end{tightitems}
+\end{block}
+\end{column}
+\end{columns}
+\centering
+\repofigure[0.27\textheight]{figures/brise_glace/sequence_partie.png}
+\end{frame}
+
+\begin{frame}{C2.5 — Distinguer ce qui existe de l'architecture de passage à l'échelle}
+\context{B2}{C2.5 · Data/IA · Zoom preuve}
+\begin{columns}[T]
+\begin{column}{0.47\linewidth}
+\begin{block}{Réalisé}
+\begin{tightitems}
+  \item Préparation et exploration des données.
+  \item Comparaison de modèles.
+  \item Explicabilité.
+  \item FastAPI et historique des prédictions.
+\end{tightitems}
+\end{block}
+\end{column}
+\begin{column}{0.49\linewidth}
+\begin{block}{Si les contraintes changent}
+\begin{tightitems}
+  \item Ingestion séparée.
+  \item Stockage brut et exploitation distincts.
+  \item Traitement distribué si la volumétrie le justifie.
+  \item Cycle de vie et surveillance du modèle.
+\end{tightitems}
+\end{block}
+\end{column}
+\end{columns}
+\begin{block}{Positionnement}
+Je ne transforme pas rétrospectivement le projet en Big Data : j'explicite comment l'architecture évoluerait si le besoin l'exigeait.
+\end{block}
+\end{frame}

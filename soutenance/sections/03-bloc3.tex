@@ -137,8 +137,27 @@ Ces choix améliorent l'efficience des ressources, mais \textbf{je n'ai pas réa
 \end{block}
 \end{frame}
 
+\input{sections/03b-bloc3-zooms}
+
+\begin{frame}{Bloc 3 — Synthèse des preuves}
+\context{B3}{Synthèse}
+\small
+\begin{tabularx}{\linewidth}{>{\bfseries}p{1.35cm}p{4.2cm}X}
+\toprule
+Comp. & Projet principal & Preuve retenue \\
+\midrule
+C3.1 & piv2glz & Pipeline GitLab CI. \\
+C3.2 & piv2glz & Tests unitaires, erreurs et intégration CLI. \\
+C3.3 & FCU / Ediacara & Surveillance réelle après mise en production. \\
+C3.4 & Homelab & Déploiement GitOps avec Argo CD. \\
+C3.5 & Homelab & Métriques, logs et observabilité. \\
+C3.6 & FCU / Ediacara & Documentation technique et procédure de MEP. \\
+\bottomrule
+\end{tabularx}
+\end{frame}
+
 % ----------------------------------------------------------------------------
-% ENGLISH PART — target 4 min
+% ENGLISH PART — target 4 min, placée strictement à la fin du bloc
 % ----------------------------------------------------------------------------
 \begin{frame}{C3.4 — Moving from manual Helm releases to GitOps}
 \selectlanguage{english}
@@ -181,21 +200,4 @@ Ces choix améliorent l'efficience des ressources, mais \textbf{je n'ai pas réa
 The environment is intentionally small and personal. It strengthens my understanding of modern DevOps practices, but it does not replace the professional evidence provided by Ediacara.
 \end{block}
 \selectlanguage{french}
-\end{frame}
-
-\begin{frame}{Bloc 3 — Synthèse des preuves}
-\context{B3}{Synthèse}
-\small
-\begin{tabularx}{\linewidth}{>{\bfseries}p{1.35cm}p{4.2cm}X}
-\toprule
-Comp. & Projet principal & Preuve retenue \\
-\midrule
-C3.1 & piv2glz & Pipeline GitLab CI. \\
-C3.2 & piv2glz & Tests unitaires, erreurs et intégration CLI. \\
-C3.3 & FCU / Ediacara & Surveillance réelle après mise en production. \\
-C3.4 & Homelab & Déploiement GitOps avec Argo CD. \\
-C3.5 & Homelab & Métriques, logs et observabilité. \\
-C3.6 & FCU / Ediacara & Documentation technique et procédure de MEP. \\
-\bottomrule
-\end{tabularx}
 \end{frame}
