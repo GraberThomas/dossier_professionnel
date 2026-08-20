@@ -1,0 +1,48 @@
+name: Build soutenance PDF
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'soutenance/**'
+      - 'figures/**'
+      - '.github/workflows/build-slides.yml'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'soutenance/**'
+      - 'figures/**'
+      - '.github/workflows/build-slides.yml'
+  workflow_dispatch:
+
+jobs:
+  build-slides:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install LaTeX toolchain
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            latexmk \
+            texlive-latex-extra \
+            texlive-lang-french \
+            texlive-fonts-recommended
+
+      - name: Compile soutenance
+        run: |
+          latexmk -pdf -interaction=nonstopmode -halt-on-error \
+            -outdir=soutenance soutenance/main.tex
+
+      - name: Upload slides artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: soutenance-rncp-pdf
+          path: soutenance/main.pdf
+          if-no-files-found: error
+          retention-days: 30
