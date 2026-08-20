@@ -1,0 +1,96 @@
+% Compléments Bloc 3 — zooms exploitation / industrialisation
+
+\begin{frame}{C3.1 + C3.2 — Une règle simple : pas de build sans validation}
+\context{B3}{C3.1 · C3.2 · piv2glz · Zoom preuve}
+\begin{center}
+\begin{tikzpicture}[node distance=0.9cm,every node/.style={font=\small,align=center}]
+  \node[draw=Line,rounded corners,fill=SoftBlue,minimum width=2.5cm,minimum height=0.9cm] (commit) {Commit};
+  \node[draw=Line,rounded corners,fill=SoftGreen,minimum width=2.5cm,minimum height=0.9cm,right=of commit] (tests) {Pytest};
+  \node[draw=Line,rounded corners,fill=SoftOrange,minimum width=2.5cm,minimum height=0.9cm,right=of tests] (build) {PyInstaller};
+  \node[draw=Line,rounded corners,fill=SoftPurple,minimum width=2.5cm,minimum height=0.9cm,right=of build] (art) {Artefacts};
+  \draw[->,thick,Blue] (commit)--(tests); \draw[->,thick,Blue] (tests)--(build); \draw[->,thick,Blue] (build)--(art);
+\end{tikzpicture}
+\end{center}
+\vspace{0.8em}
+\begin{tightitems}
+  \item La CI ne sert pas seulement à automatiser : elle rend la règle de validation explicite.
+  \item Le livrable produit correspond à un état du dépôt ayant franchi le même contrôle reproductible.
+  \item Une automatisation sans test peut simplement automatiser une régression.
+\end{tightitems}
+\end{frame}
+
+\begin{frame}{C3.3 — Surveiller une chaîne, c'est aussi redécouvrir ses règles métier}
+\context{B3}{C3.3 · FCU / Ediacara · Zoom preuve}
+\begin{columns}[T]
+\begin{column}{0.46\linewidth}
+\begin{block}{Boucle d'exploitation}
+\begin{enumerate}
+  \item Observer les jobs et les logs.
+  \item Qualifier l'anomalie.
+  \item Remonter jusqu'à la donnée ou au composant source.
+  \item Corriger puis vérifier en production.
+\end{enumerate}
+\end{block}
+\end{column}
+\begin{column}{0.50\linewidth}
+\begin{block}{Cas rencontrés}
+\begin{tightitems}
+  \item Champ PDF \texttt{/UserUnit}.
+  \item Désynchronisation possible entre \texttt{.lis} et ShomProduit.
+  \item Règles de synchronisation implicites révélées par le FCU.
+\end{tightitems}
+\end{block}
+\end{column}
+\end{columns}
+\begin{block}{Message jury}
+Une supervision utile relie l'état technique du job au processus métier qui produit et consomme la donnée.
+\end{block}
+\end{frame}
+
+\begin{frame}{C3.6 — Plusieurs documents pour plusieurs usages}
+\context{B3}{C3.6 · FCU / Ediacara · Zoom preuve}
+\scriptsize
+\begin{tabularx}{\linewidth}{>{\bfseries}p{3.0cm}X X}
+\toprule
+Support & Fonction & Besoin couvert \\
+\midrule
+Diagramme global & visualiser les flux et dépendances & localiser rapidement une panne \\
+MkDocs & décrire jobs, entrées, sorties, commandes & maintenir ou modifier un traitement \\
+Matrice PROD / RE7 & comparer les environnements & sécuriser la recette \\
+Procédure de MEP & exécuter et revenir en arrière & maîtriser une intervention sensible \\
+Document ArchFCU & conserver le raisonnement initial & expliquer choix et alternatives \\
+\bottomrule
+\end{tabularx}
+\vspace{0.7em}
+\begin{block}{Point de recul}
+J'ai d'abord documenté pour comprendre ; la transmission à l'équipe est devenue ensuite un résultat concret de ce travail.
+\end{block}
+\end{frame}
+
+\begin{frame}{Numérique responsable — L'efficience avant le discours}
+\context{B3}{Compétence transversale · Zoom preuve}
+\begin{columns}[T]
+\begin{column}{0.48\linewidth}
+\begin{block}{Décisions concrètes}
+\begin{tightitems}
+  \item Éviter les recopies systématiques de raster volumineux.
+  \item Comparer taille, date ou empreinte avant transfert.
+  \item Utiliser des tampons locaux avant livraison réseau.
+  \item Réutiliser du matériel existant pour le homelab.
+\end{tightitems}
+\end{block}
+\end{column}
+\begin{column}{0.48\linewidth}
+\begin{block}{Ce que je ne prétends pas}
+\begin{tightitems}
+  \item Pas de bilan carbone complet.
+  \item Pas d'analyse de cycle de vie.
+  \item Pas de mesure énergétique instrumentée de la chaîne.
+\end{tightitems}
+\end{block}
+\end{column}
+\end{columns}
+\begin{block}{Positionnement}
+Je présente ces choix comme des décisions d'efficience technique mesurées dans leur portée, pas comme une preuve environnementale globale.
+\end{block}
+\end{frame}
