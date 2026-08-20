@@ -1,0 +1,218 @@
+% =============================================================================
+% BLOC 4 — 20 minutes, dont 3 à 5 minutes en anglais à la fin
+% =============================================================================
+\section{Bloc 4 — Piloter l'équipe}
+\sectiondivider{Bloc 4}{Piloter l'équipe du projet de développement logiciel}{Un seul fil rouge : Lynx Immo · Le sujet n'est plus le produit, mais le collectif}
+
+\begin{frame}{Bloc 4 — Le même projet, mais un autre angle}
+\context{B4}{C4.1 $\rightarrow$ C4.6}
+\begin{block}{Distinction avec le Bloc 1}
+Dans le Bloc 1, Lynx Immo démontrait le \textbf{pilotage du projet}. Ici, il démontre le \textbf{pilotage des personnes et du fonctionnement collectif}.
+\end{block}
+\begin{tightitems}
+  \item C4.1 — Déterminer les compétences nécessaires.
+  \item C4.2 — Constituer fonctionnellement l'équipe.
+  \item C4.3 — Coordonner l'activité.
+  \item C4.4 — Accompagner les membres.
+  \item C4.5 — Planifier la montée en compétences.
+  \item C4.6 — Évaluer le fonctionnement collectif et individuel.
+\end{tightitems}
+\end{frame}
+
+\begin{frame}{C4.1 — Partir des besoins du produit pour identifier les compétences}
+\context{B4}{C4.1 · Lynx Immo}
+\begin{columns}[T]
+\begin{column}{0.46\linewidth}
+\begin{tightitems}
+  \item Application mobile apprenant.
+  \item Interface d'administration web.
+  \item Back-end, base de données et authentification.
+  \item UX/UI et parcours utilisateurs.
+  \item Déploiement, conformité, paiements et suivi du projet.
+\end{tightitems}
+\begin{block}{Principe}
+Je n'ai pas inventé les rôles à partir des personnes disponibles : j'ai d'abord \textbf{cartographié les domaines nécessaires au produit}.
+\end{block}
+\end{column}
+\begin{column}{0.50\linewidth}
+\centering
+\repofigure[0.49\textheight]{figures/ipf/architecture.png}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}{C4.2 — Une constitution opérationnelle, pas un recrutement RH}
+\context{B4}{C4.2 · Lynx Immo}
+\begin{columns}[T]
+\begin{column}{0.43\linewidth}
+\begin{tightitems}
+  \item Contexte étudiant : l'équipe existait déjà.
+  \item Pas de recrutement, d'entretien d'embauche ni de décision RH.
+  \item Mon travail a porté sur la \strong{répartition fonctionnelle des responsabilités}.
+  \item Attribution des domaines selon les compétences, les appétences et les besoins de montée en compétence.
+  \item Ajustement lorsque la disponibilité réelle différait du plan initial.
+\end{tightitems}
+\end{column}
+\begin{column}{0.53\linewidth}
+\centering
+\repofigure[0.50\textheight]{figures/ipf/organigramme.pdf}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}{C4.3 — Passer de la répartition des rôles au travail quotidien}
+\context{B4}{C4.3 · Lynx Immo}
+\begin{columns}[T]
+\begin{column}{0.42\linewidth}
+\begin{tightitems}
+  \item Découpage en tâches visibles et assignables.
+  \item Suivi dans Jira : tableau, chronologie et vue synthétique.
+  \item Points réguliers pour faire remonter les blocages.
+  \item Équilibrage de la charge et réallocation quand une dépendance menace un jalon.
+  \item Coordination avec les attentes du client et les exigences du produit.
+\end{tightitems}
+\end{column}
+\begin{column}{0.54\linewidth}
+\centering
+\repofigure[0.23\textheight]{figures/ipf/vue_synthetique_avancement_jira.png}\\[0.25em]
+\repofigure[0.23\textheight]{figures/ipf/jira-tabelau.png}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}{C4.4 — Accompagner plutôt que simplement distribuer les tâches}
+\context{B4}{C4.4 · Lynx Immo}
+\begin{columns}[T]
+\begin{column}{0.49\linewidth}
+\begin{block}{Moyens utilisés}
+\begin{tightitems}
+  \item Documentation technique et décisions partagées.
+  \item Prototypes pour réduire l'incertitude avant développement.
+  \item Échanges individuels lorsqu'un membre reste bloqué.
+  \item Relecture et aide technique selon les besoins.
+  \item Adaptation d'une tâche trop ambitieuse au niveau de maîtrise réel.
+\end{tightitems}
+\end{block}
+\end{column}
+\begin{column}{0.47\linewidth}
+\begin{block}{Point de recul}
+L'accompagnement n'est pas faire à la place de quelqu'un. Il consiste à \textbf{rendre le problème traitable}, clarifier l'objectif et donner les moyens de progresser.
+\end{block}
+\vspace{0.5em}
+\small
+Ediacara complète cette preuve par la documentation et la capitalisation utilisées par mon tuteur et un collègue.
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}{Arbitrer entre charge, apprentissage et trajectoire projet}
+\context{B4}{C4.1 $\rightarrow$ C4.4}
+\begin{center}
+\begin{tikzpicture}[node distance=1.0cm, every node/.style={font=\small,align=center}]
+  \node[draw=Line,rounded corners,fill=SoftRed,minimum width=3.2cm,minimum height=1.0cm] (risk) {Retard ou compétence\\insuffisante sur une tâche};
+  \node[draw=Line,rounded corners,fill=SoftOrange,minimum width=3.2cm,minimum height=1.0cm,right=1.3cm of risk] (analyse) {Analyser le blocage\\et la dépendance};
+  \node[draw=Line,rounded corners,fill=SoftBlue,minimum width=3.2cm,minimum height=1.0cm,right=1.3cm of analyse] (decision) {Former, aider, scinder,\\réallouer ou réduire};
+  \draw[->,thick,Blue] (risk)--(analyse); \draw[->,thick,Blue] (analyse)--(decision);
+\end{tikzpicture}
+\end{center}
+\vspace{0.9em}
+\begin{block}{Ce que je cherchais à préserver}
+À la fois la \textbf{progression de la personne}, la \textbf{qualité du livrable} et la \textbf{trajectoire du projet}. Ces trois objectifs ne sont pas toujours alignés ; le rôle de pilotage consiste à rendre l'arbitrage explicite.
+\end{block}
+\end{frame}
+
+% ----------------------------------------------------------------------------
+% ENGLISH PART — target 4 min
+% ----------------------------------------------------------------------------
+\begin{frame}{C4.5 — Planning skills development as project work}
+\selectlanguage{english}
+\context{B4 · ENGLISH}{C4.5 · Lynx Immo}
+\begin{columns}[T]
+\begin{column}{0.48\linewidth}
+\begin{tightitems}
+  \item I identified skill gaps in UX/UI, Flutter, React, Supabase, deployment and project tooling.
+  \item Learning time had to be included in the project workload instead of being treated as invisible personal work.
+  \item The main mechanisms were documentation, prototypes, peer support and focused technical exchanges.
+  \item The objective was to reach enough autonomy to complete the assigned responsibility, not to become an expert in every technology.
+\end{tightitems}
+\end{column}
+\begin{column}{0.48\linewidth}
+\begin{block}{Professional projection}
+In a company context, I would formalize this further with learning objectives, planned training actions, follow-up checkpoints and coordination with HR when appropriate.
+\end{block}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}{C4.6 — Evaluating performance without pretending to be HR}
+\context{B4 · ENGLISH}{C4.6 · Lynx Immo}
+\begin{columns}[T]
+\begin{column}{0.47\linewidth}
+\begin{block}{What I actually did}
+\begin{tightitems}
+  \item Followed collective progress against project objectives and requirements.
+  \item Observed individual contribution in the context of assigned responsibilities.
+  \item Used retrospectives and end-of-project interviews to collect two-way feedback.
+  \item Distinguished delivery problems from skill, availability or coordination problems.
+\end{tightitems}
+\end{block}
+\end{column}
+\begin{column}{0.49\linewidth}
+\begin{block}{What I did not do}
+\begin{tightitems}
+  \item No formal employee appraisal.
+  \item No salary, career or disciplinary decision.
+  \item No HR authority over team members.
+\end{tightitems}
+\end{block}
+\begin{block}{Key lesson}
+Performance evaluation must be tied to \textbf{explicit expectations and constructive feedback}, not to vague impressions.
+\end{block}
+\end{column}
+\end{columns}
+\selectlanguage{french}
+\end{frame}
+
+\begin{frame}{Le principal recul du Bloc 4 : un cadre étudiant n'est pas un service RH}
+\context{B4}{Limites et projection}
+\begin{columns}[T]
+\begin{column}{0.48\linewidth}
+\begin{block}{Ce que Lynx Immo démontre réellement}
+\begin{tightitems}
+  \item Identification des compétences.
+  \item Répartition opérationnelle des responsabilités.
+  \item Coordination et arbitrages.
+  \item Accompagnement et montée en compétence.
+  \item Suivi du fonctionnement collectif.
+\end{tightitems}
+\end{block}
+\end{column}
+\begin{column}{0.48\linewidth}
+\begin{block}{Ce qui changerait en entreprise}
+\begin{tightitems}
+  \item Recrutement avec RH.
+  \item Référentiels individuels plus formalisés.
+  \item Plans de carrière et entretiens professionnels.
+  \item Responsabilités managériales et juridiques explicites.
+\end{tightitems}
+\end{block}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}{Bloc 4 — Synthèse des preuves}
+\context{B4}{Synthèse}
+\small
+\begin{tabularx}{\linewidth}{>{\bfseries}p{1.35cm}p{4.2cm}X}
+\toprule
+Comp. & Projet principal & Preuve retenue \\
+\midrule
+C4.1 & Lynx Immo & Cartographie des domaines et compétences nécessaires. \\
+C4.2 & Lynx Immo & Constitution fonctionnelle et répartition des responsabilités. \\
+C4.3 & Lynx Immo & Coordination, Jira, charge et dépendances. \\
+C4.4 & Lynx Immo & Documentation, prototypes et accompagnement. \\
+C4.5 & Lynx Immo & Planification de la montée en compétences. \\
+C4.6 & Lynx Immo & Suivi collectif, contributions et feedback à double sens. \\
+\bottomrule
+\end{tabularx}
+\end{frame}
