@@ -1,0 +1,233 @@
+% =============================================================================
+% BLOC 2 — 20 minutes, dont 3 à 5 minutes en anglais à la fin
+% =============================================================================
+\section{Bloc 2 — Concevoir et développer}
+\sectiondivider{Bloc 2}{Concevoir et développer des solutions logicielles}{Une preuve principale différente pour chacune des cinq compétences}
+
+\begin{frame}{Bloc 2 — Cinq compétences, cinq preuves ciblées}
+\context{B2}{C2.1 $\rightarrow$ C2.5}
+\begin{columns}[T]
+\begin{column}{0.48\linewidth}
+\begin{tightitems}
+  \item \strong{C2.1 — S-123} : architecture logicielle.
+  \item \strong{C2.2 — piv2glz} : intégrité du code.
+  \item \strong{C2.3 — Brise-glace} : front-end.
+\end{tightitems}
+\end{column}
+\begin{column}{0.48\linewidth}
+\begin{tightitems}
+  \item \strong{C2.4 — FeastVerse} : back-end.
+  \item \strong{C2.5 — Prédiction assurance} : valorisation de données et perspective de passage à l'échelle.
+\end{tightitems}
+\end{column}
+\end{columns}
+\begin{block}{Choix de présentation}
+Je ne cherche pas un projet artificiellement « complet » : \textbf{chaque compétence est défendue avec le contexte où la preuve est la plus nette}.
+\end{block}
+\end{frame}
+
+\begin{frame}{C2.1 — Une première architecture correcte… mais au mauvais niveau d'abstraction}
+\context{B2}{C2.1 · S-123}
+\begin{columns}[T]
+\begin{column}{0.43\linewidth}
+\begin{tightitems}
+  \item Demande initiale : concevoir une « base S-123 ».
+  \item Première solution : transposition relationnelle directe de la norme.
+  \item Déjà \strong{73 tables} pour une implémentation partielle.
+  \item L'évolution S-123 1.0 $\rightarrow$ 1.1 rend une partie du travail obsolète avant son achèvement.
+\end{tightitems}
+\begin{block}{Constat}
+Le problème n'était pas PostgreSQL : c'était le \textbf{couplage du stockage à un format d'échange évolutif}.
+\end{block}
+\end{column}
+\begin{column}{0.53\linewidth}
+\centering
+\repofigure[0.50\textheight]{figures/s123/chronologie.png}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}{C2.1 — Passer à un méta-modèle S-100 générique}
+\context{B2}{C2.1 · S-123}
+\begin{columns}[T]
+\begin{column}{0.47\linewidth}
+\begin{tightitems}
+  \item Le POC final décrit les \strong{concepts d'un Feature Catalogue S-100} plutôt qu'une version figée de S-123.
+  \item 18 tables principales organisées par responsabilité.
+  \item Contraintes relationnelles, héritage, associations et cardinalités restent explicites.
+  \item Même parser et mêmes seeders essayés sur plusieurs catalogues S-1xx.
+\end{tightitems}
+\begin{block}{Décision}
+Dissocier le modèle de persistance interne du produit d'échange.
+\end{block}
+\end{column}
+\begin{column}{0.49\linewidth}
+\centering
+\repofigure[0.50\textheight]{figures/s123/diagramme_classe_simplifiee.png}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}{C2.2 — Faire de l'intégrité du code un prérequis au livrable}
+\context{B2}{C2.2 · piv2glz}
+\begin{columns}[T]
+\begin{column}{0.44\linewidth}
+\begin{tightitems}
+  \item Utilitaire Python de conversion PIV $\rightarrow$ GLZ/LGZ.
+  \item Pytest développé en parallèle de l'outil.
+  \item Tests unitaires, cas d'erreur et scénarios d'intégration avec \texttt{subprocess}.
+  \item Pipeline GitLab CI : \texttt{test} puis \texttt{build}.
+  \item PyInstaller ne produit les artefacts Windows \strong{que si les tests réussissent}.
+\end{tightitems}
+\end{column}
+\begin{column}{0.52\linewidth}
+\centering
+\repofigure[0.50\textheight]{figures/piv2glz/piv2glz_pipeline.png}
+\end{column}
+\end{columns}
+\begin{block}{Limite assumée}
+Pas encore de métrique de couverture, d'analyse statique ni de contrôle de sécurité dédié.
+\end{block}
+\end{frame}
+
+\begin{frame}{C2.3 — Construire une interface qui dépend réellement du contexte de jeu}
+\context{B2}{C2.3 · Brise-glace}
+\begin{columns}[T]
+\begin{column}{0.43\linewidth}
+\begin{tightitems}
+  \item React / TypeScript pour le client web.
+  \item Interface différente selon le rôle, l'état de la partie et l'appareil.
+  \item Interaction de classement par glisser-déposer.
+  \item Gestion d'un lobby, d'un maître du jeu et de joueurs connectés.
+  \item Validation fonctionnelle sur des parcours réels de partie.
+\end{tightitems}
+\end{column}
+\begin{column}{0.53\linewidth}
+\centering
+\repofigure[0.48\textheight]{figures/brise_glace/home_desktop.png}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}{C2.3 — Le temps réel fait partie de l'architecture de l'expérience}
+\context{B2}{C2.3 · Brise-glace}
+\begin{columns}[T]
+\begin{column}{0.47\linewidth}
+\begin{tightitems}
+  \item Supabase fournit la persistance et les mécanismes temps réel.
+  \item Synchronisation de la présence et de l'état partagé de la partie.
+  \item Le front-end doit réagir aux événements distants sans perdre son état local.
+  \item L'architecture technique découle directement du scénario d'usage collectif.
+\end{tightitems}
+\end{column}
+\begin{column}{0.49\linewidth}
+\centering
+\repofigure[0.50\textheight]{figures/brise_glace/architecture.png}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}{C2.5 — Une chaîne complète de valorisation de la donnée}
+\context{B2}{C2.5 · Prédiction des coûts d'assurance}
+\begin{columns}[T]
+\begin{column}{0.46\linewidth}
+\begin{tightitems}
+  \item Exploration et préparation des données.
+  \item Prévention des fuites entre apprentissage et cible.
+  \item Comparaison de \strong{cinq approches} sur le même problème de régression.
+  \item Analyse de l'influence des variables et explicabilité.
+  \item Exposition du modèle via FastAPI et persistance des prédictions.
+\end{tightitems}
+\end{column}
+\begin{column}{0.50\linewidth}
+\centering
+\repofigure[0.49\textheight]{figures/ia/architecture_actuelle.png}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}{C2.5 — Ne pas présenter un pipeline local comme un système Big Data}
+\context{B2}{C2.5 · Prise de recul}
+\begin{columns}[T]
+\begin{column}{0.44\linewidth}
+\begin{block}{État réellement réalisé}
+Pipeline local, volume modéré, apprentissage et exposition d'un modèle : \textbf{pas un système Big Data}.
+\end{block}
+\begin{block}{Passage à l'échelle envisagé}
+Séparer ingestion, stockage brut, traitements distribués, exposition et cycle de vie du modèle lorsque la volumétrie et la fréquence le justifient.
+\end{block}
+\end{column}
+\begin{column}{0.52\linewidth}
+\centering
+\repofigure[0.50\textheight]{figures/ia/nouvelle_architecture_simplifie.png}
+\end{column}
+\end{columns}
+\end{frame}
+
+% ----------------------------------------------------------------------------
+% ENGLISH PART — target 4 min
+% ----------------------------------------------------------------------------
+\begin{frame}{C2.4 — Building a layered REST back-end}
+\selectlanguage{english}
+\context{B2 · ENGLISH}{C2.4 · FeastVerse}
+\begin{columns}[T]
+\begin{column}{0.45\linewidth}
+\begin{tightitems}
+  \item Spring Boot REST API with PostgreSQL and Hibernate/JPA.
+  \item Controllers handle HTTP concerns; services contain business rules; repositories handle persistence.
+  \item DTOs and MapStruct separate persistence models from public API contracts.
+  \item Pagination, sorting and multi-criteria filtering are part of the API design.
+  \item Errors are transformed into structured HTTP responses instead of exposing technical exceptions.
+\end{tightitems}
+\end{column}
+\begin{column}{0.51\linewidth}
+\centering
+\repofigure[0.50\textheight]{figures/feastverse/archi2.pdf}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}{Security is both technical and business-oriented}
+\context{B2 · ENGLISH}{C2.4 · FeastVerse}
+\begin{columns}[T]
+\begin{column}{0.48\linewidth}
+\begin{block}{Authentication and authorization}
+\begin{tightitems}
+  \item JWT authentication integrated with Spring Security.
+  \item Three roles: standard user, moderator and administrator.
+  \item Endpoint-level authorization plus resource ownership checks.
+  \item Sensitive production parameters provided through environment variables.
+\end{tightitems}
+\end{block}
+\end{column}
+\begin{column}{0.48\linewidth}
+\begin{block}{Validation and documentation}
+\begin{tightitems}
+  \item Postman scenarios cover nominal paths, errors and authorization rules.
+  \item Swagger/OpenAPI documents the contracts.
+  \item MkDocs explains architecture and usage beyond endpoint syntax.
+\end{tightitems}
+\end{block}
+\end{column}
+\end{columns}
+\begin{block}{Limit}
+The project is an advanced academic API, not a fully completed commercial application; some CRUD areas are less complete than the security and consultation features.
+\end{block}
+\selectlanguage{french}
+\end{frame}
+
+\begin{frame}{Bloc 2 — Synthèse des preuves}
+\context{B2}{Synthèse}
+\small
+\begin{tabularx}{\linewidth}{>{\bfseries}p{1.35cm}p{4.2cm}X}
+\toprule
+Comp. & Projet principal & Preuve retenue \\
+\midrule
+C2.1 & S-123 & Architecture du méta-modèle S-100 et API de consultation. \\
+C2.2 & piv2glz & Tests automatisés et build conditionné à leur réussite. \\
+C2.3 & Brise-glace & Interface React/TypeScript et synchronisation temps réel. \\
+C2.4 & FeastVerse & Back-end Spring Boot, PostgreSQL, JWT et logique métier. \\
+C2.5 & Prédiction assurance & Pipeline Data/IA complet et architecture cible de passage à l'échelle. \\
+\bottomrule
+\end{tabularx}
+\end{frame}
