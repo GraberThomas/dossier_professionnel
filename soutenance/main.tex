@@ -19,6 +19,16 @@
 \usepackage{appendixnumberbeamer}
 \usetikzlibrary{positioning,arrows.meta,calc}
 
+% pdfLaTeX ne connaît pas nativement certains symboles Unicode employés
+% dans le support. On les mappe explicitement vers leurs équivalents TeX.
+\DeclareUnicodeCharacter{00B7}{\ensuremath{\cdot}} % ·
+\DeclareUnicodeCharacter{2192}{\ensuremath{\rightarrow}} % →
+\DeclareUnicodeCharacter{2248}{\ensuremath{\approx}} % ≈
+\DeclareUnicodeCharacter{2260}{\ensuremath{\neq}} % ≠
+\DeclareUnicodeCharacter{2264}{\ensuremath{\leq}} % ≤
+\DeclareUnicodeCharacter{2265}{\ensuremath{\geq}} % ≥
+\DeclareUnicodeCharacter{00D7}{\ensuremath{\times}} % ×
+
 \definecolor{Navy}{HTML}{17324D}
 \definecolor{Blue}{HTML}{1D6F8A}
 \definecolor{Teal}{HTML}{2D8C88}
