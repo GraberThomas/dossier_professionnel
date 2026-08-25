@@ -1,9 +1,9 @@
 % =============================================================================
-% INTRODUCTION — 5 minutes maximum
+% INTRODUCTION — 4 slides / 5 minutes maximum
 % =============================================================================
 \section{Introduction}
 
-% ~20 s
+% 1 — Titre
 \begin{frame}[plain]
   \begin{tikzpicture}[remember picture,overlay]
     \fill[Navy] (current page.south west) rectangle (current page.north east);
@@ -11,80 +11,101 @@
   \end{tikzpicture}
   \vfill
   \begin{center}
-    {\color{white}\Huge\bfseries Validation des blocs de compétences}\\[0.6em]
-    {\color{white!88}\Large Expert en Architecture et Développement Logiciel}\\[1.5em]
-    {\color{white}\large Thomas Graber}\\[0.3em]
-    {\color{white!75}Learn IT · Brest Open Campus — Alternance au SHOM}
+    {\color{white!75}\large Validation des blocs de compétences}\\[0.45em]
+    {\color{white}\Huge\bfseries Expert en architecture}\\[-0.05em]
+    {\color{white}\Huge\bfseries et développement logiciel}\\[1.3em]
+    {\color{white}\large Thomas Graber}\\[0.25em]
+    {\color{white!72}Mastère informatique · Learn IT / Brest Open Campus}\\[0.15em]
+    {\color{white!72}Alternance au SHOM · septembre 2024 — août 2026}
   \end{center}
   \vfill
 \end{frame}
 
-% ~50 s
-\begin{frame}{Mon parcours et mon contexte professionnel}
-\context{INTRO}{Contexte}
+% 2 — Contexte SHOM
+\begin{frame}{Le SHOM, et ce que son environnement impose}
+\eyebrow{Contexte professionnel}
 \begin{columns}[T]
-\begin{column}{0.50\linewidth}
-\begin{block}{Parcours}
-\begin{tightitems}
-  \item Licence informatique : systèmes, algorithmique, bases de données et développement.
-  \item Mastère développement, programmation et Data/IA.
-  \item Évolution progressive vers le \strong{back-end}, l'\strong{architecture logicielle} et la \strong{donnée}.
-\end{tightitems}
+\begin{column}{0.31\linewidth}
+  \begin{block}{L'établissement}
+  \small
+  \begin{tightitems}
+    \item Établissement public sous tutelle du ministère des Armées.
+    \item Hydrographie, océanographie, information géographique maritime.
+  \end{tightitems}
+  \end{block}
+\end{column}
+\begin{column}{0.31\linewidth}
+  \begin{block}{Trois missions}
+  \small
+  \begin{tightitems}
+    \item Sécurité de la navigation.
+    \item Soutien hydro-océanographique à la Défense.
+    \item Politiques publiques de la mer et du littoral.
+  \end{tightitems}
+  \end{block}
+\end{column}
+\begin{column}{0.34\linewidth}
+  \begin{block}{Pour un développeur}
+  \small
+  \begin{tightitems}
+    \item Environnement souverain.
+    \item Chaînes historiques en service quotidien.
+    \item Formats spécialisés et dépendances fortes.
+    \item La continuité de production prime sur l'élégance d'une refonte.
+  \end{tightitems}
+  \end{block}
+\end{column}
+\end{columns}
+\vspace{0.45em}
+\small\muted{Pôle SYSPROD, puis pôle DATA après réorganisation : un déplacement du centre de gravité vers la donnée.}
+\end{frame}
+
+% 3 — Portefeuille
+\begin{frame}{Deux piliers, six preuves ciblées}
+\eyebrow{Portefeuille de projets}
+\begin{columns}[T]
+\begin{column}{0.49\linewidth}
+\begin{block}{1 · FCU / Ediacara}
+\small\accent{Professionnel · SHOM}\\[0.4em]
+Intégrer un nouveau mode de production cartographique dans une chaîne historique, sans interrompre la production.\\[0.35em]
+\ok{6 cartes FCU en service.}
 \end{block}
 \end{column}
-\begin{column}{0.46\linewidth}
-\begin{block}{Alternance au SHOM}
-\begin{tightitems}
-  \item Depuis septembre 2024, développement de services web et d'outils internes.
-  \item Environnement sécurisé, métier et fortement contraint.
-  \item Passage du pôle SYSPROD au pôle DATA.
-  \item Travail sur l'analyse d'existant, le développement, la production et la documentation.
-\end{tightitems}
+\begin{column}{0.49\linewidth}
+\begin{block}{2 · Lynx Immo}
+\small\accent{Académique · client réel}\\[0.4em]
+Piloter cinq personnes pendant neuf mois : cadrage, feuille de route, arbitrages, montée en compétences et reprise.
 \end{block}
 \end{column}
 \end{columns}
+\vspace{0.45em}
+\begin{center}\scriptsize
+\begin{tabularx}{0.96\linewidth}{*{3}{>{\centering\arraybackslash}X}}
+\strong{S-123}\\Architecture et norme OHI & \strong{FeastVerse}\\Back-end Spring Boot & \strong{Brise-glace}\\Front React temps réel \\[0.8em]
+\strong{Prédiction assurance}\\Data / IA & \strong{piv2glz}\\Tests et CI & \strong{Homelab}\\GitOps et observabilité
+\end{tabularx}
+\end{center}
 \end{frame}
 
-% ~1 min 15
-\begin{frame}{Huit projets, huit rôles complémentaires}
-\context{INTRO}{Portefeuille}
+% 4 — Carte de lecture
+\begin{frame}{Blocs, compétences, projets}
+\eyebrow{Carte de lecture}
 \scriptsize
-\begin{tabularx}{\linewidth}{>{\bfseries}p{3.05cm}p{2.05cm}X}
+\begin{tabularx}{\linewidth}{>{\bfseries}p{2.7cm}p{4.35cm}X}
 \toprule
-Projet & Contexte & Rôle principal dans le dossier et l'oral \\
+Bloc & Preuve principale & Preuves complémentaires \\
 \midrule
-FCU / Ediacara & Professionnel & Évolution d'une chaîne de production legacy, validation, exploitation et documentation. \\
-S-123 & Professionnel & Architecture métier, méta-modèle S-100, XML/XSD, PostgreSQL et FastAPI. \\
-FeastVerse & Académique & Back-end Spring Boot sécurisé, tests, documentation et déploiement. \\
-Brise-glace & Académique & Front-end React/TypeScript, temps réel et intégration Supabase. \\
-Prédiction des coûts d'assurance & Académique & Préparation des données, modèles prédictifs, explicabilité et passage à l'échelle. \\
-Homelab & Personnel & GitOps, Kubernetes, CI/CD et observabilité. \\
-piv2glz & Professionnel & Tests automatisés, intégration continue et construction de livrables Windows. \\
-Lynx Immo & Académique / client réel & Faisabilité, planification, KPI, risques et pilotage d'équipe. \\
+Bloc 1 · Planifier\\C1.1--C1.7 & Lynx Immo\\\muted{faisabilité, veille, roadmap, KPI, arbitrages} & FCU / Ediacara (C1.3) · Homelab (C1.2) \\
+\addlinespace
+Bloc 2 · Concevoir\\C2.1--C2.5 & S-123 (C2.1) · Brise-glace (C2.3) · FeastVerse (C2.4) & piv2glz (C2.2) · Prédiction assurance (C2.5) \\
+\addlinespace
+Bloc 3 · Produire\\C3.1--C3.6 & FCU / Ediacara (C3.3, C3.6) · piv2glz (C3.1, C3.2) & Homelab (C3.4, C3.5) · FeastVerse \\
+\addlinespace
+Bloc 4 · Piloter\\C4.1--C4.6 & Lynx Immo\\\muted{ensemble du bloc} & Ediacara (C4.4) · capitalisation technique \\
 \bottomrule
 \end{tabularx}
-\end{frame}
-
-% ~1 min 30
-\begin{frame}{Une soutenance structurée par blocs, pas par projets}
-\context{INTRO}{Carte de lecture}
-\scriptsize
-\begin{tabularx}{\linewidth}{>{\bfseries}p{2.95cm}ccccX}
-\toprule
-Projet & B1 & B2 & B3 & B4 & Angle principal à l'oral \\
-\midrule
-FCU / Ediacara & \checkmarkblue & \textbullet & \checkmarkblue & \textbullet & C1.3, C3.3, C3.6 \\
-S-123 & \textbullet & \checkmarkblue &  &  & C2.1 \\
-FeastVerse &  & \checkmarkblue & \textbullet &  & C2.4 \\
-Brise-glace &  & \checkmarkblue &  &  & C2.3 \\
-Prédiction assurance &  & \checkmarkblue &  &  & C2.5 \\
-Homelab & \textbullet &  & \checkmarkblue &  & C3.4, C3.5 \\
-piv2glz &  & \checkmarkblue & \checkmarkblue &  & C2.2, C3.1, C3.2 \\
-Lynx Immo & \checkmarkblue &  &  & \checkmarkblue & C1.1--C1.2, C1.4--C1.7, C4.1--C4.6 \\
-\bottomrule
-\end{tabularx}
-\vspace{0.55em}
+\vspace{0.5em}
 \begin{block}{Principe de lecture}
-Le dossier écrit raconte les projets. \textbf{La soutenance mobilise ces projets comme preuves des compétences du référentiel.}
+\centering\small Le dossier raconte les projets. \strong{La soutenance utilise les projets comme preuves des compétences.}
 \end{block}
 \end{frame}
