@@ -1,220 +1,261 @@
 % =============================================================================
-% BLOC 4 — 20 minutes, dont 3 à 5 minutes en anglais à la fin
+% BLOC 4 — 10 slides / 20 minutes
 % =============================================================================
-\section{Bloc 4 — Piloter l'équipe}
-\sectiondivider{Bloc 4}{Piloter l'équipe du projet de développement logiciel}{Un seul fil rouge : Lynx Immo · Le sujet n'est plus le produit, mais le collectif}
+\section{Bloc 4 — Piloter}
 
-\begin{frame}{Bloc 4 — Le même projet, mais un autre angle}
-\context{B4}{C4.1 $\rightarrow$ C4.6}
-\begin{block}{Distinction avec le Bloc 1}
-Dans le Bloc 1, Lynx Immo démontrait le \textbf{pilotage du projet}. Ici, il démontre le \textbf{pilotage des personnes et du fonctionnement collectif}.
-\end{block}
-\begin{tightitems}
-  \item C4.1 — Déterminer les compétences nécessaires.
-  \item C4.2 — Constituer fonctionnellement l'équipe.
-  \item C4.3 — Coordonner l'activité.
-  \item C4.4 — Accompagner les membres.
-  \item C4.5 — Planifier la montée en compétences.
-  \item C4.6 — Évaluer le fonctionnement collectif et individuel.
-\end{tightitems}
-\end{frame}
+% 34
+\sectiondivider{BLOC 4}{Piloter l'équipe du projet}{de développement logiciel}{« Cinq personnes, neuf mois, un client réel — et une capacité réelle qui chute au moment où il faut accélérer. » · C4.1 à C4.6}
 
-\begin{frame}{C4.1 — Partir des besoins du produit pour identifier les compétences}
-\context{B4}{C4.1 · Lynx Immo}
-\begin{columns}[T]
-\begin{column}{0.46\linewidth}
-\begin{tightitems}
-  \item Application mobile apprenant.
-  \item Interface d'administration web.
-  \item Back-end, base de données et authentification.
-  \item UX/UI et parcours utilisateurs.
-  \item Déploiement, conformité, paiements et suivi du projet.
-\end{tightitems}
-\begin{block}{Principe}
-Je n'ai pas inventé les rôles à partir des personnes disponibles : j'ai d'abord \textbf{cartographié les domaines nécessaires au produit}.
-\end{block}
-\end{column}
-\begin{column}{0.50\linewidth}
-\centering
-\repofigure[0.49\textheight]{figures/ipf/architecture.png}
-\end{column}
-\end{columns}
-\end{frame}
-
-\begin{frame}{C4.2 — Une constitution opérationnelle, pas un recrutement RH}
-\context{B4}{C4.2 · Lynx Immo}
-\begin{columns}[T]
-\begin{column}{0.43\linewidth}
-\begin{tightitems}
-  \item Contexte étudiant : l'équipe existait déjà.
-  \item Pas de recrutement, d'entretien d'embauche ni de décision RH.
-  \item Mon travail a porté sur la \strong{répartition fonctionnelle des responsabilités}.
-  \item Attribution des domaines selon les compétences, les appétences et les besoins de montée en compétence.
-  \item Ajustement lorsque la disponibilité réelle différait du plan initial.
-\end{tightitems}
-\end{column}
-\begin{column}{0.53\linewidth}
-\centering
-\repofigure[0.50\textheight]{figures/ipf/organigramme.pdf}
-\end{column}
-\end{columns}
-\end{frame}
-
-\begin{frame}{C4.3 — Passer de la répartition des rôles au travail quotidien}
-\context{B4}{C4.3 · Lynx Immo}
-\begin{columns}[T]
-\begin{column}{0.42\linewidth}
-\begin{tightitems}
-  \item Découpage en tâches visibles et assignables.
-  \item Suivi dans Jira : tableau, chronologie et vue synthétique.
-  \item Points réguliers pour faire remonter les blocages.
-  \item Équilibrage de la charge et réallocation quand une dépendance menace un jalon.
-  \item Coordination avec les attentes du client et les exigences du produit.
-\end{tightitems}
-\end{column}
-\begin{column}{0.54\linewidth}
-\centering
-\repofigure[0.23\textheight]{figures/ipf/vue_synthetique_avancement_jira.png}\\[0.25em]
-\repofigure[0.23\textheight]{figures/ipf/jira-tabelau.png}
-\end{column}
-\end{columns}
-\end{frame}
-
-\begin{frame}{C4.4 — Accompagner plutôt que simplement distribuer les tâches}
-\context{B4}{C4.4 · Lynx Immo}
-\begin{columns}[T]
-\begin{column}{0.49\linewidth}
-\begin{block}{Moyens utilisés}
-\begin{tightitems}
-  \item Documentation technique et décisions partagées.
-  \item Prototypes pour réduire l'incertitude avant développement.
-  \item Échanges individuels lorsqu'un membre reste bloqué.
-  \item Relecture et aide technique selon les besoins.
-  \item Adaptation d'une tâche trop ambitieuse au niveau de maîtrise réel.
-\end{tightitems}
-\end{block}
-\end{column}
-\begin{column}{0.47\linewidth}
-\begin{block}{Point de recul}
-L'accompagnement n'est pas faire à la place de quelqu'un. Il consiste à \textbf{rendre le problème traitable}, clarifier l'objectif et donner les moyens de progresser.
-\end{block}
-\vspace{0.5em}
-\small
-Ediacara complète cette preuve par la documentation et la capitalisation utilisées par mon tuteur et un collègue.
-\end{column}
-\end{columns}
-\end{frame}
-
-\begin{frame}{Arbitrer entre charge, apprentissage et trajectoire projet}
-\context{B4}{C4.1 $\rightarrow$ C4.4}
+% 35 — anglais
+\begin{frame}{Leading a team whose real capacity changed}
+\eyebrow{In English · 3 to 4 minutes}
+\selectlanguage{english}
 \begin{center}
-\begin{tikzpicture}[node distance=1.0cm, every node/.style={font=\small,align=center}]
-  \node[draw=Line,rounded corners,fill=SoftRed,minimum width=3.2cm,minimum height=1.0cm] (risk) {Retard ou compétence\\insuffisante sur une tâche};
-  \node[draw=Line,rounded corners,fill=SoftOrange,minimum width=3.2cm,minimum height=1.0cm,right=1.3cm of risk] (analyse) {Analyser le blocage\\et la dépendance};
-  \node[draw=Line,rounded corners,fill=SoftBlue,minimum width=3.2cm,minimum height=1.0cm,right=1.3cm of analyse] (decision) {Former, aider, scinder,\\réallouer ou réduire};
-  \draw[->,thick,Blue] (risk)--(analyse); \draw[->,thick,Blue] (analyse)--(decision);
+\begin{tikzpicture}[node distance=.35cm,every node/.style={font=\small,align=center}]
+\node[draw=Line,fill=white,rounded corners,minimum width=2.65cm,minimum height=1.35cm] (a) {\textbf{The plan}\\M2 frame the project\\M1 scale development};
+\node[draw=Red,fill=SoftRed,rounded corners,minimum width=2.65cm,minimum height=1.35cm,right=of a] (b) {\textbf{The shock}\\Another M1 project\\is postponed};
+\node[draw=Orange,fill=SoftOrange,rounded corners,minimum width=2.65cm,minimum height=1.35cm,right=of b] (c) {\textbf{The consequence}\\Late arrival $\neq$\\instant capacity};
+\node[draw=Blue,fill=SoftBlue,rounded corners,minimum width=2.65cm,minimum height=1.35cm,right=of c] (d) {\textbf{My response}\\Reassign · simplify\\postpone · protect};
+\draw[-{Latex},Blue,thick] (a)--(b);\draw[-{Latex},Blue,thick] (b)--(c);\draw[-{Latex},Blue,thick] (c)--(d);
 \end{tikzpicture}
 \end{center}
-\vspace{0.9em}
-\begin{block}{Ce que je cherchais à préserver}
-À la fois la \textbf{progression de la personne}, la \textbf{qualité du livrable} et la \textbf{trajectoire du projet}. Ces trois objectifs ne sont pas toujours alignés ; le rôle de pilotage consiste à rendre l'arbitrage explicite.
-\end{block}
-\end{frame}
-
-\input{sections/04b-bloc4-zooms}
-
-\begin{frame}{Le principal recul du Bloc 4 : un cadre étudiant n'est pas un service RH}
-\context{B4}{Limites et projection}
+\vspace{0.7em}
 \begin{columns}[T]
 \begin{column}{0.48\linewidth}
-\begin{block}{Ce que Lynx Immo démontre réellement}
-\begin{tightitems}
-  \item Identification des compétences.
-  \item Répartition opérationnelle des responsabilités.
-  \item Coordination et arbitrages.
-  \item Accompagnement et montée en compétence.
-  \item Suivi du fonctionnement collectif.
-\end{tightitems}
+\begin{block}{What I learned}
+\small Capacity must be reviewed like a risk: regularly, by person and by domain.
 \end{block}
 \end{column}
 \begin{column}{0.48\linewidth}
-\begin{block}{Ce qui changerait en entreprise}
-\begin{tightitems}
-  \item Recrutement avec RH.
-  \item Référentiels individuels plus formalisés.
-  \item Plans de carrière et entretiens professionnels.
-  \item Responsabilités managériales et juridiques explicites.
-\end{tightitems}
-\end{block}
-\end{column}
-\end{columns}
-\end{frame}
-
-\begin{frame}{Bloc 4 — Synthèse des preuves}
-\context{B4}{Synthèse}
-\small
-\begin{tabularx}{\linewidth}{>{\bfseries}p{1.35cm}p{4.2cm}X}
-\toprule
-Comp. & Projet principal & Preuve retenue \\
-\midrule
-C4.1 & Lynx Immo & Cartographie des domaines et compétences nécessaires. \\
-C4.2 & Lynx Immo & Constitution fonctionnelle et répartition des responsabilités. \\
-C4.3 & Lynx Immo & Coordination, Jira, charge et dépendances. \\
-C4.4 & Lynx Immo & Documentation, prototypes et accompagnement. \\
-C4.5 & Lynx Immo & Planification de la montée en compétences. \\
-C4.6 & Lynx Immo & Suivi collectif, contributions et feedback à double sens. \\
-\bottomrule
-\end{tabularx}
-\end{frame}
-
-% ----------------------------------------------------------------------------
-% ENGLISH PART — target 4 min, placée strictement à la fin du bloc
-% ----------------------------------------------------------------------------
-\begin{frame}{C4.5 — Planning skills development as project work}
-\selectlanguage{english}
-\context{B4 · ENGLISH}{C4.5 · Lynx Immo}
-\begin{columns}[T]
-\begin{column}{0.48\linewidth}
-\begin{tightitems}
-  \item I identified skill gaps in UX/UI, Flutter, React, Supabase, deployment and project tooling.
-  \item Learning time had to be included in the project workload instead of being treated as invisible personal work.
-  \item The main mechanisms were documentation, prototypes, peer support and focused technical exchanges.
-  \item The objective was to reach enough autonomy to complete the assigned responsibility, not to become an expert in every technology.
-\end{tightitems}
-\end{column}
-\begin{column}{0.48\linewidth}
-\begin{block}{Professional projection}
-In a company context, I would formalize this further with learning objectives, planned training actions, follow-up checkpoints and coordination with HR when appropriate.
-\end{block}
-\end{column}
-\end{columns}
-\end{frame}
-
-\begin{frame}{C4.6 — Evaluating performance without pretending to be HR}
-\context{B4 · ENGLISH}{C4.6 · Lynx Immo}
-\begin{columns}[T]
-\begin{column}{0.47\linewidth}
-\begin{block}{What I actually did}
-\begin{tightitems}
-  \item Followed collective progress against project objectives and requirements.
-  \item Observed individual contribution in the context of assigned responsibilities.
-  \item Used retrospectives and end-of-project interviews to collect two-way feedback.
-  \item Distinguished delivery problems from skill, availability or coordination problems.
-\end{tightitems}
-\end{block}
-\end{column}
-\begin{column}{0.49\linewidth}
-\begin{block}{What I did not do}
-\begin{tightitems}
-  \item No formal employee appraisal.
-  \item No salary, career or disciplinary decision.
-  \item No HR authority over team members.
-\end{tightitems}
-\end{block}
-\begin{block}{Key lesson}
-Performance evaluation must be tied to \textbf{explicit expectations and constructive feedback}, not to vague impressions.
+\begin{block}{Limits of the experience}
+\small No recruitment, no HR process, no formal career management. I separate what I did from what I would implement professionally.
 \end{block}
 \end{column}
 \end{columns}
 \selectlanguage{french}
+\end{frame}
+
+% 36
+\begin{frame}{Le cadre, et ce qu'il autorise ou non}
+\eyebrow{Bloc 4 · Périmètre de la preuve}
+\begin{columns}[T]
+\begin{column}{0.32\linewidth}
+\begin{block}{FAIT}
+\small
+\begin{tightitems}
+  \item Coordination de 5 personnes
+  \item Rôles et responsabilités
+  \item Arbitrages de périmètre
+  \item Rétrospective + entretiens
+\end{tightitems}
+\end{block}
+\end{column}
+\begin{column}{0.32\linewidth}
+\begin{block}{NON RÉALISÉ}
+\small
+\begin{tightitems}
+  \item Recrutement
+  \item Processus RH
+  \item Référentiel individuel formel
+  \item Plans de carrière
+\end{tightitems}
+\end{block}
+\end{column}
+\begin{column}{0.32\linewidth}
+\begin{block}{EN ENTREPRISE}
+\small
+\begin{tightitems}
+  \item Fiches de rôle
+  \item Mobilité / formation / recrutement
+  \item Référentiel collectif + individuel
+  \item Feedback continu
+\end{tightitems}
+\end{block}
+\end{column}
+\end{columns}
+\vspace{0.5em}
+\begin{block}{Positionnement}
+\centering\small \strong{Ce que je peux démontrer, c'est ce que j'ai réellement piloté ; ce que je ne prétends pas, je le transforme en dispositif cible.}
+\end{block}
+\end{frame}
+
+% 37
+\begin{frame}{Raisonner par domaine, pas par personne}
+\eyebrow{C4.1 · Compétences nécessaires}\competency{C4.1}
+\small
+\begin{center}
+\begin{tabularx}{0.96\linewidth}{*{4}{>{\centering\arraybackslash}X}}
+\strong{Pilotage produit}\\\scriptsize périmètre · client · risques & \strong{Mobile Flutter}\\\scriptsize parcours apprenant & \strong{Web admin}\\\scriptsize gestion métier & \strong{Backend + données}\\\scriptsize auth · RLS · migrations \\[1.0em]
+\strong{UX / UI}\\\scriptsize parcours · accessibilité & \strong{Tests + sécurité}\\\scriptsize non-régression & \strong{Paiements}\\\scriptsize cycle d'abonnement & \strong{Déploiement + doc}\\\scriptsize reprise · transmission
+\end{tabularx}
+\end{center}
+\vspace{0.75em}
+\begin{block}{Règle}
+\centering\small Chaque domaine doit avoir \strong{un responsable identifiable et une solution de continuité}. Une compétence disponible sur le papier n'est pas une capacité utilisable si la personne n'est pas disponible.
+\end{block}
+\end{frame}
+
+% 38
+\begin{frame}{Constituer une équipe sans la recruter}
+\eyebrow{C4.2 · Constitution de l'équipe}\competency{C4.2}
+\begin{columns}[T]
+\begin{column}{0.49\linewidth}
+\begin{block}{Ce qui a été fait}
+\small
+\begin{tightitems}
+  \item Groupe imposé par le cadre pédagogique
+  \item Rôles précisés : chef de projet, PO, Scrum Master, développement
+  \item RACI sur 10 activités
+  \item Circuits de validation et continuité
+\end{tightitems}
+\end{block}
+\vspace{0.25em}
+\small\warn{La RACI a révélé un cumul de rôles sur deux personnes : efficace pour la continuité, risqué pour la dépendance.}
+\end{column}
+\begin{column}{0.47\linewidth}
+\begin{block}{Plan de constitution cible}
+\small Une fiche par rôle :
+\begin{tightitems}
+  \item Mission + responsabilités
+  \item Compétences techniques
+  \item Compétences relationnelles
+  \item Autonomie recherchée
+  \item Interactions clés
+\end{tightitems}
+\end{block}
+\vspace{0.25em}
+\small\strong{Arbitrage ensuite : mobilité interne, formation ciblée ou recrutement externe.}
+\end{column}
+\end{columns}
+\end{frame}
+
+% 39
+\begin{frame}{Coordonner quand la capacité s'effondre}
+\eyebrow{C4.3 · Gestion opérationnelle}\competency{C4.3}
+\begin{center}
+\begin{tikzpicture}[node distance=.25cm,every node/.style={font=\scriptsize,align=center}]
+\node[draw=Line,fill=white,rounded corners,minimum width=2.65cm,minimum height=1.55cm] (a) {\textbf{1 · Le plan}\\M2 cadrage + transverse\\M1 développement};
+\node[draw=Red,fill=SoftRed,rounded corners,minimum width=2.65cm,minimum height=1.55cm,right=of a] (b) {\textbf{2 · Le choc}\\Projet DEV M1 décalé\\au pire moment};
+\node[draw=Orange,fill=SoftOrange,rounded corners,minimum width=2.65cm,minimum height=1.55cm,right=of b] (c) {\textbf{3 · Conséquence}\\Onboarding tardif\\= capacité différée};
+\node[draw=Blue,fill=SoftBlue,rounded corners,minimum width=2.65cm,minimum height=1.55cm,right=of c] (d) {\textbf{4 · Réponse}\\Réaffecter · simplifier\\reporter · protéger};
+\draw[-{Latex},Blue,thick] (a)--(b);\draw[-{Latex},Blue,thick] (b)--(c);\draw[-{Latex},Blue,thick] (c)--(d);
+\end{tikzpicture}
+\end{center}
+\vspace{0.75em}
+\begin{block}{Leçon}
+\centering\small Le pilotage consiste aussi à décider \strong{ce qu'on cesse de suivre ou de construire} quand la capacité réelle change.
+\end{block}
+\end{frame}
+
+% 40
+\begin{frame}{Accompagner, et le coût réel de la transmission}
+\eyebrow{C4.4 + C4.5 · Animation et montée en compétences}\competency{C4.4 · C4.5}
+\begin{columns}[T]
+\begin{column}{0.48\linewidth}
+\begin{block}{Accompagnement quotidien}
+\small Points d'équipe · Teams · Confluence · Jira · GitHub · aide technique ciblée.
+\end{block}
+\begin{block}{Montée en compétences}
+\small Documentation officielle → prototype limité → tâche réelle.
+\end{block}
+\end{column}
+\begin{column}{0.48\linewidth}
+\begin{block}{La limite structurelle}
+\small Former quelqu'un coûte plus de temps à court terme que confier la tâche à la personne déjà experte.
+\end{block}
+\begin{block}{Ce que je ferais}
+\small Binômage · revues techniques · démonstrations internes · rotation sur certains domaines.
+\end{block}
+\end{column}
+\end{columns}
+\vspace{0.55em}
+\begin{block}{Point clé}
+\centering\small La documentation réduit la dépendance, mais \strong{elle ne remplace pas le transfert actif de connaissance}.
+\end{block}
+\end{frame}
+
+% 41
+\begin{frame}{Évaluer : ce que j'ai fait, ce que je construirais}
+\eyebrow{C4.6 · Suivi de la performance}\competency{C4.6}
+\begin{columns}[T]
+\begin{column}{0.44\linewidth}
+\begin{block}{Réalisé}
+\small
+\begin{tightitems}
+  \item Jalons, exigences, risques, capacité
+  \item Rétrospective générale
+  \item Entretiens individuels
+  \item Retour mutuel, pas seulement descendant
+\end{tightitems}
+\end{block}
+\small\strong{La rétrospective a montré ce que Jira ne voit pas : utilité ressentie, autonomie, clarté du rôle, charge perçue.}
+\end{column}
+\begin{column}{0.52\linewidth}
+\scriptsize
+\begin{tabularx}{\linewidth}{>{\bfseries}p{1.8cm}XX}
+\toprule
+ & Collectif & Individuel \\
+\midrule
+Livraison & objectifs atteints & engagements tenus \\
+Qualité & non-régression · revues & qualité des livrables \\
+Collaboration & blocages partagés & communication · feedback \\
+Autonomie & dépendances réduites & avancer + expliciter \\
+Progression & besoins identifiés & compétences du rôle \\
+\bottomrule
+\end{tabularx}
+\vspace{0.35em}
+\small\strong{Cible : feedbacks courts tous les 2–3 sprints, à double sens.}
+\end{column}
+\end{columns}
+\end{frame}
+
+% 42
+\begin{frame}{Préparer la reprise avant la fin du projet}
+\eyebrow{C3.6 + C4.5 · Transmission}\competency{C3.6}
+\begin{columns}[T]
+\begin{column}{0.52\linewidth}
+\begin{block}{Ce qui a été produit}
+\small
+\begin{tightitems}
+  \item MkDocs développeur > 100 pages
+  \item Monorepo structuré
+  \item DevContainer
+  \item Migrations + scripts d'initialisation
+  \item Environnements séparés
+\end{tightitems}
+\end{block}
+\centering\repofigure[0.23\textheight]{figures/ipf/acceuil_doc_dev_mkdocs.png}
+\end{column}
+\begin{column}{0.44\linewidth}
+\begin{block}{La transmissibilité ne tient pas à un document}
+\small Le projet doit pouvoir être installé et exécuté ailleurs que sur les postes de ceux qui l'ont développé.
+\end{block}
+\begin{block}{Transmission client}
+\small Une réunion de reprise est prévue pour présenter l'état réel du produit, les limites, les procédures de lancement et les conditions de reprise par une future équipe.
+\end{block}
+\vspace{0.25em}
+\scriptsize\muted{Le compte rendu ne sera ajouté à l'oral que si cette réunion a effectivement eu lieu avant la soutenance.}
+\end{column}
+\end{columns}
+\end{frame}
+
+% 43
+\begin{frame}{Bilan critique du bloc 4}
+\eyebrow{Prise de recul}
+\small
+\begin{tabularx}{\linewidth}{>{\bfseries\color{Blue}}p{3.0cm}X}
+\toprule
+Sur la planification & Un planning qui glisse reste utile s'il rend l'écart visible et force l'arbitrage. \\
+\addlinespace
+Sur les risques & Un risque n'a de valeur que s'il est réévalué et déclenche une décision assez tôt. \\
+\addlinespace
+Sur la délégation & Le choix le plus rapide à court terme peut concentrer la connaissance et coûter cher à la reprise. \\
+\addlinespace
+Sur le cumul des rôles & Chef de projet + référent technique donne une vision globale, mais crée un point unique de décision et d'escalade. \\
+\bottomrule
+\end{tabularx}
+\vspace{0.65em}
+\begin{block}{À retenir}
+\centering\small Le produit final est une base fonctionnelle, versionnée et documentée ; mon principal apprentissage porte sur \strong{la capacité réelle, la délégation et la continuité du collectif}.
+\end{block}
 \end{frame}
